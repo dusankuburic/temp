@@ -11,7 +11,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-group-edit',
     templateUrl: './group-edit.component.html',
-    styleUrl: './group-edit.component.css',
+    styleUrl: './group-edit.component.scss',
     standalone: false
 })
 export class GroupEditComponent extends DestroyableComponent implements OnInit {

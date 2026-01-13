@@ -1,0 +1,106 @@
+/**
+ * OBSIDIAN NOIR Design System - Elevation & Shadow Tokens
+ *
+ * Unified shadow and elevation system for consistent depth perception
+ * across all components. Based on Material Design 3 elevation levels.
+ */
+
+:root {
+  /* ===================================
+   * BASE SHADOW DEFINITIONS
+   * =================================== */
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 12px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.2);
+  --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.3);
+
+  /* ===================================
+   * FOCUS & INTERACTIVE SHADOWS
+   * =================================== */
+
+  --shadow-focus: 0 0 0 3px rgba(45, 212, 191, 0.4);
+  --shadow-focus-inset: inset 0 0 0 3px rgba(45, 212, 191, 0.4);
+  --shadow-focus-ring: 0 0 0 2px var(--color-surface-1), 0 0 0 4px var(--color-brand-primary);
+
+  /* ===================================
+   * GLOW EFFECTS
+   * =================================== */
+
+  --shadow-glow-teal: 0 0 20px rgba(45, 212, 191, 0.3);
+  --shadow-glow-teal-sm: 0 0 12px rgba(45, 212, 191, 0.2);
+  --shadow-glow-teal-lg: 0 0 32px rgba(45, 212, 191, 0.4);
+
+  --shadow-glow-error: 0 0 20px rgba(244, 63, 94, 0.25);
+  --shadow-glow-error-lg: 0 0 32px rgba(244, 63, 94, 0.35);
+
+  --shadow-glow-success: 0 0 20px rgba(16, 185, 129, 0.25);
+  --shadow-glow-warning: 0 0 20px rgba(251, 191, 36, 0.25);
+  --shadow-glow-info: 0 0 20px rgba(6, 182, 212, 0.25);
+  --shadow-glow-violet: 0 0 20px rgba(139, 92, 246, 0.25);
+
+  /* ===================================
+   * COMPONENT-SPECIFIC SHADOWS
+   * =================================== */
+
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 12px 48px rgba(0, 0, 0, 0.5);
+
+  --shadow-button: 0 4px 14px rgba(45, 212, 191, 0.4);
+  --shadow-button-hover: 0 6px 20px rgba(45, 212, 191, 0.6);
+
+  --shadow-dropdown: 0 12px 48px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 25px 50px rgba(0, 0, 0, 0.6);
+
+  --shadow-input-focus: 0 0 12px rgba(45, 212, 191, 0.2);
+
+  /* ===================================
+   * ELEVATION LEVELS (Semantic)
+   * =================================== */
+
+  --elevation-0: none;
+  --elevation-1: var(--shadow-xs);
+  --elevation-2: var(--shadow-sm);
+  --elevation-3: var(--shadow-md);
+  --elevation-4: var(--shadow-lg);
+  --elevation-5: var(--shadow-2xl);
+
+  /* ===================================
+   * OPACITY LEVELS
+   * =================================== */
+
+  --overlay-opacity-light: 0.3;
+  --overlay-opacity-medium: 0.5;
+  --overlay-opacity-dark: 0.8;
+}
+
+/* ===================================
+ * ELEVATION UTILITY CLASSES
+ * =================================== */
+
+.elevation-0 { box-shadow: var(--elevation-0); }
+.elevation-1 { box-shadow: var(--elevation-1); }
+.elevation-2 { box-shadow: var(--elevation-2); }
+.elevation-3 { box-shadow: var(--elevation-3); }
+.elevation-4 { box-shadow: var(--elevation-4); }
+.elevation-5 { box-shadow: var(--elevation-5); }
+
+.glow-teal { box-shadow: var(--shadow-glow-teal); }
+.glow-teal-sm { box-shadow: var(--shadow-glow-teal-sm); }
+.glow-teal-lg { box-shadow: var(--shadow-glow-teal-lg); }
+
+.glow-error { box-shadow: var(--shadow-glow-error); }
+.glow-success { box-shadow: var(--shadow-glow-success); }
+.glow-warning { box-shadow: var(--shadow-glow-warning); }
+.glow-info { box-shadow: var(--shadow-glow-info); }
+
+.focus-ring {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+.focus-ring-inset {
+  box-shadow: var(--shadow-focus-inset);
+}

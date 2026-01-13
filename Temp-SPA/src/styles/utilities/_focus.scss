@@ -1,0 +1,377 @@
+/**
+ * OBSIDIAN NOIR - Focus Ring Standardization
+ *
+ * Unified, accessible focus indicators that work consistently across
+ * all interactive elements. Ensures keyboard navigation visibility
+ * while maintaining the dramatic Obsidian Noir aesthetic.
+ *
+ * WCAG 2.1 Success Criterion 2.4.7 (Focus Visible) - Level AA
+ * Focus indicators must have 3:1 contrast ratio with adjacent colors
+ */
+
+:root {
+  /* ===================================
+   * FOCUS RING TOKENS
+   * =================================== */
+
+  /* Core focus colors */
+  --focus-ring-color: var(--teal-400);             /* Primary focus color */
+  --focus-ring-color-inverse: var(--obsidian-0);   /* On dark backgrounds */
+  --focus-ring-color-error: var(--color-error-primary);
+  --focus-ring-color-success: var(--color-success-primary);
+
+  /* Focus ring dimensions */
+  --focus-ring-width: 2px;                         /* Standard width */
+  --focus-ring-width-thick: 3px;                   /* High contrast mode */
+  --focus-ring-offset: 2px;                        /* Spacing from element */
+  --focus-ring-offset-large: 4px;                  /* Larger spacing for cards */
+
+  /* Focus ring styles */
+  --focus-ring-style: solid;                       /* Standard: solid outline */
+  --focus-ring-style-dashed: dashed;               /* Alternative: dashed */
+
+  /* Focus glow (Obsidian Noir signature) */
+  --focus-glow-spread: 0 0 0 4px;                  /* Box-shadow spread */
+  --focus-glow-color: rgba(45, 212, 191, 0.2);     /* Teal glow */
+  --focus-glow-color-error: rgba(244, 63, 94, 0.2);
+  --focus-glow-color-success: rgba(16, 185, 129, 0.2);
+
+  /* Composite focus effects */
+  --focus-outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+  --focus-outline-inverse: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color-inverse);
+  --focus-outline-error: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color-error);
+  --focus-outline-success: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color-success);
+
+  /* Focus shadows (outline + glow) */
+  --focus-shadow: 0 0 0 var(--focus-ring-offset) var(--color-canvas),
+                  0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color),
+                  var(--focus-glow-spread) var(--focus-glow-color);
+
+  --focus-shadow-error: 0 0 0 var(--focus-ring-offset) var(--color-canvas),
+                        0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color-error),
+                        var(--focus-glow-spread) var(--focus-glow-color-error);
+
+  --focus-shadow-success: 0 0 0 var(--focus-ring-offset) var(--color-canvas),
+                          0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color-success),
+                          var(--focus-glow-spread) var(--focus-glow-color-success);
+
+  /* Inset focus (for inputs) */
+  --focus-shadow-inset: inset 0 0 0 var(--focus-ring-width) var(--focus-ring-color),
+                        var(--focus-glow-spread) var(--focus-glow-color);
+}
+
+/* ===================================
+ * GLOBAL FOCUS-VISIBLE RESET
+ * Remove default browser focus, apply custom styling
+ * =================================== */
+
+*:focus {
+  outline: none; /* Remove default focus on :focus */
+}
+
+*:focus-visible {
+  /* Custom focus will be applied by component-specific rules below */
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-ring-offset);
+  transition: outline-color var(--motion-duration-instant) var(--motion-ease-standard);
+}
+
+/* ===================================
+ * BUTTONS
+ * =================================== */
+
+button:focus-visible,
+.btn:focus-visible,
+[role="button"]:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-shadow);
+}
+
+/* Filled buttons (primary, danger, success, etc.) */
+button.tmp-button-primary:focus-visible,
+button.tmp-button-danger:focus-visible,
+button.tmp-button-success:focus-visible,
+button.tmp-button-warning:focus-visible,
+button.tmp-button-info:focus-visible {
+  outline: var(--focus-ring-width) solid var(--obsidian-0); /* White outline on colored backgrounds */
+  outline-offset: 2px;
+  box-shadow: 0 0 0 calc(var(--focus-ring-offset) + 2px) var(--color-canvas),
+              0 0 0 calc(var(--focus-ring-offset) + 4px) var(--focus-ring-color),
+              0 0 16px rgba(45, 212, 191, 0.4);
+}
+
+/* Outline/secondary buttons */
+button.tmp-button-outline:focus-visible,
+button.tmp-button-secondary:focus-visible,
+button.tmp-button-subtle:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  box-shadow: var(--focus-shadow);
+}
+
+/* Icon-only buttons */
+button.tmp-button-icon-only:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 1px; /* Tighter offset for small targets */
+  box-shadow: var(--focus-shadow);
+}
+
+/* ===================================
+ * FORM INPUTS
+ * =================================== */
+
+/*
+ * Apply focus styles only to native inputs NOT part of custom form components.
+ * Custom components (tmp-input, tmp-select, tmp-textarea, tmp-datepicker)
+ * handle their own focus at the container level via form-base.scss
+ */
+input:not(.tmp-input-field):not([class*='tmp-']):focus-visible,
+textarea:not(.tmp-textarea-field):not([class*='tmp-']):focus-visible,
+select:not(.tmp-select-field):not([class*='tmp-']):focus-visible {
+  outline: none; /* Don't use outline on inputs */
+  border-color: var(--focus-ring-color);
+  box-shadow: var(--focus-shadow-inset);
+}
+
+/* Error state inputs (native only) */
+input:not(.tmp-input-field):not([class*='tmp-'])[aria-invalid="true"]:focus-visible,
+textarea:not(.tmp-textarea-field):not([class*='tmp-'])[aria-invalid="true"]:focus-visible,
+select:not(.tmp-select-field):not([class*='tmp-'])[aria-invalid="true"]:focus-visible {
+  border-color: var(--focus-ring-color-error);
+  box-shadow: inset 0 0 0 1px var(--focus-ring-color-error),
+              var(--focus-glow-spread) var(--focus-glow-color-error);
+}
+
+/* Success state inputs (native only) */
+input:not(.tmp-input-field):not([class*='tmp-']).is-valid:focus-visible,
+textarea:not(.tmp-textarea-field):not([class*='tmp-']).is-valid:focus-visible {
+  border-color: var(--focus-ring-color-success);
+  box-shadow: inset 0 0 0 1px var(--focus-ring-color-success),
+              var(--focus-glow-spread) var(--focus-glow-color-success);
+}
+
+/* Checkboxes and radios */
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  box-shadow: var(--focus-shadow);
+}
+
+/* ===================================
+ * LINKS
+ * =================================== */
+
+a:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  border-radius: 2px; /* Slight rounding for cleaner look */
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+/* Links within navigation */
+nav a:focus-visible,
+.nav-link:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  background-color: var(--color-interactive-hover);
+  border-radius: var(--border-radius-small);
+}
+
+/* ===================================
+ * INTERACTIVE ELEMENTS
+ * =================================== */
+
+/* Cards (when clickable) */
+.card:focus-visible,
+.tmp-card:focus-visible,
+[role="button"].card:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-ring-offset-large);
+  box-shadow: var(--focus-shadow),
+              var(--shadow-4); /* Combine with elevation shadow */
+}
+
+/* Tabs */
+[role="tab"]:focus-visible,
+.tab:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  z-index: 1; /* Ensure outline isn't clipped */
+}
+
+/* Accordions */
+[role="button"][aria-expanded]:focus-visible,
+.accordion-trigger:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  box-shadow: var(--focus-shadow);
+}
+
+/* Dropdowns */
+[role="combobox"]:focus-visible,
+[role="listbox"]:focus-visible,
+.dropdown-toggle:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  box-shadow: var(--focus-shadow);
+}
+
+/* Menu items */
+[role="menuitem"]:focus-visible,
+[role="option"]:focus-visible {
+  outline: none; /* Use background highlight instead */
+  background-color: var(--color-interactive-selected);
+  border-left: 3px solid var(--focus-ring-color);
+}
+
+/* ===================================
+ * MODAL & DIALOG
+ * =================================== */
+
+[role="dialog"]:focus-visible,
+.modal:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: -4px; /* Inset outline */
+}
+
+.modal-close:focus-visible,
+[role="dialog"] .close:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  box-shadow: var(--focus-shadow);
+}
+
+/* ===================================
+ * BADGES & PILLS
+ * =================================== */
+
+/* Only when clickable/removable */
+.badge:focus-visible,
+.pill:focus-visible,
+.tag:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 1px;
+  box-shadow: var(--focus-shadow);
+}
+
+/* ===================================
+ * SKIP LINKS
+ * =================================== */
+
+.skip-to-main:focus,
+.skip-link:focus {
+  outline: var(--focus-outline-inverse);
+  outline-offset: -2px; /* Inset for contrast */
+  box-shadow: 0 0 16px rgba(45, 212, 191, 0.6);
+}
+
+/* ===================================
+ * UTILITY CLASSES
+ * Apply focus styles programmatically
+ * =================================== */
+
+/* Force focus ring */
+.force-focus-ring:focus-visible {
+  outline: var(--focus-outline) !important;
+  outline-offset: var(--focus-ring-offset) !important;
+  box-shadow: var(--focus-shadow) !important;
+}
+
+/* Remove focus ring (use sparingly, only if alternative indicator exists) */
+.no-focus-ring:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Thicker focus ring (for accessibility preferences) */
+.focus-ring-thick:focus-visible {
+  outline-width: var(--focus-ring-width-thick) !important;
+}
+
+/* Focus ring with glow only (no outline) */
+.focus-glow-only:focus-visible {
+  outline: none !important;
+  box-shadow: var(--focus-glow-spread) var(--focus-glow-color) !important;
+}
+
+/* ===================================
+ * HIGH CONTRAST MODE
+ * Enhanced focus indicators for users with visual impairments
+ * =================================== */
+
+@media (prefers-contrast: more) {
+  *:focus-visible {
+    outline-width: var(--focus-ring-width-thick) !important;
+    outline-offset: 3px !important;
+    outline-color: currentColor !important; /* Use element's text color */
+  }
+
+  button:focus-visible,
+  input:focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible {
+    outline-width: 3px !important;
+    outline-style: solid !important;
+  }
+
+  /* Remove glows in high contrast mode (they may be invisible) */
+  *:focus-visible {
+    box-shadow: none !important;
+  }
+
+  /* Add background flash for extra visibility */
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    background-color: var(--color-interactive-selected) !important;
+  }
+}
+
+/* ===================================
+ * KEYBOARD NAVIGATION INDICATOR
+ * Show when user is navigating with keyboard (not mouse)
+ * =================================== */
+
+/* Add to <body> via JS when Tab key is pressed */
+body.using-keyboard *:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Remove when mouse is used */
+body.using-mouse *:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ===================================
+ * FORCED COLORS MODE (Windows High Contrast)
+ * =================================== */
+
+@media (forced-colors: active) {
+  *:focus-visible {
+    outline: 2px solid ButtonText !important;
+    outline-offset: 2px !important;
+  }
+
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* ===================================
+ * PRINT STYLES
+ * Remove focus rings when printing
+ * =================================== */
+
+@media print {
+  *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}

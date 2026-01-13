@@ -1,0 +1,81 @@
+/**
+ * OBSIDIAN NOIR Design System - Z-Index Tokens
+ *
+ * Comprehensive z-index layering system for managing stacking contexts.
+ * Prevents z-index conflicts and ensures consistent layering across components.
+ *
+ * Strategy:
+ * - Base layers: 0-10 (component-internal, form elements)
+ * - Interactive layers: 10-50 (popovers, dropdowns, tooltips)
+ * - Modal layers: 100-200 (modals, dialogs, overlays)
+ * - Fixed/Sticky layers: 300-400 (navbar, sidebar, fixed UI)
+ * - System layers: 1000+ (system notifications, critical UI)
+ */
+
+:root {
+  /* ===================================
+   * BASE LAYERS (0-10)
+   * Component-internal elements, form validation icons
+   * =================================== */
+
+  --z-index-auto: auto;
+  --z-index-base: 0;
+  --z-index-float: 1;
+  --z-index-dropdown: 2;
+  --z-index-tooltip: 3;
+  --z-index-focus-ring: 5;
+  --z-index-validation-icon: 5;
+  --z-index-select-chevron: 2;
+  --z-index-datepicker-toggle: 10;
+
+  /* ===================================
+   * INTERACTIVE LAYERS (10-50)
+   * Popovers, menus, overlays within components
+   * =================================== */
+
+  --z-index-popover: 15;
+  --z-index-menu: 15;
+  --z-index-combobox: 15;
+  --z-index-calendar: 20;
+
+  /* ===================================
+   * MODAL LAYERS (100-200)
+   * Dialogs, modals, offcanvas, critical overlays
+   * =================================== */
+
+  --z-index-modal-backdrop: 100;
+  --z-index-modal: 101;
+  --z-index-dialog: 102;
+  --z-index-alert: 110;
+
+  /* ===================================
+   * FIXED/STICKY LAYERS (300-400)
+   * Navigation, sidebars, persistent UI elements
+   * =================================== */
+
+  --z-index-sticky: 300;
+  --z-index-navbar: 300;
+  --z-index-sidebar: 300;
+  --z-index-fixed: 300;
+  --z-index-nav-dropdown: 302;
+  --z-index-nav-mobile-menu: 305;
+
+  /* ===================================
+   * SYSTEM LAYERS (1000+)
+   * Global notifications, skip links, critical UI
+   * =================================== */
+
+  --z-index-skip-link: 1000;
+  --z-index-notification: 1000;
+  --z-index-toast: 1001;
+  --z-index-system: 2000;
+
+  /* ===================================
+   * DEPRECATED (for gradual migration)
+   * Old inconsistent values - phase out over time
+   * =================================== */
+
+  --z-index-deprecated-100: 100;
+  --z-index-deprecated-99: 99;
+  --z-index-deprecated-10: 10;
+}

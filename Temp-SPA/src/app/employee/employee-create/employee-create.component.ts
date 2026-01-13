@@ -12,7 +12,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-employee-create',
     templateUrl: './employee-create.component.html',
-    styleUrl: './employee-create.component.css',
+    styleUrl: './employee-create.component.scss',
     standalone: false
 })
 export class EmployeeCreateComponent extends DestroyableComponent implements OnInit {

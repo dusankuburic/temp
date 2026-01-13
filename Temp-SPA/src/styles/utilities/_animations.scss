@@ -1,0 +1,135 @@
+/**
+ * Animation Utilities
+ * Practical animation combinations for common UI patterns
+ */
+
+/* Entry animations */
+.animate-entrance {
+  animation: fade-in var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-entrance-slide-up {
+  animation: slide-up var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-entrance-slide-down {
+  animation: slide-down var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-entrance-scale {
+  animation: scale-up var(--duration-normal) var(--easing-decelerate);
+}
+
+/* Exit animations */
+.animate-exit {
+  animation: fade-out var(--duration-fast) var(--easing-accelerate);
+}
+
+.animate-exit-slide-up {
+  animation: slide-up var(--duration-fast) var(--easing-accelerate) reverse;
+}
+
+.animate-exit-scale {
+  animation: scale-down var(--duration-fast) var(--easing-accelerate);
+}
+
+/* Attention animations (infinite) */
+.animate-attention-glow {
+  animation: glow var(--duration-slow) var(--easing-ease-in-out) infinite;
+}
+
+.animate-attention-wiggle {
+  animation: wiggle var(--duration-normal) var(--easing-standard) infinite;
+}
+
+.animate-attention-pulse {
+  animation: pulse var(--duration-slow) var(--easing-ease-in-out) infinite;
+}
+
+.animate-attention-bounce {
+  animation: bounce-in var(--duration-normal) var(--easing-bounce) infinite;
+}
+
+/* Loading animations */
+.animate-loading-spin {
+  animation: spin var(--duration-spinner) var(--easing-linear) infinite;
+}
+
+.animate-loading-pulse {
+  animation: pulse var(--duration-slow) var(--easing-ease-in-out) infinite;
+}
+
+.animate-loading-shimmer {
+  animation: shimmer var(--duration-skeleton-shimmer) var(--easing-linear) infinite;
+  background: linear-gradient(
+    90deg,
+    var(--color-background-2) 0%,
+    var(--color-background-3) 50%,
+    var(--color-background-2) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Interactive feedback animations */
+.animate-tap {
+  animation: scale-down var(--duration-ultra-fast) var(--easing-standard);
+}
+
+.animate-hover {
+  transition: transform var(--duration-fast) var(--easing-standard);
+}
+
+.animate-hover:hover {
+  transform: translateY(-2px);
+}
+
+/* Staggered animations */
+.animate-stagger-1 {
+  animation-delay: var(--delay-stagger-1);
+}
+
+.animate-stagger-2 {
+  animation-delay: var(--delay-stagger-2);
+}
+
+.animate-stagger-3 {
+  animation-delay: var(--delay-stagger-3);
+}
+
+.animate-stagger-4 {
+  animation-delay: var(--delay-stagger-4);
+}
+
+.animate-stagger-5 {
+  animation-delay: var(--delay-stagger-5);
+}
+
+/* Duration utilities */
+.animate-duration-fast {
+  animation-duration: var(--duration-fast);
+}
+
+.animate-duration-normal {
+  animation-duration: var(--duration-normal);
+}
+
+.animate-duration-slow {
+  animation-duration: var(--duration-slow);
+}
+
+/* Easing utilities */
+.animate-ease-in {
+  animation-timing-function: var(--easing-accelerate);
+}
+
+.animate-ease-out {
+  animation-timing-function: var(--easing-decelerate);
+}
+
+.animate-ease-in-out {
+  animation-timing-function: var(--easing-ease-in-out);
+}
+
+.animate-ease-bounce {
+  animation-timing-function: var(--easing-bounce);
+}

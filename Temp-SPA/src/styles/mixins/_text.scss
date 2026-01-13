@@ -1,0 +1,32 @@
+/**
+ * Text Utility Mixins
+ * Text truncation, line clamping, gradients, and shadow effects
+ */
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @content;
+}
+
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  @content;
+}
+
+@mixin text-gradient($from, $to) {
+  background: linear-gradient(135deg, $from 0%, $to 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  @content;
+}
+
+@mixin text-shadow($color, $blur: 2px) {
+  text-shadow: 0 $blur $blur * 2 $color, 0 $blur * 2 $blur * 4 rgba(0, 0, 0, 0.1);
+  @content;
+}

@@ -1,0 +1,157 @@
+@import '../../../../styles/_mixins';
+@import '../../../../styles/components/form-base';
+
+/**
+ * OBSIDIAN NOIR - Select Component
+ *
+ * Uses shared form-base patterns with select-specific customizations.
+ *
+ * BASE PATTERNS USED:
+ * - %form-container-states: Container state management (hover, focus, success, error, disabled)
+ * - form-field-strip-native(): Remove browser styling
+ * - form-floating-label(): Material Design floating label
+ * - form-validation-icon(): Success/error/loading icons (positioned to avoid chevron)
+ * - %form-error-message: Error message container
+ * - %form-required-indicator: Required asterisk
+ *
+ * COMPONENT-SPECIFIC:
+ * - Chevron rotation on focus (dropdown indicator)
+ * - Option dropdown styling (colors, hover, checked states)
+ * - Filter variant (compact size and styling)
+ * - Validation icon positioned further left to avoid chevron
+ */
+
+/* ===================================
+ * WRAPPER
+ * =================================== */
+.tmp-select-wrapper {
+  @include form-wrapper();
+
+  &.tmp-select-filter {
+    .tmp-select-container {
+      min-height: 44px;
+      background: rgba(22, 22, 34, 0.6);
+      border-color: var(--color-border-default);
+    }
+
+    .tmp-select-field {
+      padding: 18px 36px 4px 12px;
+      font-size: var(--font-size-200);
+    }
+
+    .tmp-select-label {
+      left: 12px;
+      font-size: var(--font-size-200);
+    }
+
+    .tmp-select-chevron {
+      right: 12px;
+    }
+  }
+}
+
+/* ===================================
+ * CONTAINER
+ * =================================== */
+.tmp-select-container {
+  @extend %form-container-states;
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  cursor: pointer;
+
+  /* Adjust chevron position when validation icon present */
+  &:has(.tmp-select-icon) .tmp-select-chevron {
+    right: 64px;
+  }
+}
+
+/* ===================================
+ * SELECT FIELD
+ * =================================== */
+.tmp-select-field {
+  @include form-field-strip-native();
+  flex: 1;
+  padding: 28px 44px 8px 16px;
+  width: 100%;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Option dropdown styling */
+  option {
+    padding: 12px 16px;
+    background-color: var(--obsidian-28);
+    color: #ffffff;
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-interactive-hover);
+    }
+
+    &:checked {
+      background-color: var(--color-interactive-selected);
+      color: var(--color-brand-primary);
+    }
+
+    &:disabled {
+      color: var(--color-foreground-4);
+      opacity: 0.5;
+    }
+  }
+}
+
+/* ===================================
+ * FLOATING LABEL
+ * =================================== */
+.tmp-select-label {
+  @include form-floating-label();
+}
+
+/* Required indicator */
+.required-indicator {
+  @extend %form-required-indicator;
+}
+
+/* ===================================
+ * CHEVRON & ICONS
+ * =================================== */
+.tmp-select-chevron {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--color-foreground-3);
+  pointer-events: none;
+  transition: all var(--duration-fast) var(--easing-standard);
+  z-index: var(--z-index-select-chevron);
+}
+
+.tmp-select-focused .tmp-select-chevron {
+  transform: translateY(-50%) rotate(180deg);
+  color: var(--color-brand-primary);
+}
+
+/* Validation icon positioned further right to avoid chevron collision */
+.tmp-select-icon {
+  @include form-validation-icon($right: 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Error message */
+.tmp-select-error-message {
+  @extend %form-error-message;
+}
+
+.tmp-select-error-text {
+  @extend %form-error-text;
+}
+
+/* Help text / hint */
+.select-hint {
+  @extend %form-hint-text;
+}

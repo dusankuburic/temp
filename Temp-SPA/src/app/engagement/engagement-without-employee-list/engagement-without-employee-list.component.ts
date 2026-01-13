@@ -16,7 +16,7 @@ import { EngagementCreateModalComponent } from '../engagement-create-modal/engag
 @Component({
     selector: 'app-engagement-without-employee-list',
     templateUrl: './engagement-without-employee-list.component.html',
-    styleUrl: './engagement-without-employee-list.component.css',
+    styleUrl: './engagement-without-employee-list.component.scss',
     standalone: false
 })
 export class EngagementWithoutEmployeeListComponent extends DestroyableComponent implements OnInit, AfterViewInit {

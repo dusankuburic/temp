@@ -1,0 +1,10 @@
+/**
+ * Interactive State Mixins
+ * Hover, active, focus, and disabled state utilities
+ */
+
+@mixin hover { &:hover { @content; } }
+@mixin active { &:active { @content; } }
+@mixin focus { &:focus { @content; } }
+@mixin focus-visible { &:focus-visible { @content; } }
+@mixin disabled { &:disabled { @content; } }

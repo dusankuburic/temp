@@ -17,7 +17,7 @@ import { forkJoin } from 'rxjs';
 @Component({
     selector: 'app-organization-edit-modal',
     templateUrl: './organization-edit-modal.component.html',
-    styleUrls: ['../../shared/styles/modal.css'],
+    styleUrls: ['../../shared/styles/modal.scss'],
     standalone: false
 })
 export class OrganizationEditModalComponent extends DestroyableComponent implements OnInit {

@@ -1,3 +1,5 @@
+@import '../../styles/_mixins';
+
 /**
  * OBSIDIAN NOIR - Sidebar Component
  * Elegant dark navigation with teal accent highlights
@@ -17,9 +19,9 @@
     radial-gradient(at 100% 100%, var(--mesh-teal) 0px, transparent 70%);
   border-right: 1px solid var(--color-border-subtle);
 
-  /* Smooth transitions */
-  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
-    width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Smooth transitions using tokens */
+  transition: transform var(--duration-normal) var(--easing-standard),
+              width var(--duration-normal) var(--easing-standard);
 
   /* Z-index */
   z-index: var(--z-index-fixed);
@@ -96,8 +98,7 @@
   cursor: pointer;
 
   /* Layout */
-  display: flex;
-  align-items: center;
+  @include flex-center;
   gap: var(--spacing-s);
   padding: var(--spacing-s) var(--spacing-m);
 
@@ -111,14 +112,13 @@
   /* Shape */
   border-radius: var(--border-radius-medium);
 
-  /* Transitions */
-  transition: all 150ms ease;
-
   /* States */
   user-select: none;
   outline: none;
   position: relative;
   overflow: hidden;
+  transition: background-color var(--duration-fast) var(--easing-standard),
+              color var(--duration-fast) var(--easing-standard);
 
   &:hover {
     background-color: var(--color-interactive-hover);
@@ -127,10 +127,9 @@
 
   &:active {
     background-color: var(--color-interactive-pressed);
-    transform: scale(0.98);
   }
 
-  &:focus-visible {
+  @include focus-visible {
     box-shadow: var(--shadow-focus-inset);
   }
 }
@@ -216,8 +215,7 @@
 /* Dropdown item */
 .sidebar-dropdown-item {
   /* Layout */
-  display: flex;
-  align-items: center;
+  @include flex-center;
   padding: var(--spacing-xs) var(--spacing-m);
   gap: var(--spacing-xs);
 
@@ -231,9 +229,11 @@
   /* Shape */
   border-radius: var(--border-radius-small);
 
-  /* Left accent indicator */
+  /* States */
+  user-select: none;
   position: relative;
 
+  /* Left accent indicator */
   &::before {
     content: '';
     position: absolute;
@@ -244,12 +244,13 @@
     height: 0;
     background: var(--gradient-brand);
     border-radius: var(--border-radius-pill);
-    transition: height 150ms ease;
+    transition: height var(--duration-fast) var(--easing-standard);
   }
 
-  /* Transitions */
-  transition: all 150ms ease;
-  user-select: none;
+  /* Base transitions */
+  transition: background-color var(--duration-fast) var(--easing-standard),
+              color var(--duration-fast) var(--easing-standard),
+              padding-left var(--duration-fast) var(--easing-standard);
 
   &:hover {
     background-color: var(--color-interactive-hover);
@@ -272,17 +273,16 @@
     color: var(--color-brand-primary);
     font-weight: var(--font-weight-semibold);
     padding-left: calc(var(--spacing-m) + var(--spacing-xxs));
+    box-shadow: var(--shadow-glow-teal-sm);
 
     &::before {
       height: 20px;
       background: var(--gradient-brand);
       box-shadow: var(--shadow-glow-teal-sm);
     }
-
-    box-shadow: var(--shadow-glow-teal-sm);
   }
 
-  &:focus-visible {
+  @include focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus-inset);
   }
@@ -322,7 +322,7 @@
     bottom: 0;
     background-color: var(--color-black-alpha-60);
     backdrop-filter: blur(4px);
-    z-index: 99;
+    z-index: var(--z-index-nav-mobile-menu);
     animation: fade-in 200ms ease;
   }
 }

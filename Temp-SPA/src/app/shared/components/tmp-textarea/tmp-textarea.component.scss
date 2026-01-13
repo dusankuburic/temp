@@ -1,0 +1,126 @@
+@import '../../../../styles/_mixins';
+@import '../../../../styles/components/form-base';
+
+/**
+ * OBSIDIAN NOIR - Textarea Component
+ *
+ * Uses shared form-base patterns with textarea-specific customizations.
+ *
+ * BASE PATTERNS USED:
+ * - %form-container-states: Container state management (hover, focus, success, error, disabled)
+ * - form-field-strip-native(): Remove browser styling
+ * - form-floating-label(): Material Design floating label (top-aligned variant)
+ * - form-validation-icon(): Success/error/loading icons (top-right positioning)
+ * - %form-error-message: Error message container
+ * - %form-required-indicator: Required asterisk
+ *
+ * COMPONENT-SPECIFIC:
+ * - Container padding (12px, unique to textarea)
+ * - Auto-resize behavior (overflow: hidden, min-height: auto)
+ * - Character counter footer (unique feature)
+ * - Top-aligned floating label (vs centered in other components)
+ * - Top-right icon positioning (vs centered vertically)
+ */
+
+/* ===================================
+ * WRAPPER
+ * =================================== */
+.tmp-textarea-wrapper {
+  @include form-wrapper();
+}
+
+/* ===================================
+ * CONTAINER
+ * =================================== */
+.tmp-textarea-container {
+  @extend %form-container-states;
+  display: block;
+  padding: 12px;
+  cursor: text;
+}
+
+/* ===================================
+ * TEXTAREA FIELD
+ * =================================== */
+.tmp-textarea-field {
+  @include form-field-strip-native();
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 44px 12px 12px;
+  display: block;
+  line-height: 1.5;
+  resize: none;
+
+  /* Auto-resize behavior */
+  overflow: hidden;
+  min-height: auto;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* ===================================
+ * FLOATING LABEL - Top aligned (not centered like input)
+ * =================================== */
+.tmp-textarea-label {
+  @include form-floating-label(
+    $left: 12px,
+    $top: 12px,
+    $transform-centered: none,
+    $transform-floated: translateY(-28px) scale(0.85)
+  );
+}
+
+/* Required indicator */
+.required-indicator {
+  @extend %form-required-indicator;
+}
+
+/* ===================================
+ * ICONS
+ * =================================== */
+.tmp-textarea-icon {
+  @include form-validation-icon($right: 12px, $top: 12px, $transform: none);
+}
+
+/* ===================================
+ * ERROR MESSAGE
+ * =================================== */
+.tmp-textarea-error-message {
+  @extend %form-error-message;
+}
+
+.tmp-textarea-error-text {
+  @extend %form-error-text;
+}
+
+/* ===================================
+ * FOOTER (Hint + Character Counter)
+ * =================================== */
+.tmp-textarea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-xxs);
+  padding: 0 var(--spacing-xxs);
+  gap: var(--spacing-s);
+}
+
+.textarea-hint {
+  @extend %form-hint-text;
+  margin: 0;
+  flex: 1;
+}
+
+.character-count {
+  font-size: var(--font-size-200);
+  color: var(--color-foreground-4);
+  font-family: var(--font-family-monospace);
+  flex-shrink: 0;
+  white-space: nowrap;
+}

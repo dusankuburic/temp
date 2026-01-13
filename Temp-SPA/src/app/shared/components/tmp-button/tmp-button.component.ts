@@ -6,7 +6,7 @@ export type ButtonSize = 'small' | 'medium' | 'large';
 @Component({
   selector: 'tmp-button',
   templateUrl: './tmp-button.component.html',
-  styleUrls: ['./tmp-button.component.css'],
+  styleUrls: ['./tmp-button.component.scss'],
   standalone: false
 })
 export class TmpButtonComponent {

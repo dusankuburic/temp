@@ -1,0 +1,253 @@
+@import '../../../styles/_mixins';
+
+/**
+ * OBSIDIAN NOIR - Employee Edit
+ * Page layout and styling for editing employee information
+ */
+
+/* ===================================
+ * PAGE HEADER
+ * =================================== */
+
+.employee-edit-header {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xl) 0;
+}
+
+.employee-edit-title-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.employee-edit-title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-800);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-foreground-1);
+  margin: 0 0 var(--spacing-s) 0;
+
+  background: linear-gradient(135deg, var(--color-foreground-1) 0%, var(--color-brand-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.employee-edit-subtitle {
+  font-size: var(--font-size-400);
+  color: var(--color-foreground-3);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ===================================
+ * MAIN CONTAINER
+ * =================================== */
+
+.employee-edit-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* ===================================
+ * FORM SECTION
+ * =================================== */
+
+.employee-edit-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+/* Info Card */
+.employee-edit-info-card {
+  padding: var(--spacing-l);
+}
+
+.employee-edit-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-l);
+}
+
+.employee-edit-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  text-align: center;
+}
+
+.employee-edit-info-label {
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-foreground-3);
+}
+
+.employee-edit-info-value {
+  font-size: var(--font-size-400);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand-primary);
+  font-family: var(--font-family-display);
+}
+
+/* Form Card */
+.employee-edit-form-card {
+  padding: var(--spacing-xl);
+}
+
+.employee-edit-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.employee-edit-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-s);
+  margin-top: var(--spacing-m);
+  padding-top: var(--spacing-m);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* ===================================
+ * MODERATOR SECTION
+ * =================================== */
+
+.employee-edit-moderator-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.employee-edit-section-header {
+  text-align: center;
+  padding-bottom: var(--spacing-l);
+  border-bottom: 2px solid var(--color-border-subtle);
+}
+
+.employee-edit-section-title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-600);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-foreground-1);
+  margin: 0 0 var(--spacing-xs) 0;
+
+  background: linear-gradient(135deg, var(--color-foreground-1) 0%, var(--color-brand-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.employee-edit-section-subtitle {
+  font-size: var(--font-size-300);
+  color: var(--color-foreground-3);
+  margin: 0;
+}
+
+/* Groups Grid */
+.employee-edit-groups-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-l);
+}
+
+.employee-edit-groups-card {
+  padding: var(--spacing-l);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.employee-edit-groups-card-title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-500);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-foreground-1);
+  margin: 0;
+  padding-bottom: var(--spacing-m);
+  border-bottom: 1px solid var(--color-border-subtle);
+  text-align: center;
+}
+
+.employee-edit-empty-message {
+  text-align: center;
+  color: var(--color-foreground-3);
+  font-style: italic;
+  padding: var(--spacing-l) !important;
+}
+
+/* ===================================
+ * RESPONSIVE
+ * =================================== */
+
+@media (max-width: 1024px) {
+  .employee-edit-groups-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .employee-edit-header {
+    padding: var(--spacing-l) 0;
+    margin-bottom: var(--spacing-l);
+  }
+
+  .employee-edit-title {
+    font-size: var(--font-size-700);
+  }
+
+  .employee-edit-subtitle {
+    font-size: var(--font-size-300);
+  }
+
+  .employee-edit-container {
+    padding: 0 var(--spacing-m);
+  }
+
+  .employee-edit-info-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-m);
+  }
+
+  .employee-edit-form-card {
+    padding: var(--spacing-l);
+  }
+
+  .employee-edit-form-fields {
+    gap: var(--spacing-m);
+  }
+
+  .employee-edit-section-title {
+    font-size: var(--font-size-500);
+  }
+
+  .employee-edit-groups-card {
+    padding: var(--spacing-m);
+  }
+}
+
+/* ===================================
+ * ACCESSIBILITY
+ * =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .employee-edit-info-card,
+  .employee-edit-form-card,
+  .employee-edit-groups-card {
+    border-width: 2px;
+  }
+}

@@ -17,7 +17,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-organization-list',
     templateUrl: './organization-list.component.html',
-    styleUrl: './organization-list.component.css',
+    styleUrl: './organization-list.component.scss',
     standalone: false
 })
 export class OrganizationListComponent extends DestroyableComponent implements OnInit, AfterViewInit {

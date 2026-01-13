@@ -1,0 +1,163 @@
+/**
+ * Accessibility Enhancements
+ * WCAG 2.1 Level AA compliant utilities
+ */
+
+/* Focus indicators */
+*:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-brand-primary);
+  color: var(--color-foreground-on-brand);
+  padding: var(--spacing-s) var(--spacing-m);
+  text-decoration: none;
+  z-index: 10000;
+  border-radius: 0 0 var(--border-radius-medium) 0;
+  font-weight: var(--font-weight-bold);
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Button states for accessibility */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form validation states */
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: var(--color-error-primary);
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  *:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+
+  button,
+  a,
+  input,
+  select {
+    border: 1px solid currentColor;
+  }
+
+  .border {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Forced colors (Windows High Contrast) */
+@media (forced-colors: active) {
+  .card,
+  .button,
+  .input {
+    border: 2px solid CanvasText;
+  }
+
+  button,
+  a {
+    outline: 1px solid ButtonBorder;
+  }
+}
+
+/* Better focus for form controls */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: var(--shadow-input-focus);
+}
+
+/* ARIA live region styles */
+[role="alert"],
+[role="status"] {
+  padding: var(--spacing-m);
+  margin: var(--spacing-m) 0;
+  border-radius: var(--border-radius-medium);
+  font-weight: var(--font-weight-semibold);
+}
+
+[role="alert"] {
+  background-color: var(--color-background-error);
+  color: var(--color-error-primary);
+  border: 1px solid var(--color-error-primary);
+}
+
+[role="status"] {
+  background-color: var(--color-background-success);
+  color: var(--color-success-primary);
+  border: 1px solid var(--color-success-primary);
+}
+
+/* Tooltip accessibility */
+[role="tooltip"] {
+  background-color: var(--color-surface-1);
+  color: var(--color-foreground-1);
+  padding: var(--spacing-s) var(--spacing-m);
+  border-radius: var(--border-radius-medium);
+  font-size: var(--font-size-200);
+  z-index: 1000;
+}
+
+/* Link visited state (important for colorblind users) */
+a:visited {
+  color: var(--color-foreground-link-visited);
+  text-decoration: underline;
+}
+
+/* Focus visible for keyboard users */
+.btn:focus-visible,
+.btn-primary:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+/* Link underline for clarity */
+a {
+  text-decoration: underline;
+  text-decoration-color: var(--color-foreground-link);
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}

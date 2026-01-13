@@ -1,0 +1,334 @@
+@import '../../../../styles/_mixins';
+@import '../../../../styles/components/form-base';
+
+/**
+ * OBSIDIAN NOIR - Datepicker Component
+ *
+ * Uses shared form-base patterns with datepicker-specific customizations.
+ *
+ * BASE PATTERNS USED:
+ * - form-field-strip-native(): Remove browser styling
+ * - form-floating-label(): Material Design floating label (more aggressive float)
+ *
+ * COMPONENT-SPECIFIC:
+ * - Custom container states (NO success state, custom error/focus shadows)
+ * - Calendar toggle button (Material Design controlled component)
+ * - Material Design calendar overrides (80+ lines of ::ng-deep styles)
+ * - Accessibility media queries (high contrast, reduced motion)
+ * - Responsive design media queries
+ */
+
+.tmp-datepicker-wrapper {
+  @include form-wrapper($gap: var(--spacing-xs));
+}
+
+/* ===================================
+ * CONTAINER - Custom states (different from base form-container-states)
+ * Datepicker has custom focus/error behavior and NO success state
+ * =================================== */
+.tmp-datepicker-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--border-radius-medium);
+  transition: all var(--duration-normal) var(--easing-standard);
+  min-height: 56px;
+  width: 100%;
+  overflow: hidden;
+
+  /* Hover State */
+  &:hover:not(.tmp-datepicker-disabled):not(.tmp-datepicker-error):not(.tmp-datepicker-focused) {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface-3);
+  }
+
+  /* Focus State - Custom shadow combination */
+  &.tmp-datepicker-focused:not(.tmp-datepicker-disabled):not(.tmp-datepicker-error) {
+    border-color: var(--color-brand-primary);
+    box-shadow: var(--shadow-glow-teal-sm), var(--shadow-focus-inset);
+    background-color: var(--color-surface-2);
+  }
+
+  /* Error State - Custom implementation */
+  &.tmp-datepicker-error {
+    border-color: var(--color-error-primary);
+
+    &:hover:not(.tmp-datepicker-disabled) {
+      border-color: var(--color-error-400);
+    }
+
+    &.tmp-datepicker-focused {
+      border-color: var(--color-error-primary);
+      box-shadow: var(--shadow-glow-error), inset 0 0 0 1px var(--color-error-primary);
+    }
+
+    .tmp-datepicker-label {
+      color: var(--color-error-primary);
+    }
+
+    .tmp-datepicker-icon {
+      color: var(--color-error-primary);
+    }
+  }
+
+  /* Disabled State */
+  &.tmp-datepicker-disabled {
+    background-color: var(--color-surface-3);
+    border-color: var(--color-border-subtle);
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    .tmp-datepicker-field {
+      cursor: not-allowed;
+      color: var(--color-foreground-4);
+    }
+
+    .tmp-datepicker-label {
+      color: var(--color-foreground-4);
+    }
+  }
+}
+
+/* ===================================
+ * DATEPICKER FIELD
+ * =================================== */
+.tmp-datepicker-field {
+  @include form-field-strip-native();
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 20px 48px 8px 16px !important;
+  flex: 1;
+  width: 100%;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-300);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.4;
+  cursor: pointer;
+  transition: padding var(--duration-fast) var(--easing-standard);
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:focus::placeholder {
+    color: var(--color-foreground-3);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--color-foreground-4);
+  }
+}
+
+/* ===================================
+ * FLOATING LABEL - More aggressive float than input
+ * =================================== */
+.tmp-datepicker-label {
+  @include form-floating-label(
+    $left: 16px,
+    $top: 50%,
+    $transform-centered: translateY(-50%),
+    $transform-floated: translateY(-155%) scale(0.8)
+  );
+  font-weight: var(--font-weight-regular);
+  user-select: none;
+  padding: 0 4px;
+  margin-left: -4px;
+
+  /* Floated state - additional styling */
+  [class*='-filled'] &,
+  [class*='-focused'] & {
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.02em;
+  }
+}
+
+/* ===================================
+ * DATEPICKER TOGGLE BUTTON
+ * =================================== */
+.tmp-datepicker-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-foreground-3);
+  z-index: var(--z-index-datepicker-toggle);
+
+  button {
+    color: inherit;
+  }
+}
+
+.tmp-datepicker-focused .tmp-datepicker-toggle {
+  color: var(--color-brand-primary);
+}
+
+/* ===================================
+ * ERROR MESSAGE
+ * =================================== */
+.tmp-datepicker-error-message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xxs);
+  padding-left: var(--spacing-xxs);
+  animation: slide-in var(--duration-fast) var(--easing-decelerate);
+}
+
+.tmp-datepicker-error-text {
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-error-primary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ===================================
+ * CUSTOM KEYFRAME for Datepicker
+ * (Different naming from base file's slideDown)
+ * =================================== */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+ * ACCESSIBILITY
+ * =================================== */
+@media (prefers-contrast: high) {
+  .tmp-datepicker-container {
+    border-width: 2px;
+  }
+
+  .tmp-datepicker-error {
+    border-width: 3px;
+  }
+
+  .tmp-datepicker-focused {
+    border-width: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tmp-datepicker-container,
+  .tmp-datepicker-label,
+  .tmp-datepicker-toggle,
+  .tmp-datepicker-error-message {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.tmp-datepicker-field:focus-visible {
+  outline: none;
+}
+
+/* ===================================
+ * RESPONSIVE DESIGN
+ * =================================== */
+@media (max-width: 576px) {
+  .tmp-datepicker-field {
+    font-size: var(--font-size-300);
+    padding-right: 70px;
+  }
+
+  .tmp-datepicker-label {
+    font-size: var(--font-size-300);
+  }
+}
+
+/* ===================================
+ * MATERIAL DESIGN DATEPICKER OVERRIDES
+ * =================================== */
+::ng-deep .mat-datepicker-content {
+  background-color: var(--color-surface-2) !important;
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-32);
+  border-radius: var(--border-radius-large);
+}
+
+::ng-deep .mat-calendar {
+  font-family: var(--font-family-base) !important;
+  background-color: transparent !important;
+}
+
+::ng-deep .mat-calendar-header {
+  background: var(--gradient-brand);
+  padding: 8px 0;
+  border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+  color: var(--color-foreground-on-brand) !important;
+}
+
+::ng-deep .mat-calendar-controls {
+  margin: 0 !important;
+}
+
+::ng-deep .mat-calendar-spacer {
+  display: none;
+}
+
+::ng-deep .mat-calendar-period-button {
+  color: var(--color-foreground-on-brand) !important;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+}
+
+::ng-deep .mat-calendar-arrow {
+  fill: var(--color-foreground-on-brand) !important;
+  border-top-color: currentColor !important;
+}
+
+::ng-deep .mat-calendar-previous-button,
+::ng-deep .mat-calendar-next-button {
+  color: var(--color-foreground-on-brand) !important;
+}
+
+::ng-deep .mat-calendar-table-header th {
+  color: var(--color-foreground-3) !important;
+  font-weight: 500;
+}
+
+::ng-deep .mat-calendar-body-label {
+  color: var(--color-foreground-3) !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content {
+  color: var(--color-foreground-1) !important;
+  border-radius: 50%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+::ng-deep .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+  background-color: rgba(45, 212, 191, 0.1) !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background: var(--gradient-brand) !important;
+  color: var(--color-foreground-on-brand) !important;
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: var(--color-brand-primary) !important;
+}
+
+::ng-deep .mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+  color: var(--color-foreground-4) !important;
+  opacity: 0.5;
+}
+
+::ng-deep .mat-calendar-body-cell-content.mat-focus-indicator {
+  border-radius: 50%;
+}

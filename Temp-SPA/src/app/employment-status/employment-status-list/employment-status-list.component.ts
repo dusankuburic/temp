@@ -16,7 +16,7 @@ import { TableColumn } from 'src/app/shared/components/tmp-table/tmp-table.compo
 @Component({
     selector: 'app-employment-status-list',
     templateUrl: './employment-status-list.component.html',
-    styleUrl: './employment-status-list.component.css',
+    styleUrl: './employment-status-list.component.scss',
     standalone: false
 })
 export class EmploymentStatusListComponent extends DestroyableComponent implements OnInit, AfterViewInit {
