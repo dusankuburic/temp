@@ -19,6 +19,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AddAuthHeaderInterceptor } from './core/interceptors/auth-interceptor.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { UserModule } from './user/user.module';
+import { ErrorsModule } from './errors/errors.module';
 
 export function tokenGetter(): any {
   return localStorage.getItem('token');
@@ -32,6 +33,7 @@ export function tokenGetter(): any {
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         UserModule,
+        ErrorsModule,
         SharedModule,
         FormsModule,
         AppRoutingModule,

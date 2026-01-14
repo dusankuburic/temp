@@ -1,0 +1,17 @@
+<div class="error-page-container">
+    <tmp-card variant="subtle" class="error-content">
+        <h1 class="error-code">500</h1>
+        <h2 class="error-title">Server Error</h2>
+        <p class="error-description">
+            Oops! Something went wrong on our end. We're working to fix it. Please try again later.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <tmp-button routerLink="/" variant="secondary" size="large">
+                Go Home
+            </tmp-button>
+            <tmp-button (clicked)="refresh()" variant="primary" size="large">
+                Try Again
+            </tmp-button>
+        </div>
+    </tmp-card>
+</div>
