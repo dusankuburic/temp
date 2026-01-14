@@ -7,7 +7,7 @@ import { AlertifyService } from 'src/app/core/services/alertify.service';
 @Component({
   selector: 'tmp-file-upload',
   templateUrl: './tmp-file-upload.component.html',
-  styleUrls: ['./tmp-file-upload.component.css'],
+  styleUrls: ['./tmp-file-upload.component.scss'],
   standalone: false
 })
 export class TmpFileUploadComponent {

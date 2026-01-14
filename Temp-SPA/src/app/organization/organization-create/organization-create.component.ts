@@ -10,7 +10,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-organization-create',
     templateUrl: './organization-create.component.html',
-    styleUrl: './organization-create.component.css',
+    styleUrl: './organization-create.component.scss',
     standalone: false
 })
 export class OrganizationCreateComponent extends DestroyableComponent implements OnInit {

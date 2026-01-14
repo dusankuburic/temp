@@ -1,0 +1,35 @@
+/* Display & Layout Utilities */
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+.flex-1 { flex: 1; }
+.flex-auto { flex: auto; }
+
+.grid { display: grid; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.inline { display: inline; }
+.hidden { display: none; }
+
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.items-stretch { align-items: stretch; }
+
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.h-full { height: 100%; }
+.h-auto { height: auto; }
+
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-x-auto { overflow-x: auto; }

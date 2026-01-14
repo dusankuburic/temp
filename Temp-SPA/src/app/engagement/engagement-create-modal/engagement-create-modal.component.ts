@@ -21,7 +21,7 @@ import { forkJoin } from 'rxjs';
 @Component({
     selector: 'app-engagement-create-modal',
     templateUrl: './engagement-create-modal.component.html',
-    styleUrls: ['../../shared/styles/modal.css'],
+    styleUrls: ['../../shared/styles/modal.scss'],
     standalone: false
 })
 export class EngagementCreateModalComponent extends DestroyableComponent implements OnInit{
@@ -33,7 +33,7 @@ export class EngagementCreateModalComponent extends DestroyableComponent impleme
   engagement!: Engagement;
 
   existingEngagements: ExistingEngagement[] = [];
-  employee!: Employee;
+  employee?: Employee;
   workplacesList: SelectionOption[] = [];
   employmentStatusesList: SelectionOption[] = [];
 
@@ -227,7 +227,7 @@ export class EngagementCreateModalComponent extends DestroyableComponent impleme
   }
 
   loadEngagements(): void {
-    this.engagementService.getEngagementForEmployee(this.employee.id).pipe(takeUntil(this.destroy$)).subscribe({
+    this.engagementService.getEngagementForEmployee(this.employeeId).pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         this.existingEngagements = res;
       },
@@ -238,7 +238,7 @@ export class EngagementCreateModalComponent extends DestroyableComponent impleme
   }
 
   create(): void {
-    this.engagement = { ...this.createEngagementForm.value, employeeId: this.employee.id };
+    this.engagement = { ...this.createEngagementForm.value, employeeId: this.employeeId };
     this.engagementService.createEngagement(this.engagement).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.bsModalRef.content.isSaved = true;

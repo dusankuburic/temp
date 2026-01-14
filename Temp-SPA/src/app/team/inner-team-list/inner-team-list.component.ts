@@ -17,7 +17,7 @@ import { TableColumn } from 'src/app/shared/components/tmp-table/tmp-table.compo
 @Component({
     selector: 'app-team-list',
     templateUrl: './inner-team-list.component.html',
-    styleUrl: './inner-team-list.component.css',
+    styleUrl: './inner-team-list.component.scss',
     standalone: false
 })
 export class TeamListComponent extends DestroyableComponent implements OnInit, AfterViewInit {

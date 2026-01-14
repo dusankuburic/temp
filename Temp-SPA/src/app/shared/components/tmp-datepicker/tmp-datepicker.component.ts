@@ -7,7 +7,7 @@ let nextUniqueId = 0;
 @Component({
     selector: 'tmp-datepicker',
     templateUrl: './tmp-datepicker.component.html',
-    styleUrl: './tmp-datepicker.component.css',
+    styleUrl: './tmp-datepicker.component.scss',
     standalone: false
 })
 export class TmpDatepickerComponent implements ControlValueAccessor {

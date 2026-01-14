@@ -7,7 +7,7 @@ export type BadgeSize = 'small' | 'medium' | 'large';
 @Component({
   selector: 'tmp-badge',
   templateUrl: './tmp-badge.component.html',
-  styleUrls: ['./tmp-badge.component.css'],
+  styleUrls: ['./tmp-badge.component.scss'],
   standalone: false
 })
 export class TmpBadgeComponent {

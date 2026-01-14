@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'tmp-avatar',
   templateUrl: './tmp-avatar.component.html',
-  styleUrls: ['./tmp-avatar.component.css'],
+  styleUrls: ['./tmp-avatar.component.scss'],
   standalone: false
 })
 export class TmpAvatarComponent {

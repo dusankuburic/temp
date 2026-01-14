@@ -11,7 +11,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-employment-status-edit',
     templateUrl: './employment-status-edit.component.html',
-    styleUrl: './employment-status-edit.component.css',
+    styleUrl: './employment-status-edit.component.scss',
     standalone: false
 })
 export class EmploymentStatusEditComponent extends DestroyableComponent implements OnInit {

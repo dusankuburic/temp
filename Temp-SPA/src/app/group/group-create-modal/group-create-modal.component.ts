@@ -12,7 +12,7 @@ import { BlobDto, BlobResponse } from 'src/app/core/models/blob';
 @Component({
     selector: 'app-group-create-modal',
     templateUrl: './group-create-modal.component.html',
-    styleUrls: ['../../shared/styles/modal.css'],
+    styleUrls: ['../../shared/styles/modal.scss'],
     standalone: false
 })
 export class GroupCreateModalComponent extends DestroyableComponent {

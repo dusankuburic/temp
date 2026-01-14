@@ -13,7 +13,7 @@ import { tableAnimations } from '../../../core/animations/table.animations';
 @Component({
   selector: 'tmp-table',
   templateUrl: './tmp-table.component.html',
-  styleUrls: ['./tmp-table.component.css'],
+  styleUrls: ['./tmp-table.component.scss'],
   standalone: false,
   animations: [tableAnimations]
 })

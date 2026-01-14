@@ -3,8 +3,8 @@
     <div class="tmp-select-container"
          [class.tmp-select-filled]="control.value"
          [class.tmp-select-focused]="isFocused"
-         [class.tmp-select-error]="!isFilter && control.touched && control.invalid"
-         [class.tmp-select-success]="!isFilter && control.touched && control.valid"
+         [class.tmp-select-error]="hasError"
+         [class.tmp-select-success]="isValid"
          [class.tmp-select-disabled]="control.disabled">
 
         <select
@@ -15,8 +15,8 @@
             (focus)="onFocus()"
             (blur)="onBlur()"
             [attr.aria-label]="label"
-            [attr.aria-invalid]="!isFilter && control.touched && control.invalid"
-            [attr.aria-describedby]="control.touched && control.invalid ? errorId : null">
+            [attr.aria-invalid]="hasError"
+            [attr.aria-describedby]="(hasError ? errorId : null) || (hint && !hasError ? hintId : null)">
             @for (option of options; track $index) {
             <option
                 [value]="option.value"
@@ -28,16 +28,20 @@
         </select>
 
         @if (label) {
-        <label [for]="selectId" class="tmp-select-label">{{label}}</label>
+        <label [for]="selectId" class="tmp-select-label">
+            {{ label }}
+            @if (isFieldRequired) {
+                <span class="required-indicator" aria-label="required">*</span>
+            }
+        </label>
         }
 
         <span class="tmp-select-chevron" aria-hidden="true">▼</span>
 
         @if (!isFilter && control.touched) {
-            @if (control.valid) {
+            @if (isValid) {
                 <span class="tmp-select-icon tmp-select-icon-success" aria-hidden="true">✓</span>
-            }
-            @if (control.invalid) {
+            } @else if (hasError) {
                 <span class="tmp-select-icon tmp-select-icon-error" aria-hidden="true">!</span>
             }
         }
@@ -51,6 +55,10 @@
                 </span>
             }
         </div>
+    }
+
+    @if (hint && !hasError) {
+        <p [id]="hintId" class="select-hint">{{ hint }}</p>
     }
 </div>
 } 

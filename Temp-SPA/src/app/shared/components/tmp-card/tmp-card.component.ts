@@ -6,7 +6,7 @@ export type CardSize = 'small' | 'medium' | 'large';
 @Component({
   selector: 'tmp-card',
   templateUrl: './tmp-card.component.html',
-  styleUrls: ['./tmp-card.component.css'],
+  styleUrls: ['./tmp-card.component.scss'],
   standalone: false
 })
 export class TmpCardComponent {

@@ -19,7 +19,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-employee-list',
     templateUrl: './employee-list.component.html',
-    styleUrl: './employee-list.component.css',
+    styleUrl: './employee-list.component.scss',
     standalone: false
 })
 export class EmployeeListComponent extends DestroyableComponent implements OnInit, AfterViewInit {

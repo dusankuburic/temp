@@ -1,0 +1,499 @@
+/**
+ * Fluent Design System - Animation Tokens
+ *
+ * This file defines motion and animation tokens based on Microsoft Fluent Design System.
+ * Motion creates a sense of context, guides the user, and brings delight.
+ *
+ * Structure:
+ * - Duration tokens (fast, normal, slow)
+ * - Easing functions (standard curves)
+ * - Component-specific animations
+ * - Transition presets
+ *
+ * Reference: https://fluent2.microsoft.design/motion
+ */
+
+:root {
+  /* ===================================
+   * DURATION TOKENS
+   * Fluent Design motion timing
+   * =================================== */
+
+  /* Ultra-fast - Instant feedback (50-100ms) */
+  --duration-ultra-fast: 50ms;
+  --duration-faster: 100ms;
+
+  /* Fast - Quick interactions (150-200ms) */
+  --duration-fast: 150ms;
+  --duration-fast-out: 200ms;
+
+  /* Normal - Standard transitions (250-300ms) */
+  --duration-normal: 250ms;
+  --duration-normal-in: 300ms;
+
+  /* Slow - Emphasized movements (400-500ms) */
+  --duration-slow: 400ms;
+  --duration-slower: 500ms;
+
+  /* Ultra-slow - Large transitions (600ms+) */
+  --duration-ultra-slow: 600ms;
+
+  /* ===================================
+   * EASING FUNCTIONS
+   * Fluent uses custom bezier curves for natural motion
+   * =================================== */
+
+  /* Standard easing - Default for most transitions */
+  --easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  /* Decelerate - Entrance animations (fast start, slow end) */
+  --easing-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --easing-ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
+
+  /* Accelerate - Exit animations (slow start, fast end) */
+  --easing-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+  --easing-ease-in: cubic-bezier(0.4, 0.0, 1, 1);
+
+  /* Accelerate-Decelerate - Emphasized motion */
+  --easing-accelerate-decelerate: cubic-bezier(0.4, 0.0, 0.6, 1);
+  --easing-ease-in-out: cubic-bezier(0.4, 0.0, 0.6, 1);
+
+  /* Linear - Constant speed (rarely used) */
+  --easing-linear: linear;
+
+  /* Max - Very sharp deceleration */
+  --easing-max: cubic-bezier(0.0, 0.0, 0.0, 1);
+
+  /* Bounce - Playful, spring-like */
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ===================================
+   * MOTION PRESETS
+   * Pre-configured transition combinations
+   * =================================== */
+
+  /* Fade transitions */
+  --transition-fade-in: opacity var(--duration-fast) var(--easing-decelerate);
+  --transition-fade-out: opacity var(--duration-faster) var(--easing-accelerate);
+
+  /* Scale transitions */
+  --transition-scale-up: transform var(--duration-normal) var(--easing-decelerate);
+  --transition-scale-down: transform var(--duration-fast) var(--easing-accelerate);
+
+  /* Slide transitions */
+  --transition-slide-up: transform var(--duration-normal) var(--easing-decelerate);
+  --transition-slide-down: transform var(--duration-fast) var(--easing-accelerate);
+  --transition-slide-left: transform var(--duration-normal) var(--easing-decelerate);
+  --transition-slide-right: transform var(--duration-normal) var(--easing-decelerate);
+
+  /* Color transitions */
+  --transition-color: color var(--duration-fast) var(--easing-standard);
+  --transition-background: background-color var(--duration-fast) var(--easing-standard);
+  --transition-border: border-color var(--duration-fast) var(--easing-standard);
+
+  /* Shadow transitions */
+  --transition-shadow: box-shadow var(--duration-normal) var(--easing-standard);
+
+  /* ===================================
+   * COMPONENT-SPECIFIC TRANSITIONS
+   * Pre-configured for common UI patterns
+   * =================================== */
+
+  /* Button transitions */
+  --transition-button: background-color var(--duration-fast) var(--easing-standard),
+                       box-shadow var(--duration-fast) var(--easing-standard),
+                       transform var(--duration-ultra-fast) var(--easing-standard);
+
+  /* Input/Form transitions */
+  --transition-input: border-color var(--duration-fast) var(--easing-standard),
+                      box-shadow var(--duration-fast) var(--easing-standard);
+
+  /* Card transitions */
+  --transition-card: box-shadow var(--duration-normal) var(--easing-standard),
+                     transform var(--duration-normal) var(--easing-standard);
+
+  /* Modal/Dialog transitions */
+  --transition-modal-backdrop: opacity var(--duration-normal) var(--easing-decelerate);
+  --transition-modal-content: transform var(--duration-normal) var(--easing-decelerate),
+                              opacity var(--duration-normal) var(--easing-decelerate);
+
+  /* Dropdown/Menu transitions */
+  --transition-dropdown: opacity var(--duration-fast) var(--easing-decelerate),
+                         transform var(--duration-fast) var(--easing-decelerate);
+
+  /* Tooltip transitions */
+  --transition-tooltip: opacity var(--duration-faster) var(--easing-decelerate);
+
+  /* Panel/Sidebar transitions */
+  --transition-panel: transform var(--duration-normal) var(--easing-standard);
+
+  /* Tab transitions */
+  --transition-tab: color var(--duration-fast) var(--easing-standard),
+                    border-color var(--duration-fast) var(--easing-standard);
+
+  /* Link transitions */
+  --transition-link: color var(--duration-faster) var(--easing-standard),
+                     text-decoration-color var(--duration-faster) var(--easing-standard);
+
+  /* ===================================
+   * REVEAL ANIMATIONS
+   * Fluent's signature Reveal effect
+   * =================================== */
+
+  --transition-reveal: background var(--duration-normal) var(--easing-standard);
+
+  /* ===================================
+   * LOADING ANIMATIONS
+   * For progress indicators and spinners
+   * =================================== */
+
+  --duration-spinner: 1.4s;
+  --duration-progress-indeterminate: 2s;
+  --duration-skeleton-shimmer: 1.5s;
+
+  /* ===================================
+   * DELAY TOKENS
+   * Stagger animations for lists
+   * =================================== */
+
+  --delay-stagger-1: 50ms;
+  --delay-stagger-2: 100ms;
+  --delay-stagger-3: 150ms;
+  --delay-stagger-4: 200ms;
+  --delay-stagger-5: 250ms;
+}
+
+/* ===================================
+ * ANIMATION KEYFRAMES
+ * Reusable animation definitions
+ * =================================== */
+
+/* Fade in */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade out */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Scale up */
+@keyframes scale-up {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Scale down */
+@keyframes scale-down {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Slide up */
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide down */
+@keyframes slide-down {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide left */
+@keyframes slide-left {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide right */
+@keyframes slide-right {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Spinner rotation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulse */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Progress indeterminate */
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Bounce in */
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Wiggle effect */
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotateZ(0deg);
+  }
+  15% {
+    transform: rotateZ(-5deg);
+  }
+  30% {
+    transform: rotateZ(3deg);
+  }
+  45% {
+    transform: rotateZ(-3deg);
+  }
+  60% {
+    transform: rotateZ(2deg);
+  }
+  75% {
+    transform: rotateZ(-1deg);
+  }
+}
+
+/* Glow effect */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(45, 212, 191, 0.6);
+  }
+}
+
+/* Flip card */
+@keyframes flip-in-x {
+  0% {
+    opacity: 0;
+    transform: rotateX(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+}
+
+/* Gradient shift */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ===================================
+ * ANIMATION UTILITY CLASSES
+ * Helper classes for quick application
+ * =================================== */
+
+/* Fade animations */
+.animate-fade-in {
+  animation: fade-in var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-fade-out {
+  animation: fade-out var(--duration-fast) var(--easing-accelerate);
+}
+
+/* Scale animations */
+.animate-scale-up {
+  animation: scale-up var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-scale-down {
+  animation: scale-down var(--duration-fast) var(--easing-accelerate);
+}
+
+/* Slide animations */
+.animate-slide-up {
+  animation: slide-up var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-slide-down {
+  animation: slide-down var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-slide-left {
+  animation: slide-left var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-slide-right {
+  animation: slide-right var(--duration-normal) var(--easing-decelerate);
+}
+
+/* Loading animations */
+.animate-spin {
+  animation: spin var(--duration-spinner) var(--easing-linear) infinite;
+}
+
+.animate-pulse {
+  animation: pulse var(--duration-slow) var(--easing-ease-in-out) infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer var(--duration-skeleton-shimmer) var(--easing-linear) infinite;
+  background: linear-gradient(
+    90deg,
+    var(--color-background-2) 0%,
+    var(--color-background-3) 50%,
+    var(--color-background-2) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Additional animations */
+.animate-bounce-in {
+  animation: bounce-in var(--duration-normal) var(--easing-bounce);
+}
+
+.animate-wiggle {
+  animation: wiggle var(--duration-normal) var(--easing-standard) infinite;
+}
+
+.animate-glow {
+  animation: glow var(--duration-slow) var(--easing-ease-in-out) infinite;
+}
+
+.animate-flip-in-x {
+  animation: flip-in-x var(--duration-normal) var(--easing-decelerate);
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+/* Transition utilities */
+.transition-none {
+  transition: none !important;
+}
+
+.transition-all {
+  transition: all var(--duration-normal) var(--easing-standard);
+}
+
+.transition-colors {
+  transition: var(--transition-color), var(--transition-background), var(--transition-border);
+}
+
+.transition-opacity {
+  transition: var(--transition-fade-in);
+}
+
+.transition-shadow {
+  transition: var(--transition-shadow);
+}
+
+.transition-transform {
+  transition: transform var(--duration-normal) var(--easing-standard);
+}
+
+/* ===================================
+ * MOTION PREFERENCES
+ * Respect user's motion preferences
+ * =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

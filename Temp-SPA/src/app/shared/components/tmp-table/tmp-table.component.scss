@@ -1,0 +1,541 @@
+/**
+ * OBSIDIAN NOIR - Table Component
+ * Dark data tables with subtle glow effects and refined interactions
+ */
+
+/* ===================================
+ * TABLE WRAPPER
+ * =================================== */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.tmp-table-wrapper {
+  width: 100%;
+}
+
+.tmp-table-container {
+  width: 100%;
+  max-width: 100%; /* Ensure it doesn't overflow parent */
+  overflow-x: auto;
+  border-radius: var(--border-radius-large);
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-4);
+
+  /* Custom scrollbar - High visibility */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-foreground-3) var(--color-surface-3);
+}
+
+.tmp-table-container::-webkit-scrollbar {
+  height: 10px; /* Slightly thicker */
+  width: 10px;
+}
+
+.tmp-table-container::-webkit-scrollbar-track {
+  background: var(--color-surface-3);
+  border-radius: var(--border-radius-large);
+}
+
+.tmp-table-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-foreground-3);
+  border-radius: var(--border-radius-pill);
+  border: 2px solid var(--color-surface-3); /* Padding effect */
+}
+
+.tmp-table-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-brand-primary);
+}
+
+/* ===================================
+ * BASE TABLE
+ * =================================== */
+
+.tmp-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-300);
+  color: var(--color-foreground-1);
+}
+
+/* ===================================
+ * TABLE HEADER
+ * =================================== */
+
+.tmp-table-head {
+  background-color: var(--color-surface-2);
+}
+
+.tmp-table-head th {
+  /* Layout */
+  padding: var(--spacing-m) var(--spacing-l);
+
+  /* Typography */
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-200);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-foreground-3);
+
+  /* Visual */
+  border-bottom: 1px solid var(--color-border-default);
+  white-space: nowrap;
+  text-align: left;
+  background-color: var(--color-surface-2);
+
+  /* Transition */
+  transition: color 200ms ease;
+}
+
+.tmp-table-head th:first-child {
+  border-top-left-radius: var(--border-radius-large);
+}
+
+.tmp-table-head th:last-child {
+  border-top-right-radius: var(--border-radius-large);
+}
+
+/* ===================================
+ * TABLE BODY
+ * =================================== */
+
+.tmp-table-body tr {
+  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tmp-table-body td {
+  /* Layout */
+  padding: var(--spacing-m) var(--spacing-l);
+
+  /* Visual */
+  border-bottom: 1px solid var(--color-border-subtle);
+  vertical-align: middle;
+  background-color: transparent;
+
+  /* Transitions */
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tmp-table-body tr:last-child td {
+  border-bottom: none;
+}
+
+.tmp-table-body tr:last-child td:first-child {
+  border-bottom-left-radius: var(--border-radius-large);
+}
+
+.tmp-table-body tr:last-child td:last-child {
+  border-bottom-right-radius: var(--border-radius-large);
+}
+
+/* ===================================
+ * STRIPED VARIANT
+ * =================================== */
+
+.tmp-table-striped .tmp-table-body tr:nth-child(even) {
+  background-color: var(--color-surface-2);
+}
+
+.tmp-table-striped .tmp-table-body tr:nth-child(odd) {
+  background-color: var(--color-surface-1);
+}
+
+/* ===================================
+ * HOVERABLE VARIANT - Teal Glow
+ * =================================== */
+
+.tmp-table-hoverable .tmp-table-body tr {
+  cursor: pointer;
+  position: relative;
+}
+
+.tmp-table-hoverable .tmp-table-body tr:hover {
+  background-color: var(--color-interactive-hover);
+}
+
+.tmp-table-hoverable .tmp-table-body tr:hover td {
+  color: var(--color-foreground-1);
+}
+
+/* Subtle left border indicator on hover */
+.tmp-table-hoverable .tmp-table-body tr:hover td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-brand-primary);
+}
+
+/* Active/pressed state */
+.tmp-table-hoverable .tmp-table-body tr:active {
+  background-color: var(--color-interactive-pressed);
+}
+
+/* ===================================
+ * COMPACT VARIANT
+ * =================================== */
+
+.tmp-table-compact .tmp-table-head th {
+  padding: var(--spacing-s) var(--spacing-m);
+  font-size: var(--font-size-100);
+}
+
+.tmp-table-compact .tmp-table-body td {
+  padding: var(--spacing-s) var(--spacing-m);
+  font-size: var(--font-size-200);
+}
+
+/* ===================================
+ * STICKY HEADER
+ * =================================== */
+
+.tmp-table-sticky-header .tmp-table-head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tmp-table-sticky-header .tmp-table-head th {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ===================================
+ * EMPTY STATE
+ * =================================== */
+
+.tmp-table-empty {
+  padding: var(--spacing-xxl);
+  text-align: center;
+  background-color: var(--color-surface-1);
+  border-radius: var(--border-radius-large);
+  border: 1px dashed var(--color-border-default);
+  animation: empty-fade-in 400ms ease;
+}
+
+@keyframes empty-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tmp-table-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-m);
+}
+
+.tmp-table-empty-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--color-foreground-4);
+  opacity: 0.5;
+}
+
+.tmp-table-empty-text {
+  font-size: var(--font-size-400);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-foreground-3);
+  margin: 0;
+}
+
+/* ===================================
+ * CELL CONTENT STYLING
+ * =================================== */
+
+/* Button groups in cells */
+.tmp-table-body td .btn-group,
+.tmp-table-body td .tmp-button-group {
+  display: inline-flex;
+  gap: var(--spacing-xs);
+}
+
+/* Badges in cells */
+.tmp-table-body td .tmp-badge,
+.tmp-table-body td .badge {
+  vertical-align: middle;
+}
+
+/* Links in cells - Teal accent */
+.tmp-table-body td a {
+  color: var(--color-brand-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: all 200ms ease;
+}
+
+.tmp-table-body td a:hover {
+  color: var(--color-brand-primary-hover);
+  text-shadow: var(--shadow-glow-teal-sm);
+}
+
+/* ===================================
+ * RESPONSIVE DESIGN
+ * =================================== */
+
+@media (max-width: 768px) {
+  .tmp-table-container {
+    border-radius: var(--border-radius-medium);
+  }
+
+  .tmp-table-head th,
+  .tmp-table-body td {
+    padding: var(--spacing-s) var(--spacing-m);
+    font-size: var(--font-size-200);
+  }
+
+  .tmp-table-head th {
+    font-size: var(--font-size-100);
+  }
+}
+
+@media (max-width: 576px) {
+  .tmp-table-head th,
+  .tmp-table-body td {
+    padding: var(--spacing-s) var(--spacing-s);
+  }
+
+  /* Stack buttons on mobile */
+  .tmp-table-body td .btn-group,
+  .tmp-table-body td .tmp-button-group {
+    flex-direction: column;
+    gap: var(--spacing-xxs);
+  }
+}
+
+/* ===================================
+ * ACCESSIBILITY
+ * =================================== */
+
+/* Focus visible for keyboard navigation */
+.tmp-table-body tr:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-brand-primary);
+}
+
+.tmp-table-body tr:focus-visible td:first-child {
+  border-top-left-radius: var(--border-radius-small);
+  border-bottom-left-radius: var(--border-radius-small);
+}
+
+.tmp-table-body tr:focus-visible td:last-child {
+  border-top-right-radius: var(--border-radius-small);
+  border-bottom-right-radius: var(--border-radius-small);
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .tmp-table-container {
+    border-width: 2px;
+  }
+
+  .tmp-table-head th {
+    border-bottom-width: 3px;
+  }
+
+  .tmp-table-body td {
+    border-bottom-width: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .tmp-table-body td,
+  .tmp-table-body tr,
+  .tmp-table-empty {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ===================================
+ * SELECTION STATE - Teal Highlight
+ * =================================== */
+
+.tmp-table-body tr.selected {
+  background-color: rgba(45, 212, 191, 0.1) !important;
+}
+
+.tmp-table-body tr.selected td {
+  border-color: rgba(45, 212, 191, 0.3);
+}
+
+.tmp-table-body tr.selected td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-brand-primary);
+}
+
+/* ===================================
+ * LOADING STATE
+ * =================================== */
+
+.tmp-table-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.tmp-table-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 13, 12, 0.7);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-large);
+}
+
+/* Loading spinner overlay */
+.tmp-table-loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border-subtle);
+  border-top-color: var(--color-brand-primary);
+  border-radius: 50%;
+  animation: table-spin 800ms linear infinite;
+  z-index: 1;
+}
+
+@keyframes table-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* ===================================
+ * SORTABLE HEADERS - Teal Accent
+ * =================================== */
+
+.tmp-table-head th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 200ms ease;
+}
+
+.tmp-table-head th.sortable:hover {
+  background-color: var(--color-surface-3);
+  color: var(--color-foreground-1);
+}
+
+.tmp-table-head th.sortable::after {
+  content: '';
+  display: inline-block;
+  margin-left: var(--spacing-xs);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 5px solid var(--color-foreground-4);
+  opacity: 0.4;
+  vertical-align: middle;
+  transition: all 200ms ease;
+}
+
+.tmp-table-head th.sortable:hover::after {
+  opacity: 0.7;
+}
+
+.tmp-table-head th.sortable.asc::after {
+  border-bottom: 5px solid var(--color-brand-primary);
+  opacity: 1;
+  filter: drop-shadow(0 0 4px var(--color-brand-primary));
+}
+
+.tmp-table-head th.sortable.desc::after {
+  border-top: 5px solid var(--color-brand-primary);
+  border-bottom: none;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px var(--color-brand-primary));
+}
+
+/* ===================================
+ * ROW ACTIONS COLUMN
+ * =================================== */
+
+.tmp-table-head th.actions,
+.tmp-table-body td.actions {
+  text-align: right;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.tmp-table-body td.actions {
+  padding-right: var(--spacing-m);
+}
+
+/* ===================================
+ * NUMERIC COLUMNS
+ * =================================== */
+
+.tmp-table-head th.numeric,
+.tmp-table-body td.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tmp-table-body td.numeric {
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-200);
+  color: var(--color-foreground-2);
+}
+
+/* ===================================
+ * STATUS INDICATORS
+ * =================================== */
+
+.tmp-table-body td .status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: var(--spacing-xs);
+  vertical-align: middle;
+}
+
+.tmp-table-body td .status-dot.active {
+  background-color: var(--color-success-primary);
+  box-shadow: var(--shadow-glow-success);
+}
+
+.tmp-table-body td .status-dot.inactive {
+  background-color: var(--color-foreground-4);
+}
+
+.tmp-table-body td .status-dot.warning {
+  background-color: var(--color-warning-primary);
+  box-shadow: var(--shadow-glow-warning);
+}
+
+.tmp-table-body td .status-dot.error {
+  background-color: var(--color-error-primary);
+  box-shadow: var(--shadow-glow-error);
+}

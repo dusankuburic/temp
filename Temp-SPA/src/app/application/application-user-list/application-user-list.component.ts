@@ -9,7 +9,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-application-user-list',
     templateUrl: './application-user-list.component.html',
-    styleUrl: './application-user-list.component.css',
+    styleUrl: './application-user-list.component.scss',
     standalone: false
 })
 export class ApplicationUserListComponent extends DestroyableComponent implements OnInit {

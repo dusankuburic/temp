@@ -1,0 +1,34 @@
+/**
+ * Layout Utility Mixins
+ * Container, grid, and section padding utilities
+ */
+
+@mixin container($max-width: 1200px, $padding: 20px) {
+  width: 100%;
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $padding;
+  padding-right: $padding;
+  @content;
+}
+
+@mixin section-padding($top: 60px, $bottom: 60px) {
+  padding-top: $top;
+  padding-bottom: $bottom;
+  @content;
+}
+
+@mixin grid($columns: 1, $gap: 20px) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+  @content;
+}
+
+@mixin grid-auto($min-width: 250px, $gap: 20px) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+  @content;
+}

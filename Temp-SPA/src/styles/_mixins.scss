@@ -1,0 +1,14 @@
+/**
+ * SCSS Mixins Library - Backward Compatibility Wrapper
+ *
+ * This file maintains backward compatibility by importing the modular
+ * mixin files from the mixins/ directory.
+ *
+ * For new projects, consider importing directly from the modular files:
+ * @import 'mixins/responsive';
+ * @import 'mixins/layout';
+ * @import 'mixins/buttons';
+ * etc.
+ */
+
+@import 'mixins/index';

@@ -15,7 +15,7 @@ import { SelectionOption } from 'src/app/shared/components/tmp-select/tmp-select
 @Component({
     selector: 'app-engagement-create',
     templateUrl: './engagement-create.component.html',
-    styleUrl: './engagement-create.component.css',
+    styleUrl: './engagement-create.component.scss',
     standalone: false
 })
 export class EngagementCreateComponent extends DestroyableComponent implements OnInit {

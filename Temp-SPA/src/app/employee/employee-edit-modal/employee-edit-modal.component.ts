@@ -23,7 +23,7 @@ import { TableColumn } from 'src/app/shared/components/tmp-table/tmp-table.compo
 @Component({
     selector: 'app-employee-edit-modal',
     templateUrl: './employee-edit-modal.component.html',
-    styleUrls: ['../../shared/styles/modal.css'],
+    styleUrls: ['../../shared/styles/modal.scss'],
     standalone: false
 })
 export class EmployeeEditModalComponent extends DestroyableComponent implements OnInit { 

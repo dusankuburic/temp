@@ -5,7 +5,7 @@ export type ModalSize = 'small' | 'medium' | 'large' | 'fullscreen';
 @Component({
   selector: 'tmp-modal',
   templateUrl: './tmp-modal.component.html',
-  styleUrls: ['./tmp-modal.component.css'],
+  styleUrls: ['./tmp-modal.component.scss'],
   standalone: false
 })
 export class TmpModalComponent implements OnInit, OnDestroy {

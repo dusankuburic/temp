@@ -1,0 +1,32 @@
+/**
+ * Focus Ring & Focus State Mixins
+ * Keyboard focus indicators and accessibility-friendly focus styles
+ */
+
+@mixin focus-ring($color: var(--color-focus, #2563eb), $width: 2px) {
+  outline: $width solid $color;
+  outline-offset: 2px;
+  @content;
+}
+
+@mixin focus-ring-button {
+  &:focus-visible {
+    outline: 2px solid var(--color-focus, #2563eb);
+    outline-offset: 2px;
+  }
+  @content;
+}
+
+@mixin focus-ring-input {
+  &:focus-visible {
+    outline: 2px solid var(--color-focus, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  @content;
+}
+
+@mixin focus-ring-reset {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  @content;
+}

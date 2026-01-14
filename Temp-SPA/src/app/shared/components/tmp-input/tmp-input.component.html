@@ -3,8 +3,8 @@
     <div class="tmp-input-container"
          [class.tmp-input-filled]="control.value"
          [class.tmp-input-focused]="isFocused"
-         [class.tmp-input-error]="!isFilter && control.touched && control.invalid"
-         [class.tmp-input-success]="!isFilter && control.touched && control.valid"
+         [class.tmp-input-error]="hasError"
+         [class.tmp-input-success]="isValid"
          [class.tmp-input-disabled]="control.disabled">
 
         <input
@@ -17,18 +17,26 @@
             (focus)="onFocus()"
             (blur)="onBlur()"
             [attr.aria-label]="label"
-            [attr.aria-invalid]="!isFilter && control.touched && control.invalid"
-            [attr.aria-describedby]="control.touched && control.invalid ? errorId : null">
+            [attr.aria-invalid]="hasError"
+            [attr.aria-describedby]="(hasError ? errorId : null) || (hint && !hasError ? hintId : null)">
 
-        <label [for]="inputId" class="tmp-input-label">{{label}}</label>
+        <label [for]="inputId" class="tmp-input-label">
+            {{ label }}
+            @if (isFieldRequired) {
+                <span class="required-indicator" aria-label="required">*</span>
+            }
+        </label>
 
         @if (!isFilter && control.touched) {
-            @if (control.valid) {
+            @if (isLoading) {
+                <span class="tmp-input-icon tmp-input-icon-loading" aria-hidden="true">
+                    <fa-icon [icon]="faSpinner" [size]="'xl'"></fa-icon>
+                </span>
+            } @else if (control.valid) {
                 <span class="tmp-input-icon tmp-input-icon-success" aria-hidden="true">
                     <fa-icon [icon]="faCheck" [size]="'xl'"></fa-icon>
                 </span>
-            }
-            @if (control.invalid) {
+            } @else if (control.invalid) {
                 <span class="tmp-input-icon tmp-input-icon-error" aria-hidden="true">
                     <fa-icon [icon]="faExclamationCircle" [size]="'xl'"></fa-icon>
                 </span>
@@ -87,6 +95,10 @@
                 <span class="tmp-input-error-text">Value too high.</span>
             }
         </div>
+    }
+
+    @if (hint && !hasError) {
+        <p [id]="hintId" class="input-hint">{{ hint }}</p>
     }
 </div>
 }

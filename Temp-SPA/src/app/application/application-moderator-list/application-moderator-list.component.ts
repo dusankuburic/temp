@@ -10,7 +10,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-application-moderator-list',
     templateUrl: './application-moderator-list.component.html',
-    styleUrl: './application-moderator-list.component.css',
+    styleUrl: './application-moderator-list.component.scss',
     standalone: false
 })
 export class ApplicationModeratorListComponent extends DestroyableComponent implements OnInit {
