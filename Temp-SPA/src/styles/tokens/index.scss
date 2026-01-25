@@ -1,11 +1,11 @@
 /**
  * Fluent Design System - Design Tokens
  *
- * This is the main entry point for all design tokens.
- * Import this file to get access to the complete Fluent Design token system.
+ * This is main entry point for all design tokens.
+ * Import this file to get access to complete Fluent Design token system.
  *
  * Usage in your styles.css:
- * @import './styles/tokens/index';
+ * @use './styles/tokens/index';
  *
  * Token Categories:
  * 1. Colors - Neutral, brand, and semantic color palettes
@@ -25,15 +25,15 @@
  */
 
 /* Import token files in order */
-@import './_colors';
-@import './_typography';
-@import './_spacing';
-@import './_elevation';
-@import './_z-index';
-@import './_animation';
-@import './_motion';
-@import './_data-viz';
-@import './_borders';
+@forward './_colors';
+@forward './_typography';
+@forward './_spacing';
+@forward './_elevation';
+@forward './_z-index';
+@forward './_animation';
+@forward './_motion';
+@forward './_data-viz';
+@forward './_borders';
 
 /**
  * Base Styles

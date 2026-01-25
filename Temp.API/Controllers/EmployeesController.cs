@@ -26,6 +26,26 @@ public class EmployeesController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("with-engagement")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(PagedList<GetEmployeesWithEngagementResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetEmployeesWithEngagement([FromQuery] GetEmployeesWithEngagementRequest request) {
+        var response = await _employeeService.GetEmployeesWithEngagement(request);
+        Response.AddPagination(response.CurrentPage, response.PageSize, response.TotalCount, response.TotalPages);
+
+        return Ok(response);
+    }
+
+    [HttpGet("without-engagement")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(PagedList<GetEmployeesWithoutEngagementResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetEmployeesWithoutEngagement([FromQuery] GetEmployeesWithoutEngagementRequest request) {
+        var response = await _employeeService.GetEmployeesWithoutEngagement(request);
+        Response.AddPagination(response.CurrentPage, response.PageSize, response.TotalCount, response.TotalPages);
+
+        return Ok(response);
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(GetEmployeesResponse), StatusCodes.Status200OK)]
@@ -47,8 +67,14 @@ public class EmployeesController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> UpdateEmployee([FromBody] UpdateEmployeeRequest request) {
-        var response = await _employeeService.UpdateEmployee(request);
+    public async Task<IActionResult> UpdateEmployee([FromRoute] int id, [FromBody] UpdateEmployeeRequest request) {
+        if (request.Id != 0 && request.Id != id) {
+            return BadRequest("Route id and payload id must match.");
+        }
+
+        request.Id = id;
+
+        await _employeeService.UpdateEmployee(request);
 
         return NoContent();
     }

@@ -1,5 +1,5 @@
 import { Component, Input, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { AbstractControl, NG_VALUE_ACCESSOR, ValidationErrors, Validators } from '@angular/forms';
 import { ControlValueAccessorDirective } from '../control-value-accessor.directive';
 import { faCheck, faExclamationCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
@@ -44,7 +44,7 @@ export class TmpInputComponent<T> extends ControlValueAccessorDirective<T> {
 
   get isFieldRequired(): boolean {
     if (!this.control?.validator) return false;
-    const validator = this.control.validator({} as any);
+    const validator = this.control.validator({} as AbstractControl);
     return !!(validator && validator['required'] === true);
   }
 
@@ -68,7 +68,7 @@ export class TmpInputComponent<T> extends ControlValueAccessorDirective<T> {
     this.isFocused = false;
   }
 
-  // Icons
+  
   protected readonly faCheck = faCheck;
   protected readonly faExclamationCircle = faExclamationCircle;
   protected readonly faSpinner = faSpinner;

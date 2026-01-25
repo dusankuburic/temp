@@ -34,8 +34,8 @@ export class EngagementCreateModalComponent extends DestroyableComponent impleme
 
   existingEngagements: ExistingEngagement[] = [];
   employee?: Employee;
-  workplacesList: SelectionOption[] = [];
-  employmentStatusesList: SelectionOption[] = [];
+  workplacesList: SelectionOption<number>[] = [];
+  employmentStatusesList: SelectionOption<number>[] = [];
 
   fileIcon = faFile;
   downloadIcon = faCloudDownloadAlt;

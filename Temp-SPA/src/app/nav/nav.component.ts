@@ -6,6 +6,8 @@ import { AlertifyService } from '../core/services/alertify.service';
 import { AuthService } from '../core/services/auth.service';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { DestroyableComponent } from '../core/base/destroyable.component';
+import { User } from '../core/models/user';
+import { JwtPayload } from '../core/models/jwt-payload';
 
 @Component({
     selector: 'app-nav',
@@ -13,45 +15,61 @@ import { DestroyableComponent } from '../core/base/destroyable.component';
     styleUrls: ['./nav.component.scss'],
     standalone: false
 })
-export class NavComponent extends DestroyableComponent implements OnInit, OnDestroy {
-  signOutIcon = faSignOutAlt
-  model: any = {};
-  isMenuOpen = false;
-  isUserMenuOpen = false;
-  private removeDocumentClickListener?: () => void;
+ export class NavComponent extends DestroyableComponent implements OnInit, OnDestroy {
+   signOutIcon = faSignOutAlt
+   isMenuOpen = false;
+   isUserMenuOpen = false;
+   isScrolled = false;
+   private removeDocumentClickListener?: () => void;
+   private removeScrollListener?: () => void;
 
-  constructor(
-    public authService: AuthService,
-    private alertify: AlertifyService,
-    private router: Router,
-    private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document) {
-    super();
-  }
+   constructor(
+     public authService: AuthService,
+     private alertify: AlertifyService,
+     private router: Router,
+     private renderer: Renderer2,
+     @Inject(DOCUMENT) private document: Document) {
+     super();
+   }
 
-  ngOnInit(): void {
-    this.removeDocumentClickListener = this.renderer.listen(this.document, 'click', () => {
-      this.isUserMenuOpen = false;
-    });
+   ngOnInit(): void {
+     
+     this.removeDocumentClickListener = this.renderer.listen(this.document, 'click', () => {
+       this.isUserMenuOpen = false;
+     });
 
-    this.router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.isUserMenuOpen = false;
-        if (this.isMobile()) {
-          this.isMenuOpen = false;
-          this.applySidebarState();
-        }
-      });
-  }
+     
+     this.removeScrollListener = this.renderer.listen(this.document, 'scroll', () => {
+       this.onWindowScroll();
+     });
+
+     
+     this.onWindowScroll();
+
+     this.router.events
+       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd), takeUntil(this.destroy$))
+       .subscribe(() => {
+         this.isUserMenuOpen = false;
+         if (this.isMobile()) {
+           this.isMenuOpen = false;
+           this.applySidebarState();
+         }
+       });
+   }
+
+   private onWindowScroll(): void {
+     const scrollPosition = typeof window !== 'undefined' ? window.pageYOffset || document.documentElement.scrollTop : 0;
+     this.isScrolled = scrollPosition > 10;
+   }
 
   ngOnDestroy(): void {
     this.removeDocumentClickListener?.();
+    this.removeScrollListener?.();
     super.ngOnDestroy();
   }
 
 
-  loggedIn(): any {
+  loggedIn(): boolean {
     return this.authService.loggedIn();
   }
 
@@ -96,11 +114,11 @@ export class NavComponent extends DestroyableComponent implements OnInit, OnDest
     }
   }
 
-  get currentUser(): any {
+  get currentUser(): User {
     return this.authService.currentUser;
   }
 
-  get decodedToken(): any {
+  get decodedToken(): JwtPayload | null {
       return this.authService.decodedToken;
   }
 

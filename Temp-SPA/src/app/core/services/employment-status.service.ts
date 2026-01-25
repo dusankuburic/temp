@@ -58,12 +58,12 @@ getEmploymentStatuses(): Observable<EmploymentStatus[]> {
   return this.http.get<EmploymentStatus[]>(this.baseUrl + 'employmentStatuses');
 }
 
-getEmploymentStatusesForSelect(): Observable<SelectionOption[]> {
+getEmploymentStatusesForSelect(): Observable<SelectionOption<number>[]> {
   return this.http.get<EmploymentStatus[]>(this.baseUrl + 'employmentStatuses')
     .pipe(map(x => x.map(p => ({
       value: p.id,
       display: p.name
-    } as SelectionOption)))
+    } as SelectionOption<number>)))
   );
 }
 

@@ -22,15 +22,16 @@
     </form>
   </tmp-card>
 
-  <!-- Data Table Card -->
-  <tmp-card variant="filled" class="employee-list-table-card">
-    <tmp-table
-      [columns]="columns"
-      [data]="employees"
-      [striped]="true"
-      [hoverable]="true"
-      [loading]="isLoading"
-      emptyMessage="No employees found">
+   <!-- Data Table Card -->
+   <tmp-card variant="filled" class="employee-list-table-card">
+     <tmp-table
+       [columns]="columns"
+       [data]="employees"
+       [striped]="true"
+       [hoverable]="true"
+       [loading]="isLoading"
+       [disableAnimations]="disableTableAnimations"
+       emptyMessage="No employees found">
 
       <!-- Custom row template for complex content -->
       <ng-template #rowTemplate let-employee>

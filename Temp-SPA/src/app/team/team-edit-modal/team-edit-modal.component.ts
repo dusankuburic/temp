@@ -33,7 +33,7 @@ export class TeamEditModalComponent extends DestroyableComponent implements OnIn
   title?: string;
   teamFiles: any[] = [];
 
-  // Pagination
+  
   pageNumber = 1;
   pageSize = 5;
 

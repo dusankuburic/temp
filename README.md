@@ -73,7 +73,7 @@ make start
 
 **App (Default Admin):**
 - Username: `johndoe@test.com`
-- Password: `5B3jt4H8$$3t03E88`
+- Password: `YourSecurePassword123!`
 
 **Redis UI:**
 - Username: `root` (configurable via `REDIS_UI_USER` env var)

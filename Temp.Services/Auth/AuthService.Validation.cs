@@ -1,4 +1,4 @@
-﻿using Temp.Domain.Models.Identity;
+using Temp.Domain.Models.Identity;
 using Temp.Services.Auth.Exceptions;
 
 namespace Temp.Services.Auth;
@@ -16,11 +16,6 @@ public partial class AuthService
         ValidateUserIsNull(user);
         ValidateUserIdIsNull(user.Id);
         ValidateUserFields(user);
-    }
-
-    private void ValidateOnLogin(SignInResult signInResult) {
-        if (signInResult.Succeeded == false)
-            throw new NullUserException();
     }
 
     private static void ValidateUserFields(AppUser user) {

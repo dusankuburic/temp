@@ -26,6 +26,22 @@ public class EmployeesControllerTests : IClassFixture<WebApplicationFactory<Prog
     }
 
     [Fact]
+    public async Task GetEmployeesWithEngagement_ReturnsOkResult() {
+
+        var response = await _client.GetAsync("/api/employees/with-engagement");
+
+        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task GetEmployeesWithoutEngagement_ReturnsOkResult() {
+
+        var response = await _client.GetAsync("/api/employees/without-engagement");
+
+        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
     public async Task GetEmployee_WithValidId_ReturnsEmployee() {
         var employeeId = 1;
 
@@ -84,7 +100,7 @@ public class EmployeesControllerTests : IClassFixture<WebApplicationFactory<Prog
     }
 
     [Fact]
-    public async Task UpdateEmployee_WithValidData_ReturnsOk() {
+    public async Task UpdateEmployee_WithValidData_ReturnsNoContent() {
 
         var employeeId = 1;
         var request = new UpdateEmployeeRequest
@@ -96,13 +112,26 @@ public class EmployeesControllerTests : IClassFixture<WebApplicationFactory<Prog
 
         var response = await _client.PutAsJsonAsync($"/api/employees/{employeeId}", request);
 
-        if (response.IsSuccessStatusCode) {
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.Should().BeOneOf(HttpStatusCode.NoContent, HttpStatusCode.Unauthorized);
+    }
 
-            var updatedEmployee = await response.Content.ReadFromJsonAsync<GetEmployeeResponse>();
-            updatedEmployee.Should().NotBeNull();
-            updatedEmployee!.FirstName.Should().Be(request.FirstName);
+    [Fact]
+    public async Task UpdateEmployee_WithMismatchedIds_ReturnsBadRequest() {
+
+        var employeeId = 1;
+        var mismatchedRequest = new UpdateEmployeeRequest {
+            Id = employeeId + 1,
+            FirstName = "Mismatch",
+            LastName = "User"
+        };
+
+        var response = await _client.PutAsJsonAsync($"/api/employees/{employeeId}", mismatchedRequest);
+
+        if (response.StatusCode == HttpStatusCode.Unauthorized) {
+            return;
         }
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]

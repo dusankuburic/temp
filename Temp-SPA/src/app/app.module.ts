@@ -20,6 +20,7 @@ import { AddAuthHeaderInterceptor } from './core/interceptors/auth-interceptor.i
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { UserModule } from './user/user.module';
 import { ErrorsModule } from './errors/errors.module';
+import { ModalFixService } from './core/services/modal-fix.service';
 
 export function tokenGetter(): any {
   return localStorage.getItem('token');

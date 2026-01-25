@@ -48,9 +48,9 @@ export class EmployeeEditModalComponent extends DestroyableComponent implements 
   employee!: Employee;
   username?: string;
   fullTeam!: FullTeam;
-  organizationsSelect!: SelectionOption[];
-  innerGroupsSelect!: SelectionOption[];
-  innerTeamsSelect!: SelectionOption[];
+  organizationsSelect!: SelectionOption<number>[];
+  innerGroupsSelect!: SelectionOption<number>[];
+  innerTeamsSelect!: SelectionOption<number>[];
   currentModeratorGroups!: Group[];
   freeModeratorGroups!: Group[];
 

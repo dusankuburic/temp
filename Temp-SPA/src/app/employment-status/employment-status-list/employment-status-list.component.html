@@ -20,14 +20,15 @@
     </form>
   </tmp-card>
 
-  <!-- Data Table Card -->
-  <tmp-card variant="filled" class="employment-status-list-table-card">
-    <tmp-table
-      [columns]="columns"
-      [data]="employmentStatuses"
-      [striped]="true"
-      [hoverable]="true"
-      emptyMessage="No employment statuses found">
+   <!-- Data Table Card -->
+   <tmp-card variant="filled" class="employment-status-list-table-card">
+     <tmp-table
+       [columns]="columns"
+       [data]="employmentStatuses"
+       [striped]="true"
+       [hoverable]="true"
+       [disableAnimations]="disableTableAnimations"
+       emptyMessage="No employment statuses found">
 
       <ng-template #rowTemplate let-employment>
         <tr>

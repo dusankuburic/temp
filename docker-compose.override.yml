@@ -84,6 +84,8 @@ services:
       - ConnectionStrings__DefaultConnection=${SQL_CONNECTION_DOCKER:-Server=tempdb;User=sa;Password=YourStrong!Passw0rd;Database=Temp;Trusted_Connection=false;MultipleActiveResultSets=True;TrustServerCertificate=True;}
       - ConnectionStrings__AzureConnection=${AZURE_STORAGE_CONNECTION:-AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;TableEndpoint=http://azurite:10002/devstoreaccount1;}
       - ConnectionStrings__Redis=${REDIS_CONNECTION:-redis-cache:6379}
+      # Seeding Configuration
+      - SeedConfiguration__AdminUser__Password=${SEED_ADMIN_PASSWORD:-YourSecurePassword123!}
     ports:
       - 5000:8080
       - 5001:8081

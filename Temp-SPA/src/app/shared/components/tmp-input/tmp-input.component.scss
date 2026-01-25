@@ -1,5 +1,5 @@
-@import '../../../../styles/_mixins';
-@import '../../../../styles/components/form-base';
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/components/form-base' as *;
 
 /**
  * OBSIDIAN NOIR - Input Component

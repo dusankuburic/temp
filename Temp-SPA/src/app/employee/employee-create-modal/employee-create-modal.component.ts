@@ -22,9 +22,9 @@ export class EmployeeCreateModalComponent extends DestroyableComponent implement
   title?: string;
   createEmployeeForm!: FormGroup;
   employee!: Employee;
-  organizationsSelect!: SelectionOption[];
-  innerGroupsSelect!: SelectionOption[];
-  innerTeamsSelect!: SelectionOption[];
+  organizationsSelect!: SelectionOption<number>[];
+  innerGroupsSelect!: SelectionOption<number>[];
+  innerTeamsSelect!: SelectionOption<number>[];
   profilePictureUrl?: string;
   profilePicturePreviewUrl?: string;
   private profilePhotoFile: File | null = null;

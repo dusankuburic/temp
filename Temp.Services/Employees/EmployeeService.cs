@@ -99,7 +99,7 @@ public partial class EmployeeService : BaseService<Employee>, IEmployeeService
         var currentDateTime = DateTime.UtcNow;
 
         var allEmployeesCount = await UnitOfWork.Employees.QueryNoTracking().CountAsync();
-        Console.WriteLine($"[DEBUG] Total Employees in DB: {allEmployeesCount}");
+        Logger.LogDebug($"Total employees in DB: {allEmployeesCount}");
 
         IQueryable<Employee> employeesQuery = UnitOfWork.Employees
             .QueryNoTracking()
@@ -107,7 +107,7 @@ public partial class EmployeeService : BaseService<Employee>, IEmployeeService
             .OrderByDescending(x => x.Id);
 
         var filteredCount = await employeesQuery.CountAsync();
-        Console.WriteLine($"[DEBUG] Employees without active engagement: {filteredCount}");
+        Logger.LogDebug($"Employees without active engagement: {filteredCount}");
 
         employeesQuery = ApplyEmployeeFilters(employeesQuery, request.Role, request.FirstName, request.LastName);
 
@@ -120,7 +120,7 @@ public partial class EmployeeService : BaseService<Employee>, IEmployeeService
             request.PageNumber,
             request.PageSize);
             
-        Console.WriteLine($"[DEBUG] Returning {employees.Count} employees in response page.");
+        Logger.LogDebug($"Returning {employees.Count} employees without engagement in response page.");
 
         return employees;
     });

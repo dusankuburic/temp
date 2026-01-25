@@ -2,19 +2,21 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faEdit, faLock, faLockOpen, faPlusCircle, faSitemap, faUserTimes } from '@fortawesome/free-solid-svg-icons';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { Subscription, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { combineLatest, debounceTime, distinctUntilChanged, startWith, takeUntil } from 'rxjs';
 import { Employee, EmployeeParams } from 'src/app/core/models/employee';
 import { PaginatedResult, Pagination } from 'src/app/core/models/pagination';
 import { UnassignRoleDto } from 'src/app/core/models/unassignRoleDto';
 import { AlertifyService } from 'src/app/core/services/alertify.service';
 import { EmployeeService } from 'src/app/core/services/employee.service';
+import { ModalFactoryService } from 'src/app/core/services/modal-factory.service';
 import { SelectionOption } from 'src/app/shared/components/tmp-select/tmp-select.component';
 import { TableColumn } from 'src/app/shared/components/tmp-table/tmp-table.component';
 import { EmployeeCreateModalComponent } from '../employee-create-modal/employee-create-modal.component';
 import { EmployeeEditModalComponent } from '../employee-edit-modal/employee-edit-modal.component';
 import { EmployeeAssignRoleModalComponent } from '../employee-assign-role-modal/employee-assign-role-modal.component';
 import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
+import { UserRoles } from 'src/app/core/constants/app.constants';
 
 @Component({
     selector: 'app-employee-list',
@@ -38,16 +40,16 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
   ];
 
   bsModalRef?: BsModalRef;
-  subscriptions!: Subscription;
   filtersForm!: FormGroup;
   employees!: Employee[];
+  disableTableAnimations = false;
   unassignRoleDto!: UnassignRoleDto;
   rolesSelect: SelectionOption[] = [
     {value: '', display: '', disabled: true},
     {value: '', display: 'All'},
-    {value: 'User', display: 'User'},
-    {value: 'Admin', display: 'Admin'},
-    {value: 'Moderator', display: 'Moderator'},
+    {value: UserRoles.USER, display: 'User'},
+    {value: UserRoles.ADMIN, display: 'Admin'},
+    {value: UserRoles.MODERATOR, display: 'Moderator'},
     {value: 'None', display: 'None'}];
   employeeParams!: EmployeeParams;
 
@@ -59,7 +61,7 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
     private employeeService: EmployeeService,
     private alertify: AlertifyService,
     private fb: FormBuilder,
-    private bsModalService: BsModalService) {
+    private modalFactory: ModalFactoryService) {
       super();
       this.employeeParams = employeeService.getEmployeeParams();
 
@@ -71,43 +73,30 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
     }
     
   ngAfterViewInit(): void {
-    const roleControl = this.filtersForm.get('role');
-    roleControl?.valueChanges.pipe(
-      debounceTime(100),
-      distinctUntilChanged(),
+    combineLatest([
+      this.filtersForm.get('role')!.valueChanges.pipe(
+        startWith(this.filtersForm.get('role')!.value),
+        debounceTime(100),
+        distinctUntilChanged()
+      ),
+      this.filtersForm.get('firstName')!.valueChanges.pipe(
+        startWith(this.filtersForm.get('firstName')!.value),
+        debounceTime(600),
+        distinctUntilChanged()
+      ),
+      this.filtersForm.get('lastName')!.valueChanges.pipe(
+        startWith(this.filtersForm.get('lastName')!.value),
+        debounceTime(600),
+        distinctUntilChanged()
+      )
+    ]).pipe(
       takeUntil(this.destroy$)
-    ).subscribe((searchFor) => {
-        const params = this.employeeService.getEmployeeParams();
-        params.pageNumber = 1;
-        this.employeeParams.role = searchFor;
-        this.employeeService.setEmployeeParams(params);
-        this.employeeParams = params;
-        this.loadEmployees();
-    });
-
-    const firstNameControl = this.filtersForm.get('firstName');
-    firstNameControl?.valueChanges.pipe(
-      debounceTime(600),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
-    ).subscribe((searchFor) => {
-        const params = this.employeeService.getEmployeeParams();
-        params.pageNumber = 1;
-        params.firstName = searchFor;
-        this.employeeService.setEmployeeParams(params);
-        this.employeeParams = params;
-        this.loadEmployees();
-    });
-
-    const lastNameControl = this.filtersForm.get('lastName');
-    lastNameControl?.valueChanges.pipe(
-      debounceTime(600),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
-    ).subscribe((searchFor) => {
+    ).subscribe(([role, firstName, lastName]) => {
       const params = this.employeeService.getEmployeeParams();
       params.pageNumber = 1;
-      params.lastName = searchFor;
+      params.role = role;
+      params.firstName = firstName;
+      params.lastName = lastName;
       this.employeeService.setEmployeeParams(params);
       this.employeeParams = params;
       this.loadEmployees();
@@ -124,72 +113,45 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
   }
 
   openCreateModal(): void {
-    const initialState: ModalOptions = {
-      class: 'modal-dialog-centered',
+    this.bsModalRef = this.modalFactory.open({
+      component: EmployeeCreateModalComponent,
+      cssClass: 'modal-dialog-centered',
       initialState: {
         title: 'Create Employee'
-      }
-    };
-    this.subscriptions = new Subscription();
-    this.bsModalRef = this.bsModalService.show(EmployeeCreateModalComponent, initialState);
-    if (this.bsModalRef?.onHidden) {
-      this.subscriptions.add(this.bsModalRef.onHidden.subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
-          this.loadEmployees();
-        
-        this.unsubscribe();
-      }))
-    }
+      },
+      onSave: () => this.loadEmployees()
+    }, this.destroy$);
   }
 
   openEditModal(id: number): void {
-    const initialState: ModalOptions = {
-      class: 'modal-dialog-centered modal-xl',
+    this.bsModalRef = this.modalFactory.open({
+      component: EmployeeEditModalComponent,
+      cssClass: 'modal-dialog-centered modal-xl',
       initialState: {
         title: 'Edit Employee',
         employeeId: id
-      }
-    };
-    this.subscriptions = new Subscription();
-    this.bsModalRef = this.bsModalService.show(EmployeeEditModalComponent, initialState);
-    if (this.bsModalRef?.onHidden) {
-      this.subscriptions.add(this.bsModalRef.onHidden.subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
-          this.loadEmployees();
-        
-        this.unsubscribe();
-      }))
-    }
+      },
+      onSave: () => this.loadEmployees()
+    }, this.destroy$);
   }
 
   openAssignRoleModal(id: number, firstName: string, lastName: string): void {
-    const initialState: ModalOptions = {
-      class: 'modal-dialog-centered',
+    this.bsModalRef = this.modalFactory.open({
+      component: EmployeeAssignRoleModalComponent,
+      cssClass: 'modal-dialog-centered',
       initialState: {
         title: 'Assign Role',
         employeeId: id,
         firstName: firstName,
         lastName: lastName
-      }
-    };
-    this.subscriptions = new Subscription();
-    this.bsModalRef = this.bsModalService.show(EmployeeAssignRoleModalComponent, initialState);
-    if (this.bsModalRef?.onHidden) {
-      this.subscriptions.add(this.bsModalRef.onHidden.subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
-          this.loadEmployees();
-        
-        this.unsubscribe();
-      }))
-    }
-  }
-
-  unsubscribe() {
-    this.subscriptions.unsubscribe();
+      },
+      onSave: () => this.loadEmployees()
+    }, this.destroy$);
   }
 
   loadEmployees(): void {
     this.isLoading = true;
+    this.disableTableAnimations = true;
     this.employeeService.getEmployees()
       .pipe(
         takeUntil(this.destroy$),
@@ -199,10 +161,12 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
           this.employees = res.result;
           this.pagination = res.pagination;
           this.isLoading = false;
+          setTimeout(() => this.disableTableAnimations = false, 0);
         },
         error: () => {
           this.alertify.error('Unable to load employees');
           this.isLoading = false;
+          setTimeout(() => this.disableTableAnimations = false, 0);
         }
       });
   }
@@ -247,6 +211,4 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
         }
       });
   }
-
-
 }

@@ -7,28 +7,28 @@
  */
 
 /* Layout & Responsive Foundation */
-@import 'responsive';
-@import 'layout';
+@use 'responsive' as *;
+@use 'layout' as *;
 
 /* Interactive States & Flexbox */
-@import 'interactive';
-@import 'flexbox';
+@use 'interactive' as *;
+@use 'flexbox' as *;
 
 /* Visual Effects */
-@import 'glass';
-@import 'shadows';
-@import 'animations';
-@import 'text';
+@use 'glass' as *;
+@use 'shadows' as *;
+@use 'animations' as *;
+@use 'text' as *;
 
 /* Component Styling */
-@import 'buttons';
-@import 'forms';
-@import 'cards';
+@use 'buttons' as *;
+@use 'forms' as *;
+@use 'cards' as *;
 
 /* Focus & Accessibility */
-@import 'focus';
-@import 'accessibility';
+@use 'focus' as *;
+@use 'accessibility' as *;
 
 /* UI Enhancements */
-@import 'scrollbar';
-@import 'centering';
+@use 'scrollbar' as *;
+@use 'centering' as *;

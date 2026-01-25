@@ -65,7 +65,7 @@ export class WorkplaceCreateModalComponent extends DestroyableComponent implemen
 
     onFileUploaded(response: BlobResponse): void {
       if (!response.error && response.blob) {
-        // For profile picture (images), store the URL
+        
         if (response.blob.fileType === 'Image') {
           this.profilePictureUrl = response.blob.name;
         }
@@ -74,7 +74,7 @@ export class WorkplaceCreateModalComponent extends DestroyableComponent implemen
     }
 
     onFileDeleted(path: string): void {
-      // If deleted file is the profile picture, clear it
+      
       if (path === this.profilePictureUrl) {
         this.profilePictureUrl = undefined;
       }

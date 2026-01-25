@@ -51,7 +51,7 @@ export class TmpButtonComponent {
   }
 
   private hasContent(): boolean {
-    // Check if button has text content (will be checked via ng-content)
-    return true; // Simplified - in real implementation, check for projected content
+    
+    return true; 
   }
 }
