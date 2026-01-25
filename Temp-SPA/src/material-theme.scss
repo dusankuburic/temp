@@ -1,4 +1,0 @@
-@use '@angular/material' as mat;
-
-// Include only core styles to avoid SASS API version conflicts
-@include mat.core();

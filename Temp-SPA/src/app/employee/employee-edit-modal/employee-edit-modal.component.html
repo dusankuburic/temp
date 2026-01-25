@@ -1,6 +1,6 @@
 <div class="modal-header-obsidian">
     <h4 class="modal-title-obsidian">{{title}}</h4>
-    <button type="button" class="modal-close-obsidian" aria-label="Close" (click)="bsModalRef.hide()" (keydown.enter)="bsModalRef.hide()" (keydown.space)="bsModalRef.hide()">
+    <button type="button" class="modal-close-obsidian" aria-label="Close" (click)="bsModalRef.hide()">
       <span class="modal-close-icon" aria-hidden="true">×</span>
     </button>
 </div>
@@ -8,7 +8,7 @@
     <tabset>
         <tab heading="Profile">
             <div>
-                <form [formGroup]="editEmployeeForm" (ngSubmit)="update()">
+                <form [formGroup]="editEmployeeForm" (ngSubmit)="update()" (keydown.enter)="$event.preventDefault()">
                     <div class="employee-edit-grid">
                         <div>
                             <!-- Profile Avatar & Name Header -->

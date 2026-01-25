@@ -62,12 +62,12 @@ getWorkplaces(): Observable<Workplace[]> {
   return this.http.get<Workplace[]>(this.baseUrl + 'workplaces');
 }
 
-getWorkplacesForSelect(): Observable<SelectionOption[]> {
+getWorkplacesForSelect(): Observable<SelectionOption<number>[]> {
   return this.http.get<Workplace[]>(this.baseUrl + 'workplaces')
     .pipe(map(x => x.map(p => ({
       value: p.id,
       display: p.name
-    } as SelectionOption)))
+    } as SelectionOption<number>)))
   );
 }
 

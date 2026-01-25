@@ -18,9 +18,9 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 export class EmployeeCreateComponent extends DestroyableComponent implements OnInit {
   createEmployeeForm!: FormGroup;
   employee!: Employee;
-  organizationsSelect!: SelectionOption[];
-  innerGroupsSelect!: SelectionOption[];
-  innerTeamsSelect!: SelectionOption[];
+  organizationsSelect!: SelectionOption<number>[];
+  innerGroupsSelect!: SelectionOption<number>[];
+  innerTeamsSelect!: SelectionOption<number>[];
 
   firstName = new FormControl('', [
     Validators.required,

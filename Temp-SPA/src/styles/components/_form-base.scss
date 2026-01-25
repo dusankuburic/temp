@@ -101,12 +101,22 @@
     }
   }
 
-  /* Error State - Red border with error glow on focus */
+  /* Error State - No border, just background tint and Shake */
   &[class*='-error'] {
-    border-color: var(--color-error-primary) !important;
+    /* border-color: var(--color-border-default) !important; // Keep neutral border */
+    /* background-color: rgba(244, 63, 94, 0.02); // Red tint */
+    background: rgba(244, 63, 94, 0.02);
+    border-color: var(--color-border-default) !important;
 
     &[class*='-focused'] {
-      box-shadow: var(--shadow-glow-error);
+      /* box-shadow: var(--shadow-glow-error); // Remove red glow */
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15), 0 0 12px rgba(244, 63, 94, 0.2);
+      /* Actually user wanted "without border". 
+         If we keep shadow it looks like a border.
+         Let's keep the focus shadow *subtle* or just remove it if they hate borders.
+         Glow is okay, hard border is bad.
+      */
+      border-color: var(--color-border-default) !important;
       outline: none;
     }
   }

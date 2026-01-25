@@ -5,16 +5,17 @@ import { Observable } from "rxjs";
 
 @Injectable()
 export class AddAuthHeaderInterceptor implements HttpInterceptor {
-    jwtHelper = new JwtHelperService();
+    constructor(private jwtHelper: JwtHelperService) {}
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        const token = localStorage.getItem('token');
 
-        let token = localStorage.getItem('token');
-        let authHeader = '';
-        if (!this.jwtHelper.isTokenExpired(token ?? null))
-            authHeader = `Bearer ${token}`
+        if (!token || this.jwtHelper.isTokenExpired(token)) {
+            return next.handle(req);
+        }
 
-        const authorized: HttpRequest<any> = req.clone({
-            setHeaders: {'Authorization': authHeader}
+        const authorized = req.clone({
+            setHeaders: { 'Authorization': `Bearer ${token}` }
         });
 
         return next.handle(authorized);

@@ -5,7 +5,7 @@
     </button>
 </div>
 <div class="modal-body-obsidian">
-    <form [formGroup]="createEmployeeForm" (ngSubmit)="create()">
+    <form [formGroup]="createEmployeeForm" (ngSubmit)="create()" (keydown.enter)="$event.preventDefault()">
         <div class="modal-form-section">
             <tmp-input [formControl]="firstName" [label]="'First Name'" [placeholder]="'Enter First Name'"></tmp-input>
             <tmp-input [formControl]="lastName" [label]="'Last Name'" [placeholder]="'Last Name'"></tmp-input>

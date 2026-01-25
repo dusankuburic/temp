@@ -1,6 +1,6 @@
-@import '../../../styles/_mixins';
+@use '../../../styles/_mixins' as *;
 
-.error-page-container {
+  .error-page-container {
     min-height: 80vh;
     display: flex;
     align-items: center;

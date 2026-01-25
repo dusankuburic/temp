@@ -25,8 +25,8 @@ export class EngagementCreateComponent extends DestroyableComponent implements O
 
   existingEngagements!: ExistingEngagement[];
   employee!: Employee;
-  workplacesList!: SelectionOption[];
-  employmentStatusesList!: SelectionOption[];
+  workplacesList!: SelectionOption<number>[];
+  employmentStatusesList!: SelectionOption<number>[];
 
   salary = new FormControl('', [
     Validators.required,

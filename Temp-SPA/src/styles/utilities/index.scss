@@ -3,11 +3,11 @@
  * Import all utility classes
  */
 
-@import './_display';
-@import './_text';
-@import './_background';
-@import './_border';
-@import './_animations';
-@import './_focus';
-@import './_glass-morphism';
-@import './_responsive';
+@forward './_display';
+@forward './_text';
+@forward './_background';
+@forward './_border';
+@forward './_animations';
+@forward './_focus';
+@forward './_glass-morphism';
+@forward './_responsive';

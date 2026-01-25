@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faEdit, faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { Subscription, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { EmploymentStatus, EmploymentStatusParams } from 'src/app/core/models/employmentStatus';
 import { PaginatedResult, Pagination } from 'src/app/core/models/pagination';
 import { AlertifyService } from 'src/app/core/services/alertify.service';
@@ -30,8 +30,8 @@ export class EmploymentStatusListComponent extends DestroyableComponent implemen
   ];
 
   bsModalRef?: BsModalRef;
-  subscriptions!: Subscription;
   filtersForm!: FormGroup;
+  disableTableAnimations = false;
   employmentStatuses!: EmploymentStatus[];
   pagination!: Pagination;
   employmentStatusParams!: EmploymentStatusParams;
@@ -79,15 +79,13 @@ export class EmploymentStatusListComponent extends DestroyableComponent implemen
         title: 'Create Employment Status'
       }
     };
-    this.subscriptions = new Subscription();
     this.bsModalRef = this.bsModalService.show(EmploymentStatusCreateModalComponent, initialState);
     if (this.bsModalRef?.onHidden) {
-      this.subscriptions.add(this.bsModalRef.onHidden.subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
+      this.bsModalRef.onHidden.pipe(takeUntil(this.destroy$)).subscribe(() => {
+        if (this.bsModalRef?.content?.isSaved) {
           this.loadEmploymentStatuses();
-
-        this.unsubscribe();
-      }))
+        }
+      })
     }
   }
 
@@ -99,28 +97,29 @@ export class EmploymentStatusListComponent extends DestroyableComponent implemen
         employmentStatusId: id
       }
     };
-    this.subscriptions = new Subscription();
     this.bsModalRef = this.bsModalService.show(EmploymentStatusEditModalComponent, initialState);
     if (this.bsModalRef?.onHidden) {
-      this.subscriptions.add(this.bsModalRef.onHidden.subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
+      this.bsModalRef.onHidden.pipe(takeUntil(this.destroy$)).subscribe(() => {
+        if (this.bsModalRef?.content?.isSaved) {
           this.loadEmploymentStatuses();
-        
-        this.unsubscribe();
-      }))
+        }
+      })
     }
   }
 
   loadEmploymentStatuses(): void {
+    this.disableTableAnimations = true;
     this.employmentStatusService.getPagedEmploymentStatuses()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: PaginatedResult<EmploymentStatus[]>) => {
           this.employmentStatuses = res.result;
           this.pagination = res.pagination;
+          setTimeout(() => this.disableTableAnimations = false, 0);
         },
         error: () => {
           this.alertify.error('Unable to load employment statuses');
+          setTimeout(() => this.disableTableAnimations = false, 0);
         }
       });
   }
@@ -145,12 +144,7 @@ export class EmploymentStatusListComponent extends DestroyableComponent implemen
       error: () => {
         this.alertify.error('Unable to archive');
       }
-    });
+      });
   }
-
-  unsubscribe() {
-    this.subscriptions.unsubscribe();
-  }
-
-
 }
+

@@ -24,7 +24,7 @@
       }
 
       <!-- Body -->
-      <tbody class="tmp-table-body" [@tableAnimations]="safeData.length" *ngIf="!loading">
+      <tbody class="tmp-table-body" [@tableAnimations]="disableAnimations ? null : safeData.length" *ngIf="!loading">
         @if (safeData.length) {
           @for (item of safeData; track trackByFn($index, item)) {
             @if (rowTemplate) {
@@ -36,7 +36,7 @@
                     [style.text-align]="getColumnAlign(column)"
                     role="gridcell"
                     [attr.aria-colindex]="$index + 1">
-                    {{ item[column.key] }}
+                    {{ $any(item)[column.key] }}
                   </td>
                 }
               </tr>

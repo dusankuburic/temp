@@ -17,15 +17,28 @@ export class TmpDatepickerComponent implements ControlValueAccessor {
   @Input() maxDate: Date | null = null;
 
   private uniqueId = `tmp-datepicker-${++nextUniqueId}`;
+  private onChange: (value: Date | null) => void = () => {};
+  private onTouched: () => void = () => {};
 
   constructor(@Self() public controlDir: NgControl) {
     this.controlDir.valueAccessor = this;
   }
 
-  writeValue(obj: any): void {}
-  registerOnChange(fn: any): void {}
-  registerOnTouched(fn: any): void {}
-  setDisabledState?(isDisabled: boolean): void {}
+  writeValue(value: Date | null): void {
+    // Implementation would set the datepicker value
+  }
+
+  registerOnChange(fn: (value: Date | null) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    // Implementation would disable/enable the datepicker
+  }
 
   get control(): FormControl {
     return this.controlDir.control as FormControl;

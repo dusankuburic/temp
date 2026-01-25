@@ -1,12 +1,12 @@
 import { Component, Input, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { AbstractControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { ControlValueAccessorDirective } from '../control-value-accessor.directive';
 
-export interface SelectionOption {
-  value: any,
-  display: any,
-  disabled?: boolean,
-  hidden?: boolean
+export interface SelectionOption<T = string> {
+  value: T | null;
+  display: string;
+  disabled?: boolean;
+  hidden?: boolean;
 }
 
 let nextUniqueId = 0;
@@ -25,7 +25,7 @@ let nextUniqueId = 0;
     standalone: false
 })
 export class TmpSelectComponent<T> extends ControlValueAccessorDirective<T> {
-  @Input() options: SelectionOption[] = [];
+  @Input() options: SelectionOption<any>[] = [];
   @Input() label = '';
   @Input() isFilter: boolean = false;
   @Input() hint: string = '';
@@ -47,7 +47,7 @@ export class TmpSelectComponent<T> extends ControlValueAccessorDirective<T> {
 
   get isFieldRequired(): boolean {
     if (!this.control?.validator) return false;
-    const validator = this.control.validator({} as any);
+    const validator = this.control.validator({} as AbstractControl);
     return !!(validator && validator['required'] === true);
   }
 

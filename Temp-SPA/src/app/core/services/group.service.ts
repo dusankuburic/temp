@@ -88,14 +88,14 @@ getInnerTeams(groupId: number): Observable<InnerTeam[]> {
   return this.http.get<InnerTeam[]>(this.baseUrl + 'groups/inner-teams/' + groupId);
 }
 
-getInnerTeamsForSelect(groupId: number): Observable<SelectionOption[]> {
-  return this.http.get<InnerTeam[]>(this.baseUrl + 'groups/inner-teams/' + groupId)
-    .pipe(map(x => x.map(p => ({
-      value: p.id,
-      display: p.name,
-    } as SelectionOption)))
-  );
-}
+  getInnerTeamsForSelect(groupId: number): Observable<SelectionOption<number>[]> {
+    return this.http.get<InnerTeam[]>(this.baseUrl + 'groups/inner-teams/' + groupId)
+      .pipe(map(x => x.map(p => ({
+        value: p.id,
+        display: p.name,
+      } as SelectionOption<number>)))
+    );
+  }
 
 getModeratorGroups(moderatorId: number): Observable<Group[]> {
   return this.http.get<Group[]>(this.baseUrl + 'groups/moderator-groups/' + moderatorId);

@@ -1,5 +1,5 @@
 import { Component, Input, forwardRef, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { AbstractControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { ControlValueAccessorDirective } from '../control-value-accessor.directive';
 import { faCheck, faExclamationCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
@@ -52,7 +52,7 @@ export class TmpTextareaComponent<T> extends ControlValueAccessorDirective<T> im
 
   get isFieldRequired(): boolean {
     if (!this.control?.validator) return false;
-    const validator = this.control.validator({} as any);
+    const validator = this.control.validator({} as AbstractControl);
     return !!(validator && validator['required'] === true);
   }
 
@@ -92,11 +92,11 @@ export class TmpTextareaComponent<T> extends ControlValueAccessorDirective<T> im
     if (!this.textarea?.nativeElement) return;
     const element = this.textarea.nativeElement;
     element.style.height = 'auto';
-    const newHeight = Math.max(element.scrollHeight, this.rows * 24); // Assuming ~24px per row
+    const newHeight = Math.max(element.scrollHeight, this.rows * 24); 
     element.style.height = newHeight + 'px';
   }
 
-  // Icons
+  
   protected readonly faCheck = faCheck;
   protected readonly faExclamationCircle = faExclamationCircle;
   protected readonly faSpinner = faSpinner;

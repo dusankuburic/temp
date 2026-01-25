@@ -28,9 +28,9 @@ export class EmployeeEditComponent extends DestroyableComponent implements OnIni
   editEmployeeForm!: FormGroup;
   employee!: Employee;
   fullTeam!: FullTeam;
-  organizationsSelect!: SelectionOption[];
-  innerGroupsSelect!: SelectionOption[];
-  innerTeamsSelect!: SelectionOption[];
+  organizationsSelect!: SelectionOption<number>[];
+  innerGroupsSelect!: SelectionOption<number>[];
+  innerTeamsSelect!: SelectionOption<number>[];
   currentModeratorGroups!: Group[];
   freeModeratorGroups!: Group[];
 

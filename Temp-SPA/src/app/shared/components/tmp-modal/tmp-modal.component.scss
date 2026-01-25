@@ -28,11 +28,11 @@
   -webkit-backdrop-filter: blur(8px) saturate(120%);
 
   /* Animation */
-  animation: modal-fade-in 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: modal-fade-in 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tmp-modal-overlay.tmp-modal-closing {
-  animation: modal-fade-out 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: modal-fade-out 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ===================================
@@ -54,7 +54,7 @@
   box-shadow: var(--shadow-modal);
 
   /* Animation */
-  animation: modal-scale-up 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: modal-scale-up 150ms cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center;
 
   /* Overflow */
@@ -62,7 +62,7 @@
 }
 
 .tmp-modal-closing .tmp-modal-dialog {
-  animation: modal-scale-down 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: modal-scale-down 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Teal accent bar at top */

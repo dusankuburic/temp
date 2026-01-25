@@ -60,14 +60,25 @@ public class DependencyException : ServiceException
     }
 }
 
-public class UnauthorizedAccessException : ServiceException
-{
-    public UnauthorizedAccessException(string message)
-        : base(message, "UNAUTHORIZED") {
+    public class UnauthorizedAccessException : ServiceException
+    {
+        public UnauthorizedAccessException(string message)
+            : base(message, "UNAUTHORIZED") {
+        }
     }
-}
 
-public class ConflictException : ServiceException
+    public class AuthenticationException : ServiceException
+    {
+        public AuthenticationException(string message)
+            : base(message, "AUTHENTICATION_FAILED") {
+        }
+
+        public AuthenticationException(string message, Exception innerException)
+            : base(message, "AUTHENTICATION_FAILED", innerException) {
+        }
+    }
+
+    public class ConflictException : ServiceException
 {
     public ConflictException(string message)
         : base(message, "CONFLICT") {

@@ -1,120 +1,110 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Temp.Database;
 using Temp.Domain.Models;
 
 namespace Temp.API.Data;
 
-public class Seed
+public static class Seed
 {
-    public static void SeedOrganizations(ApplicationDbContext ctx) {
-        if (!ctx.Organizations.Any()) {
-            var organizationData = File.ReadAllText("Data/OrganizationSeedData.json");
-            var organizations = JsonConvert.DeserializeObject<List<Organization>>(organizationData);
-
-            organizations.ForEach(x => {
-                x.CreatedAt = DateTime.UtcNow;
-                x.CreatedBy = "System";
-                x.UpdatedAt = DateTime.UtcNow;
-                x.UpdatedBy = "System";
-            });
-
-            ctx.Organizations.AddRange(organizations);
-
-            ctx.SaveChanges();
+    public static async Task SeedEntitiesAsync<TEntity>(
+        ApplicationDbContext ctx,
+        DbSet<TEntity> dbSet,
+        string jsonFilePath) where TEntity : BaseEntity
+    {
+        if (await dbSet.AnyAsync())
+        {
+            return;
         }
+
+        if (!File.Exists(jsonFilePath))
+        {
+            return;
+        }
+
+        var jsonData = await File.ReadAllTextAsync(jsonFilePath);
+        var entities = JsonConvert.DeserializeObject<List<TEntity>>(jsonData);
+
+        if (entities == null || !entities.Any())
+        {
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+        foreach (var entity in entities)
+        {
+            entity.CreatedAt = now;
+            entity.CreatedBy = "System";
+            entity.UpdatedAt = now;
+            entity.UpdatedBy = "System";
+        }
+
+        await dbSet.AddRangeAsync(entities);
+        await ctx.SaveChangesAsync();
     }
 
-    public static void SeedGroups(ApplicationDbContext ctx) {
-        if (!ctx.Groups.Any()) {
-            var groupData = File.ReadAllText("Data/GroupSeedData.json");
-            var groups = JsonConvert.DeserializeObject<List<Group>>(groupData);
-
-            groups.ForEach(x => {
-                x.CreatedAt = DateTime.UtcNow;
-                x.CreatedBy = "System";
-                x.UpdatedAt = DateTime.UtcNow;
-                x.UpdatedBy = "System";
-            });
-
-            ctx.Groups.AddRange(groups);
-
-            ctx.SaveChanges();
-        }
+    public static async Task SeedOrganizationsAsync(ApplicationDbContext ctx)
+    {
+        await SeedEntitiesAsync(ctx, ctx.Organizations, "Data/OrganizationSeedData.json");
     }
 
-    public static void SeedTeams(ApplicationDbContext ctx) {
-        if (!ctx.Teams.Any()) {
-            var teamData = File.ReadAllText("Data/TeamSeedData.json");
-            var teams = JsonConvert.DeserializeObject<List<Team>>(teamData);
-
-            teams.ForEach(x => {
-                x.CreatedAt = DateTime.UtcNow;
-                x.CreatedBy = "System";
-                x.UpdatedAt = DateTime.UtcNow;
-                x.UpdatedBy = "System";
-            });
-
-            ctx.Teams.AddRange(teams);
-
-            ctx.SaveChanges();
-        }
+    public static async Task SeedGroupsAsync(ApplicationDbContext ctx)
+    {
+        await SeedEntitiesAsync(ctx, ctx.Groups, "Data/GroupSeedData.json");
     }
 
-    public static void SeedEmploymentStatuses(ApplicationDbContext ctx) {
-        if (!ctx.EmploymentStatuses.Any()) {
-            var employmentStatusData = File.ReadAllText("Data/EmploymentStatusSeedData.json");
-            var employmentStatuses = JsonConvert.DeserializeObject<List<EmploymentStatus>>(employmentStatusData);
-
-            employmentStatuses.ForEach(x => {
-                x.CreatedAt = DateTime.UtcNow;
-                x.CreatedBy = "System";
-                x.UpdatedAt = DateTime.UtcNow;
-                x.UpdatedBy = "System";
-            });
-
-            ctx.EmploymentStatuses.AddRange(employmentStatuses);
-
-            ctx.SaveChanges();
-        }
+    public static async Task SeedTeamsAsync(ApplicationDbContext ctx)
+    {
+        await SeedEntitiesAsync(ctx, ctx.Teams, "Data/TeamSeedData.json");
     }
 
-    public static void SeedWorkplaces(ApplicationDbContext ctx) {
-        if (!ctx.Workplaces.Any()) {
-            var workplaceData = File.ReadAllText("Data/WorkplaceSeedData.json");
-            var workplaces = JsonConvert.DeserializeObject<List<Workplace>>(workplaceData);
-
-            workplaces.ForEach(x => {
-                x.CreatedAt = DateTime.UtcNow;
-                x.CreatedBy = "System";
-                x.UpdatedAt = DateTime.UtcNow;
-                x.UpdatedBy = "System";
-            });
-
-            ctx.Workplaces.AddRange(workplaces);
-
-            ctx.SaveChanges();
-        }
+    public static async Task SeedEmploymentStatusesAsync(ApplicationDbContext ctx)
+    {
+        await SeedEntitiesAsync(ctx, ctx.EmploymentStatuses, "Data/EmploymentStatusSeedData.json");
     }
 
-    public static void SeedEmployees(ApplicationDbContext ctx) {
-        if (!ctx.Employees.Any()) {
-            var employeesData = File.ReadAllText("Data/EmployeeSeedData.json");
-            var employees = JsonConvert.DeserializeObject<List<Employee>>(employeesData);
+    public static async Task SeedWorkplacesAsync(ApplicationDbContext ctx)
+    {
+        await SeedEntitiesAsync(ctx, ctx.Workplaces, "Data/WorkplaceSeedData.json");
+    }
 
-            employees.ForEach(x => {
-                x.CreatedAt = DateTime.UtcNow;
-                x.CreatedBy = "System";
-                x.UpdatedAt = DateTime.UtcNow;
-                x.UpdatedBy = "System";
-                if (string.IsNullOrWhiteSpace(x.AppUserId)) {
-                    x.AppUserId = Guid.NewGuid().ToString();
-                }
-            });
-
-            ctx.Employees.AddRange(employees);
-
-            ctx.SaveChanges();
+    public static async Task SeedEmployeesAsync(ApplicationDbContext ctx)
+    {
+        if (await ctx.Employees.AnyAsync())
+        {
+            return;
         }
+
+        const string jsonFilePath = "Data/EmployeeSeedData.json";
+        if (!File.Exists(jsonFilePath))
+        {
+            return;
+        }
+
+        var jsonData = await File.ReadAllTextAsync(jsonFilePath);
+        var employees = JsonConvert.DeserializeObject<List<Employee>>(jsonData);
+
+        if (employees == null || !employees.Any())
+        {
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+        foreach (var employee in employees)
+        {
+            employee.CreatedAt = now;
+            employee.CreatedBy = "System";
+            employee.UpdatedAt = now;
+            employee.UpdatedBy = "System";
+
+            if (string.IsNullOrWhiteSpace(employee.AppUserId))
+            {
+                employee.AppUserId = Guid.NewGuid().ToString();
+            }
+        }
+
+        await ctx.Employees.AddRangeAsync(employees);
+        await ctx.SaveChangesAsync();
     }
 }
