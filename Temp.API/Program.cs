@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Temp.API.Bootstrap;
 using Temp.API.Middleware;
-using Temp.Domain.Models.Identity;
+using Temp.API.Services;
+using Temp.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,7 @@ builder.Services.AddMappingsCollection();
 builder.Services.ConfigurePersistence(builder.Configuration);
 builder.Services.AddProgramServices(builder.Configuration);
 builder.Services.AddAuthSetup(builder.Configuration);
+builder.Services.AddDataSeeder(builder.Configuration);
 builder.Services.ConfigureSwaggerDoc();
 builder.Services.AddControllers()
     .ConfigureSerialization()
@@ -26,33 +27,43 @@ builder.Services.AddResponseCompression(options => {
 var app = builder.Build();
 
 
-using (var scope = app.Services.CreateScope()) {
+using (var scope = app.Services.CreateScope())
+{
     var services = scope.ServiceProvider;
     var logger = services.GetRequiredService<ILogger<Program>>();
-    try {
+
+    try
+    {
         var ctx = services.GetRequiredService<ApplicationDbContext>();
 
-
-        int maxRetries = 5;
+        const int maxRetries = 5;
         int retryCount = 0;
         bool success = false;
 
-        while (retryCount < maxRetries && !success) {
-            try {
+        while (retryCount < maxRetries && !success)
+        {
+            try
+            {
                 bool databaseExists = await ctx.Database.CanConnectAsync();
 
-                if (!databaseExists) {
+                if (!databaseExists)
+                {
                     await ctx.Database.EnsureCreatedAsync();
                     logger.LogInformation("Database created successfully from model");
-                } else {
+                }
+                else
+                {
                     await ctx.Database.MigrateAsync();
                     logger.LogInformation("Database migrations applied successfully");
                 }
 
                 success = true;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 retryCount++;
-                if (retryCount >= maxRetries) {
+                if (retryCount >= maxRetries)
+                {
                     logger.LogError(ex, "Failed to initialize database after {RetryCount} attempts", maxRetries);
                     throw;
                 }
@@ -62,53 +73,12 @@ using (var scope = app.Services.CreateScope()) {
             }
         }
 
-        Seed.SeedOrganizations(ctx);
-        Seed.SeedGroups(ctx);
-        Seed.SeedTeams(ctx);
-        Seed.SeedEmploymentStatuses(ctx);
-        Seed.SeedWorkplaces(ctx);
-        Seed.SeedEmployees(ctx);
-
-        var userManager = services.GetRequiredService<UserManager<AppUser>>();
-
-        if (!await userManager.Users.AnyAsync()) {
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-            await roleManager.CreateAsync(new IdentityRole() { Name = "Admin" });
-            await roleManager.CreateAsync(new IdentityRole() { Name = "User" });
-            await roleManager.CreateAsync(new IdentityRole() { Name = "Moderator" });
-
-            var user = new AppUser {
-                DisplayName = "John",
-                Email = "johndoe@test.com",
-                UserName = "johndoe@test.com",
-                LockoutEnabled = false,
-            };
-
-            var claims = new List<Claim>() {
-                new Claim(ClaimTypes.Role, "Admin"),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.DisplayName)
-            };
-
-            var result =  await userManager.CreateAsync(user, "5B3jt4H8$$3t03E88");
-            if (result.Succeeded) {
-                await userManager.AddToRoleAsync(user, "Admin");
-                await userManager.AddClaimsAsync(user, claims);
-            }
-
-            var employee = await ctx.Employees
-                .Where(x => x.Id == 1)
-                .FirstOrDefaultAsync();
-            if (employee != null) {
-                employee.AppUserId = user.Id;
-                employee.IsAppUserActive = true;
-                await ctx.SaveChangesAsync();
-            }
-        }
-
-    } catch (Exception exMsg) {
-        logger.LogError(exMsg, "Error during application initialization");
+        var seeder = services.GetRequiredService<IDataSeeder>();
+        await seeder.SeedAsync();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Error during application initialization");
     }
 }
 app.UseHttpLogging();

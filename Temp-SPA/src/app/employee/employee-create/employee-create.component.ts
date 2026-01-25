@@ -12,15 +12,15 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-employee-create',
     templateUrl: './employee-create.component.html',
-    styleUrl: './employee-create.component.css',
+    styleUrl: './employee-create.component.scss',
     standalone: false
 })
 export class EmployeeCreateComponent extends DestroyableComponent implements OnInit {
   createEmployeeForm!: FormGroup;
   employee!: Employee;
-  organizationsSelect!: SelectionOption[];
-  innerGroupsSelect!: SelectionOption[];
-  innerTeamsSelect!: SelectionOption[];
+  organizationsSelect!: SelectionOption<number>[];
+  innerGroupsSelect!: SelectionOption<number>[];
+  innerTeamsSelect!: SelectionOption<number>[];
 
   firstName = new FormControl('', [
     Validators.required,

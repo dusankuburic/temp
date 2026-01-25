@@ -15,7 +15,7 @@ import { SelectionOption } from 'src/app/shared/components/tmp-select/tmp-select
 @Component({
     selector: 'app-engagement-create',
     templateUrl: './engagement-create.component.html',
-    styleUrl: './engagement-create.component.css',
+    styleUrl: './engagement-create.component.scss',
     standalone: false
 })
 export class EngagementCreateComponent extends DestroyableComponent implements OnInit {
@@ -25,8 +25,8 @@ export class EngagementCreateComponent extends DestroyableComponent implements O
 
   existingEngagements!: ExistingEngagement[];
   employee!: Employee;
-  workplacesList!: SelectionOption[];
-  employmentStatusesList!: SelectionOption[];
+  workplacesList!: SelectionOption<number>[];
+  employmentStatusesList!: SelectionOption<number>[];
 
   salary = new FormControl('', [
     Validators.required,

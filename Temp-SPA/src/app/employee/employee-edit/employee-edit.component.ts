@@ -18,7 +18,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-employee-edit',
     templateUrl: './employee-edit.component.html',
-    styleUrl: './employee-edit.component.css',
+    styleUrl: './employee-edit.component.scss',
     standalone: false
 })
 export class EmployeeEditComponent extends DestroyableComponent implements OnInit {
@@ -28,9 +28,9 @@ export class EmployeeEditComponent extends DestroyableComponent implements OnIni
   editEmployeeForm!: FormGroup;
   employee!: Employee;
   fullTeam!: FullTeam;
-  organizationsSelect!: SelectionOption[];
-  innerGroupsSelect!: SelectionOption[];
-  innerTeamsSelect!: SelectionOption[];
+  organizationsSelect!: SelectionOption<number>[];
+  innerGroupsSelect!: SelectionOption<number>[];
+  innerTeamsSelect!: SelectionOption<number>[];
   currentModeratorGroups!: Group[];
   freeModeratorGroups!: Group[];
 

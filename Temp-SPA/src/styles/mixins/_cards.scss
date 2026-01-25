@@ -1,0 +1,38 @@
+/**
+ * Card Component Mixins
+ * Card containers, interactive cards, headers, and footers
+ */
+
+@mixin card {
+  background-color: var(--color-card-bg, #ffffff);
+  border-radius: var(--radius-lg, 8px);
+  padding: var(--card-padding, 20px);
+  @include elevation-2;
+  @content;
+}
+
+@mixin card-interactive {
+  @include card;
+  @include transition(all, 0.3s, ease);
+
+  &:hover {
+    @include elevation-4;
+    transform: translateY(-4px);
+  }
+
+  @content;
+}
+
+@mixin card-header {
+  padding-bottom: var(--spacing-md, 16px);
+  margin-bottom: var(--spacing-md, 16px);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  @content;
+}
+
+@mixin card-footer {
+  padding-top: var(--spacing-md, 16px);
+  margin-top: var(--spacing-md, 16px);
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  @content;
+}

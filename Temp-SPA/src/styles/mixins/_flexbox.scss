@@ -1,0 +1,41 @@
+/**
+ * Flexbox Helper Mixins
+ * Common flexbox layouts and alignment utilities
+ */
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @content;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @content;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @content;
+}
+
+@mixin flex-gap($gap) {
+  display: flex;
+  gap: $gap;
+  align-items: center;
+  @content;
+}
+
+@mixin flex-wrap-center {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md, 16px);
+  @content;
+}

@@ -1,10 +1,11 @@
-﻿using Temp.Database.UnitOfWork;
+using Temp.Database.UnitOfWork;
 using Temp.Domain.Models.Identity;
 using Temp.Services._Shared;
 using Temp.Services.Auth.Exceptions;
 using Temp.Services.Auth.Models.Commands;
 using Temp.Services.Integrations.Loggings;
 using Temp.Services.Providers;
+using Temp.Services.Exceptions;
 
 namespace Temp.Services.Auth;
 
@@ -30,10 +31,18 @@ public partial class AuthService : BaseService, IAuthService
     public Task<LoginAppUserResponse> Login(LoginAppUserRequest request) =>
         TryCatch(async () => {
             var appUser = await _userManager.FindByEmailAsync(request.Username);
-            ValidateUserIsNull(appUser);
+            
+            // If user doesn't exist, return a failed result instead of throwing validation error
+            if (appUser == null) {
+                throw new AuthenticationException("Invalid username or password");
+            }
 
             var result = await _signInManager.CheckPasswordSignInAsync(appUser, request.Password, false);
-            ValidateOnLogin(result);
+            
+            // Check if login failed
+            if (!result.Succeeded) {
+                throw new AuthenticationException("Invalid username or password");
+            }
 
             var employeeId = await UnitOfWork.Employees
                 .QueryNoTracking()
@@ -65,9 +74,8 @@ public partial class AuthService : BaseService, IAuthService
     public Task<AppUser> Register(RegisterAppUserRequest request) =>
         TryCatch(async () => {
 
-            var allowedRoles = new[] { "Admin", "User", "Moderator" };
-            if (!allowedRoles.Contains(request.Role))
-                throw new InvalidUserException($"Invalid role: {request.Role}");
+            if (!AppConstants.AllowedRoles.Contains(request.Role))
+                throw new InvalidUserException($"Invalid role: {request.Role}. Allowed roles: {string.Join(", ", AppConstants.AllowedRoles)}");
 
             var user = new AppUser {
                 DisplayName = request.DisplayName,

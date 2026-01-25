@@ -19,7 +19,7 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 @Component({
     selector: 'app-group-list',
     templateUrl: './inner-group-list.component.html',
-    styleUrl: './inner-group-list.component.css',
+    styleUrl: './inner-group-list.component.scss',
     standalone: false
 })
 export class GroupListComponent extends DestroyableComponent implements OnInit, AfterViewInit {

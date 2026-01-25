@@ -1,7 +1,7 @@
-@if (isOpen) {
+@if (isOpen || isClosing) {
   <div class="tmp-modal-overlay"
-       [class.tmp-modal-opening]="isAnimating && isOpen"
-       [class.tmp-modal-closing]="isAnimating && !isOpen"
+       [class.tmp-modal-opening]="isAnimating && !isClosing"
+       [class.tmp-modal-closing]="isClosing"
        (click)="onBackdropClick()"
        role="dialog"
        aria-modal="true"

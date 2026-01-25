@@ -16,55 +16,77 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error) {
-          switch (error.status) {
-            case 400:
-              if (error.error?.errors) {
-                const modalStateErrors = [];
-                for (const key in error.error.errors) {
-                  if (error.error.errors[key]) {
-                    modalStateErrors.push(error.error.errors[key]);
-                  }
-                }
-                this.alertify.error(modalStateErrors.flat().join('\n'));
-              } else if (typeof error.error === 'object') {
-                this.alertify.error('Bad Request');
-              } else {
-                this.alertify.error(error.error);
-              }
-              break;
-
-            case 401:
-              this.alertify.error('Unauthorized');
-              this.router.navigate(['/login']);
-              break;
-
-            case 403:
-              this.alertify.error('You do not have permission to access this resource');
-              break;
-
-            case 404:
-              this.router.navigate(['/not-found']);
-              break;
-
-            case 500:
-              if (error.error) {
-                this.alertify.error('Server error occurred');
-              }
-              break;
-
-            case 0:
-              this.alertify.error('Network error - unable to connect to server');
-              break;
-
-            default:
-              this.alertify.error('An unexpected error occurred');
-              console.error('HTTP Error:', error);
-              break;
-          }
+        if (!error) {
+          return throwError(() => error);
         }
+
+        const endpoint = request.url;
+        const method = request.method;
+
+        switch (error.status) {
+          case 400:
+            this.handle400Error(error);
+            break;
+
+          case 401:
+            this.alertify.error('Your session has expired. Please log in again.');
+            this.router.navigate(['/login']);
+            break;
+
+          case 403:
+            this.alertify.error('You do not have permission to access this resource');
+            break;
+
+          case 404:
+            console.warn(`404 Error: ${method} ${endpoint}`);
+            this.router.navigateByUrl('/not-found');
+            break;
+
+          case 500:
+            console.error(`500 Error: ${method} ${endpoint}`, error.error);
+            this.router.navigateByUrl('/server-error');
+            break;
+
+          case 0:
+            this.alertify.error('Network error - unable to connect to server. Please check your internet connection.');
+            console.error(`Network Error: ${method} ${endpoint}`);
+            break;
+
+          default:
+            this.alertify.error('An unexpected error occurred');
+            console.error(`HTTP Error (${error.status}): ${method} ${endpoint}`, error);
+            break;
+        }
+
         return throwError(() => error);
       })
     );
+  }
+
+  private handle400Error(error: HttpErrorResponse): void {
+    if (error.error?.errors && typeof error.error.errors === 'object') {
+      const modalStateErrors: string[] = [];
+      for (const key in error.error.errors) {
+        if (Object.prototype.hasOwnProperty.call(error.error.errors, key)) {
+          const value = error.error.errors[key];
+          if (Array.isArray(value)) {
+            modalStateErrors.push(...value);
+          } else if (value) {
+            modalStateErrors.push(String(value));
+          }
+        }
+      }
+      if (modalStateErrors.length > 0) {
+        this.alertify.error(modalStateErrors.join('\n'));
+      } else {
+        this.alertify.error('Bad Request');
+      }
+    } else if (typeof error.error === 'string' && error.error.trim()) {
+      this.alertify.error(error.error);
+    } else if (error.error?.message) {
+      this.alertify.error(error.error.message);
+    } else {
+      this.alertify.error('Bad Request - Invalid data provided');
+    }
   }
 }

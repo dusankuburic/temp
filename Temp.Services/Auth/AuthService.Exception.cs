@@ -1,6 +1,7 @@
-﻿using Temp.Domain.Models.Identity;
+using Temp.Domain.Models.Identity;
 using Temp.Services.Auth.Exceptions;
 using Temp.Services.Auth.Models.Commands;
+using Temp.Services.Exceptions;
 
 namespace Temp.Services.Auth;
 
@@ -9,10 +10,11 @@ public partial class AuthService
     public delegate Task<LoginAppUserResponse> ReturningRegisterAppUserFunction();
     public delegate Task<AppUser> ReturningAppUserFunction();
 
-
     private async Task<LoginAppUserResponse> TryCatch(ReturningRegisterAppUserFunction returningRegisterAppUserFunction) {
         try {
             return await returningRegisterAppUserFunction();
+        } catch (AuthenticationException authenticationException) {
+            throw authenticationException; // Let it bubble up as is
         } catch (NullUserException nullUserException) {
             throw CreateAndLogValidationException(nullUserException);
         } catch (InvalidUserException invalidUserException) {
@@ -27,6 +29,8 @@ public partial class AuthService
     private async Task<AppUser> TryCatch(ReturningAppUserFunction returningAppUserFunction) {
         try {
             return await returningAppUserFunction();
+        } catch (AuthenticationException authenticationException) {
+            throw authenticationException; // Let it bubble up as is
         } catch (NullUserException nullUserException) {
             throw CreateAndLogValidationException(nullUserException);
         } catch (InvalidUserException invalidUserException) {

@@ -17,7 +17,7 @@ import { forkJoin } from 'rxjs';
 @Component({
     selector: 'app-team-edit-modal',
     templateUrl: './team-edit-modal.component.html',
-    styleUrls: ['../../shared/styles/modal.css'],
+    styleUrls: ['../../shared/styles/modal.scss'],
     standalone: false
 })
 export class TeamEditModalComponent extends DestroyableComponent implements OnInit{
@@ -33,7 +33,7 @@ export class TeamEditModalComponent extends DestroyableComponent implements OnIn
   title?: string;
   teamFiles: any[] = [];
 
-  // Pagination
+  
   pageNumber = 1;
   pageSize = 5;
 

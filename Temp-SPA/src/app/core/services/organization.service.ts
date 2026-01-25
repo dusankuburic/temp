@@ -61,12 +61,12 @@ export class OrganizationService {
     return this.http.get<Organization[]>(this.baseUrl + 'organizations');
   }
 
-  getOrganizationsForSelect(): Observable<SelectionOption[]> {
+  getOrganizationsForSelect(): Observable<SelectionOption<number>[]> {
     return this.http.get<Organization[]>(this.baseUrl + 'organizations')
       .pipe(map(x => x.map(p => ({
         value: p.id,
         display: p.name,
-      } as SelectionOption)))
+      } as SelectionOption<number>)))
     );
   }
 
@@ -90,12 +90,12 @@ export class OrganizationService {
     return this.http.get<InnerGroup[]>(this.baseUrl + 'organizations/inner-groups/' + organizationId);
   }
 
-  getInnerGroupsForSelect(organizationId: number): Observable<SelectionOption[]> {
+  getInnerGroupsForSelect(organizationId: number): Observable<SelectionOption<number>[]> {
     return this.http.get<InnerGroup[]>(this.baseUrl + 'organizations/inner-groups/' + organizationId)
       .pipe(map(x => x.map(p => ({
         value: p.id,
         display: p.name,
-      } as SelectionOption)))
+      } as SelectionOption<number>)))
     );
   }
 

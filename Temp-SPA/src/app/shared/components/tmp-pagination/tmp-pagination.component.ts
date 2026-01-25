@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
     selector: 'tmp-pagination',
     templateUrl: './tmp-pagination.component.html',
-    styleUrls: ['./tmp-pagination.component.css'],
+    styleUrls: ['./tmp-pagination.component.scss'],
     standalone: false
 })
 export class TmpPaginationComponent {

@@ -5,7 +5,7 @@ export type ModalSize = 'small' | 'medium' | 'large' | 'fullscreen';
 @Component({
   selector: 'tmp-modal',
   templateUrl: './tmp-modal.component.html',
-  styleUrls: ['./tmp-modal.component.css'],
+  styleUrls: ['./tmp-modal.component.scss'],
   standalone: false
 })
 export class TmpModalComponent implements OnInit, OnDestroy {
@@ -23,6 +23,8 @@ export class TmpModalComponent implements OnInit, OnDestroy {
   @Output() opened = new EventEmitter<void>();
 
   isAnimating = false;
+  isClosing = false;
+  private animationTimeout?: number;
 
   ngOnInit(): void {
     if (this.isOpen) {
@@ -31,6 +33,9 @@ export class TmpModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
     this.removeBodyScrollLock();
   }
 
@@ -50,25 +55,35 @@ export class TmpModalComponent implements OnInit, OnDestroy {
       this.isOpenChange.emit(this.isOpen);
       this.opened.emit();
 
-      // Remove animation class after animation completes
-      setTimeout(() => {
+      if (this.animationTimeout) {
+        clearTimeout(this.animationTimeout);
+      }
+
+      this.animationTimeout = window.setTimeout(() => {
         this.isAnimating = false;
-      }, 300);
+        this.animationTimeout = undefined;
+      }, 150);
     }
   }
 
   close(): void {
     if (this.isOpen && this.closable) {
+      this.isClosing = true;
       this.isAnimating = true;
 
-      // Wait for close animation before removing modal
-      setTimeout(() => {
-        this.isOpen = false;
-        this.isAnimating = false;
+      if (this.animationTimeout) {
+        clearTimeout(this.animationTimeout);
+      }
+
+      this.animationTimeout = window.setTimeout(() => {
         this.removeBodyScrollLock();
+        this.isOpen = false;
         this.isOpenChange.emit(this.isOpen);
         this.closed.emit();
-      }, 200);
+        this.isClosing = false;
+        this.isAnimating = false;
+        this.animationTimeout = undefined;
+      }, 150);
     }
   }
 
@@ -79,7 +94,7 @@ export class TmpModalComponent implements OnInit, OnDestroy {
   }
 
   onDialogClick(event: Event): void {
-    // Prevent click from bubbling to backdrop
+    
     event.stopPropagation();
   }
 
@@ -94,13 +109,13 @@ export class TmpModalComponent implements OnInit, OnDestroy {
 
   private addBodyScrollLock(): void {
     if (typeof document !== 'undefined') {
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
     }
   }
 
   private removeBodyScrollLock(): void {
     if (typeof document !== 'undefined') {
-      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
     }
   }
 }

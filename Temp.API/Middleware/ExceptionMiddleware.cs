@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Temp.API.Models;
 using Temp.Services.Exceptions;
+using UnauthorizedAccessException = Temp.Services.Exceptions.UnauthorizedAccessException;
 
 namespace Temp.API.Middleware;
 
@@ -57,7 +58,14 @@ public class ExceptionMiddleware
                 errorResponse.ErrorCode = businessEx.ErrorCode;
                 break;
 
-            case Services.Exceptions.UnauthorizedAccessException unauthorizedEx:
+            case AuthenticationException authEx:
+                _logger.LogWarning(authEx, "Authentication failed");
+                errorResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
+                errorResponse.Message = authEx.Message;
+                errorResponse.ErrorCode = authEx.ErrorCode;
+                break;
+
+            case UnauthorizedAccessException unauthorizedEx:
                 _logger.LogWarning(unauthorizedEx, "Unauthorized access attempt");
                 errorResponse.StatusCode = (int)HttpStatusCode.Forbidden;
                 errorResponse.Message = unauthorizedEx.Message;

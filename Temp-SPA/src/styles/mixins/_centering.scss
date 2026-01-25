@@ -1,0 +1,38 @@
+/**
+ * Centering & Positioning Utility Mixins
+ * Absolute centering and grid centering utilities
+ */
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  @content;
+}
+
+@mixin absolute-center-y {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  @content;
+}
+
+@mixin absolute-center-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  @content;
+}
+
+@mixin grid-center {
+  display: grid;
+  place-items: center;
+  @content;
+}
+
+@mixin margin-auto-center {
+  margin-left: auto;
+  margin-right: auto;
+  @content;
+}

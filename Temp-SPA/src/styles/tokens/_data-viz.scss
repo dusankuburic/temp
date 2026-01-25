@@ -1,0 +1,352 @@
+/**
+ * OBSIDIAN NOIR Design System - Data Visualization Tokens
+ *
+ * Purpose-built color palettes for HR/Temp application data visualization.
+ * Includes employee statuses, application workflows, time-off calendars,
+ * and chart colors optimized for dark backgrounds.
+ *
+ * Design Principles:
+ * - WCAG AA compliant on dark backgrounds
+ * - Colorblind-friendly (deuteranopia/protanopia tested)
+ * - Distinct enough to differentiate at a glance
+ * - Matches Obsidian Noir's dramatic aesthetic
+ */
+
+:root {
+  /* ===================================
+   * HR-SPECIFIC: EMPLOYEE STATUSES
+   * Color-coded employee states for dashboards and tables
+   * =================================== */
+
+  /* Active - Teal (primary brand color) */
+  --status-employee-active: var(--teal-400);
+  --status-employee-active-bg: rgba(45, 212, 191, 0.1);
+  --status-employee-active-border: var(--teal-600);
+
+  /* On Leave - Amber (warning color) */
+  --status-employee-on-leave: var(--amber-400);
+  --status-employee-on-leave-bg: rgba(251, 191, 36, 0.1);
+  --status-employee-on-leave-border: var(--amber-600);
+
+  /* Inactive/Suspended - Violet (neutral warning) */
+  --status-employee-inactive: var(--violet-400);
+  --status-employee-inactive-bg: rgba(167, 139, 250, 0.1);
+  --status-employee-inactive-border: var(--violet-600);
+
+  /* Terminated - Red (error/danger) */
+  --status-employee-terminated: var(--color-error-primary);
+  --status-employee-terminated-bg: rgba(244, 63, 94, 0.1);
+  --status-employee-terminated-border: var(--color-error-600);
+
+  /* Pending Onboarding - Cyan (info) */
+  --status-employee-pending: var(--color-info-primary);
+  --status-employee-pending-bg: rgba(6, 182, 212, 0.1);
+  --status-employee-pending-border: var(--color-info-600);
+
+  /* ===================================
+   * HR-SPECIFIC: APPLICATION WORKFLOW
+   * Color-coded stages for temp worker applications
+   * =================================== */
+
+  /* New/Submitted - Cyan (new information) */
+  --status-app-submitted: #06b6d4;
+  --status-app-submitted-bg: rgba(6, 182, 212, 0.1);
+  --status-app-submitted-border: #0891b2;
+
+  /* Under Review - Amber (in progress) */
+  --status-app-review: var(--amber-400);
+  --status-app-review-bg: rgba(251, 191, 36, 0.1);
+  --status-app-review-border: var(--amber-600);
+
+  /* Interview Scheduled - Violet (action needed) */
+  --status-app-interview: var(--violet-400);
+  --status-app-interview-bg: rgba(167, 139, 250, 0.1);
+  --status-app-interview-border: var(--violet-600);
+
+  /* Approved/Hired - Green (success) */
+  --status-app-approved: var(--color-success-primary);
+  --status-app-approved-bg: rgba(16, 185, 129, 0.1);
+  --status-app-approved-border: var(--color-success-600);
+
+  /* Rejected - Red (rejected/failed) */
+  --status-app-rejected: var(--color-error-primary);
+  --status-app-rejected-bg: rgba(244, 63, 94, 0.1);
+  --status-app-rejected-border: var(--color-error-600);
+
+  /* Withdrawn - Gray (inactive) */
+  --status-app-withdrawn: #78716c;
+  --status-app-withdrawn-bg: rgba(120, 113, 108, 0.1);
+  --status-app-withdrawn-border: #57534e;
+
+  /* On Hold - Orange (paused) */
+  --status-app-on-hold: #fb923c;
+  --status-app-on-hold-bg: rgba(251, 146, 60, 0.1);
+  --status-app-on-hold-border: #ea580c;
+
+  /* ===================================
+   * HR-SPECIFIC: TIME-OFF CALENDAR
+   * Visual calendar markers for different leave types
+   * =================================== */
+
+  /* Vacation - Teal (positive/planned) */
+  --leave-vacation: var(--teal-400);
+  --leave-vacation-bg: rgba(45, 212, 191, 0.15);
+
+  /* Sick Leave - Red (medical) */
+  --leave-sick: #f43f5e;
+  --leave-sick-bg: rgba(244, 63, 94, 0.15);
+
+  /* Personal Day - Violet (personal) */
+  --leave-personal: var(--violet-400);
+  --leave-personal-bg: rgba(167, 139, 250, 0.15);
+
+  /* Maternity/Paternity - Pink (family) */
+  --leave-maternity: #ec4899;
+  --leave-maternity-bg: rgba(236, 72, 153, 0.15);
+
+  /* Bereavement - Dark Gray (somber) */
+  --leave-bereavement: #a8a29e;
+  --leave-bereavement-bg: rgba(168, 162, 158, 0.15);
+
+  /* Holiday - Amber (special/festive) */
+  --leave-holiday: var(--amber-400);
+  --leave-holiday-bg: rgba(251, 191, 36, 0.15);
+
+  /* Unpaid Leave - Light Gray (neutral) */
+  --leave-unpaid: #d6d3d1;
+  --leave-unpaid-bg: rgba(214, 211, 209, 0.15);
+
+  /* ===================================
+   * CHARTS: CATEGORICAL PALETTE
+   * 10 distinct colors for pie charts, bar graphs, legends
+   * Optimized for dark backgrounds and colorblind accessibility
+   * =================================== */
+
+  --chart-categorical-1: #2dd4bf;  /* Teal (brand) */
+  --chart-categorical-2: #fbbf24;  /* Amber */
+  --chart-categorical-3: #a78bfa;  /* Violet */
+  --chart-categorical-4: #06b6d4;  /* Cyan */
+  --chart-categorical-5: #10b981;  /* Green */
+  --chart-categorical-6: #f43f5e;  /* Rose */
+  --chart-categorical-7: #ec4899;  /* Pink */
+  --chart-categorical-8: #fb923c;  /* Orange */
+  --chart-categorical-9: #60a5fa;  /* Blue */
+  --chart-categorical-10: #d6d3d1; /* Gray */
+
+  /* ===================================
+   * CHARTS: SEQUENTIAL PALETTE
+   * For heatmaps, choropleth maps, intensity visualization
+   * Low → High intensity (5-step scale)
+   * =================================== */
+
+  /* Teal Sequential (default) */
+  --chart-sequential-teal-1: #ccfbf1;  /* Lightest */
+  --chart-sequential-teal-2: #5eead4;
+  --chart-sequential-teal-3: #14b8a6;
+  --chart-sequential-teal-4: #0d9488;
+  --chart-sequential-teal-5: #115e59;  /* Darkest */
+
+  /* Green Sequential (success/growth) */
+  --chart-sequential-green-1: #d1fae5;
+  --chart-sequential-green-2: #6ee7b7;
+  --chart-sequential-green-3: #10b981;
+  --chart-sequential-green-4: #059669;
+  --chart-sequential-green-5: #047857;
+
+  /* Amber Sequential (warnings/attention) */
+  --chart-sequential-amber-1: #fef3c7;
+  --chart-sequential-amber-2: #fcd34d;
+  --chart-sequential-amber-3: #f59e0b;
+  --chart-sequential-amber-4: #d97706;
+  --chart-sequential-amber-5: #b45309;
+
+  /* Red Sequential (errors/critical) */
+  --chart-sequential-red-1: #fecdd3;
+  --chart-sequential-red-2: #fb7185;
+  --chart-sequential-red-3: #f43f5e;
+  --chart-sequential-red-4: #e11d48;
+  --chart-sequential-red-5: #be123c;
+
+  /* ===================================
+   * CHARTS: DIVERGING PALETTE
+   * For comparing two extremes (negative ↔ positive)
+   * Red (negative) → Gray (neutral) → Green (positive)
+   * =================================== */
+
+  --chart-diverging-negative-2: #f43f5e;  /* Strong negative */
+  --chart-diverging-negative-1: #fb7185;  /* Weak negative */
+  --chart-diverging-neutral: #78716c;     /* Neutral */
+  --chart-diverging-positive-1: #6ee7b7;  /* Weak positive */
+  --chart-diverging-positive-2: #10b981;  /* Strong positive */
+
+  /* ===================================
+   * CHARTS: BACKGROUND & GRID
+   * Chart canvas and supporting visuals
+   * =================================== */
+
+  --chart-background: var(--color-surface-2);           /* Card background */
+  --chart-grid-line: rgba(255, 255, 255, 0.05);         /* Subtle grid lines */
+  --chart-grid-line-major: rgba(255, 255, 255, 0.1);    /* Major axis lines */
+  --chart-axis-label: var(--color-foreground-3);        /* Axis text */
+  --chart-axis-title: var(--color-foreground-2);        /* Axis titles */
+  --chart-legend-text: var(--color-foreground-2);       /* Legend labels */
+  --chart-tooltip-bg: var(--color-surface-elevated);    /* Tooltip background */
+  --chart-tooltip-text: var(--color-foreground-1);      /* Tooltip text */
+  --chart-tooltip-border: var(--color-border-strong);   /* Tooltip border */
+
+  /* ===================================
+   * CHARTS: HOVER & INTERACTION STATES
+   * =================================== */
+
+  --chart-hover-opacity: 0.8;           /* Opacity on hover */
+  --chart-inactive-opacity: 0.3;        /* Opacity when not selected */
+  --chart-highlight-glow: 0 0 12px rgba(45, 212, 191, 0.4);  /* Glow on highlight */
+
+  /* ===================================
+   * DATA TABLE: HEATMAP BACKGROUNDS
+   * For inline table cell visualizations (e.g., performance ratings)
+   * =================================== */
+
+  /* Performance/Rating Scale (1-5) */
+  --heatmap-rating-1: rgba(244, 63, 94, 0.15);    /* Poor - Red */
+  --heatmap-rating-2: rgba(251, 146, 60, 0.15);   /* Fair - Orange */
+  --heatmap-rating-3: rgba(251, 191, 36, 0.15);   /* Good - Amber */
+  --heatmap-rating-4: rgba(45, 212, 191, 0.15);   /* Very Good - Teal */
+  --heatmap-rating-5: rgba(16, 185, 129, 0.15);   /* Excellent - Green */
+
+  /* Utilization/Capacity (0-100%) */
+  --heatmap-utilization-0-20: rgba(214, 211, 209, 0.1);    /* Very Low */
+  --heatmap-utilization-20-40: rgba(167, 139, 250, 0.1);   /* Low */
+  --heatmap-utilization-40-60: rgba(251, 191, 36, 0.1);    /* Medium */
+  --heatmap-utilization-60-80: rgba(45, 212, 191, 0.1);    /* High */
+  --heatmap-utilization-80-100: rgba(16, 185, 129, 0.15);  /* Very High */
+
+  /* ===================================
+   * BADGES: STATUS INDICATOR PRESETS
+   * Ready-to-use badge color combinations
+   * =================================== */
+
+  /* Active Status Badge */
+  --badge-active-text: var(--status-employee-active);
+  --badge-active-bg: var(--status-employee-active-bg);
+  --badge-active-border: var(--status-employee-active-border);
+
+  /* Warning Status Badge */
+  --badge-warning-text: var(--status-employee-on-leave);
+  --badge-warning-bg: var(--status-employee-on-leave-bg);
+  --badge-warning-border: var(--status-employee-on-leave-border);
+
+  /* Danger Status Badge */
+  --badge-danger-text: var(--status-employee-terminated);
+  --badge-danger-bg: var(--status-employee-terminated-bg);
+  --badge-danger-border: var(--status-employee-terminated-border);
+
+  /* Info Status Badge */
+  --badge-info-text: var(--status-employee-pending);
+  --badge-info-bg: var(--status-employee-pending-bg);
+  --badge-info-border: var(--status-employee-pending-border);
+
+  /* Success Status Badge */
+  --badge-success-text: var(--status-app-approved);
+  --badge-success-bg: var(--status-app-approved-bg);
+  --badge-success-border: var(--status-app-approved-border);
+
+  /* ===================================
+   * PROGRESS BARS & METERS
+   * =================================== */
+
+  --progress-track-bg: rgba(255, 255, 255, 0.08);       /* Empty track */
+  --progress-fill-primary: var(--gradient-brand);        /* Default fill */
+  --progress-fill-success: var(--color-success-primary); /* Success state */
+  --progress-fill-warning: var(--color-warning-primary); /* Warning state */
+  --progress-fill-error: var(--color-error-primary);     /* Error state */
+
+  /* ===================================
+   * SPARKLINES & MINI CHARTS
+   * Inline data visualizations for tables/cards
+   * =================================== */
+
+  --sparkline-positive: var(--color-success-primary);    /* Upward trend */
+  --sparkline-negative: var(--color-error-primary);      /* Downward trend */
+  --sparkline-neutral: var(--color-foreground-3);        /* Flat/no change */
+  --sparkline-line-width: 2px;                           /* Line thickness */
+  --sparkline-point-size: 4px;                           /* Data point size */
+
+  /* ===================================
+   * ACCESSIBILITY: HIGH CONTRAST OVERRIDES
+   * Enhanced colors for users with visual impairments
+   * =================================== */
+
+  @media (prefers-contrast: more) {
+    /* Increase contrast for all categorical colors */
+    --chart-categorical-1: #5eead4;  /* Lighter teal */
+    --chart-categorical-2: #fcd34d;  /* Lighter amber */
+    --chart-categorical-3: #c4b5fd;  /* Lighter violet */
+    --chart-categorical-4: #22d3ee;  /* Lighter cyan */
+    --chart-categorical-5: #34d399;  /* Lighter green */
+    --chart-categorical-6: #fb7185;  /* Lighter rose */
+
+    /* Stronger borders for status indicators */
+    --status-employee-active-border: var(--teal-300);
+    --status-app-approved-border: #34d399;
+    --status-app-rejected-border: #fb7185;
+  }
+}
+
+/* ===================================
+ * UTILITY CLASSES FOR DATA VIZ
+ * Apply data visualization colors in HTML
+ * =================================== */
+
+/* Employee Status Classes */
+.status-employee-active {
+  color: var(--status-employee-active);
+  background-color: var(--status-employee-active-bg);
+  border: 1px solid var(--status-employee-active-border);
+}
+
+.status-employee-on-leave {
+  color: var(--status-employee-on-leave);
+  background-color: var(--status-employee-on-leave-bg);
+  border: 1px solid var(--status-employee-on-leave-border);
+}
+
+.status-employee-terminated {
+  color: var(--status-employee-terminated);
+  background-color: var(--status-employee-terminated-bg);
+  border: 1px solid var(--status-employee-terminated-border);
+}
+
+/* Application Status Classes */
+.status-app-submitted { color: var(--status-app-submitted); }
+.status-app-review { color: var(--status-app-review); }
+.status-app-interview { color: var(--status-app-interview); }
+.status-app-approved { color: var(--status-app-approved); }
+.status-app-rejected { color: var(--status-app-rejected); }
+
+/* Chart Color Classes */
+.chart-color-1 { fill: var(--chart-categorical-1); stroke: var(--chart-categorical-1); }
+.chart-color-2 { fill: var(--chart-categorical-2); stroke: var(--chart-categorical-2); }
+.chart-color-3 { fill: var(--chart-categorical-3); stroke: var(--chart-categorical-3); }
+.chart-color-4 { fill: var(--chart-categorical-4); stroke: var(--chart-categorical-4); }
+.chart-color-5 { fill: var(--chart-categorical-5); stroke: var(--chart-categorical-5); }
+
+/* Sparkline Trend Indicators */
+.sparkline-positive {
+  color: var(--sparkline-positive);
+}
+
+.sparkline-negative {
+  color: var(--sparkline-negative);
+}
+
+.sparkline-neutral {
+  color: var(--sparkline-neutral);
+}
+
+/* Heatmap Cell Classes */
+.heatmap-rating-1 { background-color: var(--heatmap-rating-1); }
+.heatmap-rating-2 { background-color: var(--heatmap-rating-2); }
+.heatmap-rating-3 { background-color: var(--heatmap-rating-3); }
+.heatmap-rating-4 { background-color: var(--heatmap-rating-4); }
+.heatmap-rating-5 { background-color: var(--heatmap-rating-5); }

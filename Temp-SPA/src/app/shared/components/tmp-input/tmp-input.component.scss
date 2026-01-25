@@ -1,0 +1,109 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/components/form-base' as *;
+
+/**
+ * OBSIDIAN NOIR - Input Component
+ *
+ * Uses shared form-base patterns with input-specific customizations.
+ *
+ * BASE PATTERNS USED:
+ * - %form-container-states: Container state management (hover, focus, success, error, disabled)
+ * - form-field-strip-native($include-autofill: true): Remove browser styling + Chrome autofill fixes
+ * - form-floating-label(): Material Design floating label
+ * - form-validation-icon(): Success/error/loading icons
+ * - %form-error-message: Error message container
+ * - %form-required-indicator: Required asterisk
+ *
+ * COMPONENT-SPECIFIC:
+ * - Chrome autofill styling (input-only feature)
+ * - Number input spinner styling (type="number" specific)
+ * - Filter variant (compact height and padding)
+ */
+
+/* ===================================
+ * WRAPPER
+ * =================================== */
+.tmp-input-wrapper {
+  @include form-wrapper();
+
+  &.tmp-input-filter {
+    .tmp-input-container {
+      height: 48px;
+    }
+
+    .tmp-input-field {
+      padding: 20px 12px 6px 12px;
+    }
+
+    .tmp-input-label {
+      left: 12px;
+    }
+  }
+}
+
+/* ===================================
+ * CONTAINER
+ * =================================== */
+.tmp-input-container {
+  @extend %form-container-states;
+  display: block;
+  height: 60px;
+  cursor: text;
+}
+
+/* ===================================
+ * INPUT FIELD
+ * =================================== */
+.tmp-input-field {
+  @include form-field-strip-native($include-autofill: true);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 28px 44px 8px 16px;
+  display: block;
+
+  /* Number input spinner styling */
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    filter: invert(1) hue-rotate(180deg);
+    opacity: 0.6;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+/* ===================================
+ * FLOATING LABEL
+ * =================================== */
+.tmp-input-label {
+  @include form-floating-label();
+}
+
+/* Required indicator */
+.required-indicator {
+  @extend %form-required-indicator;
+}
+
+/* ===================================
+ * ICONS & MESSAGES
+ * =================================== */
+.tmp-input-icon {
+  @include form-validation-icon();
+}
+
+/* Error message */
+.tmp-input-error-message {
+  @extend %form-error-message;
+}
+
+.tmp-input-error-text {
+  @extend %form-error-text;
+}
+
+/* Help text / hint */
+.input-hint {
+  @extend %form-hint-text;
+}

@@ -1,0 +1,391 @@
+/**
+ * OBSIDIAN NOIR - Tooltip Component
+ *
+ * Elegant, glass-morphism tooltips with dramatic glow effects.
+ * Supports multiple placements, themes, and sizes.
+ *
+ * Usage:
+ * <div class="tooltip" data-tooltip="Tooltip text">Hover me</div>
+ * Or use with Angular Material tooltips by overriding mat-tooltip styles
+ */
+
+:root {
+  /* Tooltip tokens */
+  --tooltip-bg: var(--color-surface-elevated);
+  --tooltip-bg-glass: rgba(22, 22, 34, 0.85);
+  --tooltip-text: var(--color-foreground-1);
+  --tooltip-border: var(--color-border-strong);
+  --tooltip-shadow: var(--shadow-8), 0 0 20px rgba(45, 212, 191, 0.2);
+  --tooltip-arrow-size: 6px;
+  --tooltip-max-width: 240px;
+  --tooltip-padding: var(--spacing-xs) var(--spacing-sm);
+  --tooltip-border-radius: var(--border-radius-small);
+  --tooltip-font-size: var(--font-size-200);
+  --tooltip-z-index: var(--z-index-popover);
+}
+
+/* ===================================
+ * BASE TOOLTIP STYLES
+ * =================================== */
+
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::before,
+[data-tooltip]::after {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-decelerate),
+              transform var(--motion-duration-fast) var(--motion-ease-decelerate);
+  z-index: var(--tooltip-z-index);
+}
+
+/* Tooltip content bubble */
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+
+  /* Layout */
+  max-width: var(--tooltip-max-width);
+  padding: var(--tooltip-padding);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+
+  /* Typography */
+  font-family: var(--font-family-base);
+  font-size: var(--tooltip-font-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  text-align: center;
+  color: var(--tooltip-text);
+
+  /* Visual */
+  background-color: var(--tooltip-bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--tooltip-border);
+  border-radius: var(--tooltip-border-radius);
+  box-shadow: var(--tooltip-shadow);
+}
+
+/* Tooltip arrow */
+[data-tooltip]::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* Show on hover and focus */
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::before,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+}
+
+/* ===================================
+ * TOOLTIP PLACEMENTS
+ * Default: top
+ * =================================== */
+
+/* TOP (default) */
+[data-tooltip]:not([data-tooltip-position])::before,
+[data-tooltip][data-tooltip-position="top"]::before {
+  bottom: calc(100% + var(--tooltip-arrow-size) + 4px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+[data-tooltip]:not([data-tooltip-position])::after,
+[data-tooltip][data-tooltip-position="top"]::after {
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: var(--tooltip-arrow-size) var(--tooltip-arrow-size) 0 var(--tooltip-arrow-size);
+  border-color: var(--tooltip-bg-glass) transparent transparent transparent;
+}
+
+[data-tooltip]:not([data-tooltip-position]):hover::before,
+[data-tooltip][data-tooltip-position="top"]:hover::before {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* BOTTOM */
+[data-tooltip][data-tooltip-position="bottom"]::before {
+  top: calc(100% + var(--tooltip-arrow-size) + 4px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+}
+
+[data-tooltip][data-tooltip-position="bottom"]::after {
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 var(--tooltip-arrow-size) var(--tooltip-arrow-size) var(--tooltip-arrow-size);
+  border-color: transparent transparent var(--tooltip-bg-glass) transparent;
+}
+
+[data-tooltip][data-tooltip-position="bottom"]:hover::before {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* LEFT */
+[data-tooltip][data-tooltip-position="left"]::before {
+  top: 50%;
+  right: calc(100% + var(--tooltip-arrow-size) + 4px);
+  transform: translateY(-50%) translateX(-4px);
+}
+
+[data-tooltip][data-tooltip-position="left"]::after {
+  top: 50%;
+  right: calc(100% + 4px);
+  transform: translateY(-50%);
+  border-width: var(--tooltip-arrow-size) 0 var(--tooltip-arrow-size) var(--tooltip-arrow-size);
+  border-color: transparent transparent transparent var(--tooltip-bg-glass);
+}
+
+[data-tooltip][data-tooltip-position="left"]:hover::before {
+  transform: translateY(-50%) translateX(0);
+}
+
+/* RIGHT */
+[data-tooltip][data-tooltip-position="right"]::before {
+  top: 50%;
+  left: calc(100% + var(--tooltip-arrow-size) + 4px);
+  transform: translateY(-50%) translateX(4px);
+}
+
+[data-tooltip][data-tooltip-position="right"]::after {
+  top: 50%;
+  left: calc(100% + 4px);
+  transform: translateY(-50%);
+  border-width: var(--tooltip-arrow-size) var(--tooltip-arrow-size) var(--tooltip-arrow-size) 0;
+  border-color: transparent var(--tooltip-bg-glass) transparent transparent;
+}
+
+[data-tooltip][data-tooltip-position="right"]:hover::before {
+  transform: translateY(-50%) translateX(0);
+}
+
+/* ===================================
+ * TOOLTIP THEMES
+ * =================================== */
+
+/* Dark (default) - Already styled above */
+
+/* Light theme */
+[data-tooltip][data-tooltip-theme="light"]::before {
+  background-color: var(--obsidian-0);
+  color: var(--obsidian-24);
+  border-color: var(--obsidian-8);
+  box-shadow: var(--shadow-8);
+}
+
+[data-tooltip][data-tooltip-theme="light"][data-tooltip-position="top"]::after {
+  border-top-color: var(--obsidian-0);
+}
+
+[data-tooltip][data-tooltip-theme="light"][data-tooltip-position="bottom"]::after {
+  border-bottom-color: var(--obsidian-0);
+}
+
+[data-tooltip][data-tooltip-theme="light"][data-tooltip-position="left"]::after {
+  border-left-color: var(--obsidian-0);
+}
+
+[data-tooltip][data-tooltip-theme="light"][data-tooltip-position="right"]::after {
+  border-right-color: var(--obsidian-0);
+}
+
+/* Error theme */
+[data-tooltip][data-tooltip-theme="error"]::before {
+  background-color: var(--color-error-primary);
+  color: var(--obsidian-0);
+  border-color: var(--color-error-600);
+  box-shadow: var(--shadow-8), 0 0 20px rgba(244, 63, 94, 0.3);
+}
+
+[data-tooltip][data-tooltip-theme="error"][data-tooltip-position="top"]::after {
+  border-top-color: var(--color-error-primary);
+}
+
+[data-tooltip][data-tooltip-theme="error"][data-tooltip-position="bottom"]::after {
+  border-bottom-color: var(--color-error-primary);
+}
+
+[data-tooltip][data-tooltip-theme="error"][data-tooltip-position="left"]::after {
+  border-left-color: var(--color-error-primary);
+}
+
+[data-tooltip][data-tooltip-theme="error"][data-tooltip-position="right"]::after {
+  border-right-color: var(--color-error-primary);
+}
+
+/* Success theme */
+[data-tooltip][data-tooltip-theme="success"]::before {
+  background-color: var(--color-success-primary);
+  color: var(--obsidian-0);
+  border-color: var(--color-success-600);
+  box-shadow: var(--shadow-8), 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+[data-tooltip][data-tooltip-theme="success"][data-tooltip-position="top"]::after {
+  border-top-color: var(--color-success-primary);
+}
+
+[data-tooltip][data-tooltip-theme="success"][data-tooltip-position="bottom"]::after {
+  border-bottom-color: var(--color-success-primary);
+}
+
+[data-tooltip][data-tooltip-theme="success"][data-tooltip-position="left"]::after {
+  border-left-color: var(--color-success-primary);
+}
+
+[data-tooltip][data-tooltip-theme="success"][data-tooltip-position="right"]::after {
+  border-right-color: var(--color-success-primary);
+}
+
+/* Warning theme */
+[data-tooltip][data-tooltip-theme="warning"]::before {
+  background-color: var(--color-warning-primary);
+  color: var(--obsidian-30);
+  border-color: var(--amber-600);
+  box-shadow: var(--shadow-8), 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+[data-tooltip][data-tooltip-theme="warning"][data-tooltip-position="top"]::after {
+  border-top-color: var(--color-warning-primary);
+}
+
+[data-tooltip][data-tooltip-theme="warning"][data-tooltip-position="bottom"]::after {
+  border-bottom-color: var(--color-warning-primary);
+}
+
+[data-tooltip][data-tooltip-theme="warning"][data-tooltip-position="left"]::after {
+  border-left-color: var(--color-warning-primary);
+}
+
+[data-tooltip][data-tooltip-theme="warning"][data-tooltip-position="right"]::after {
+  border-right-color: var(--color-warning-primary);
+}
+
+/* ===================================
+ * TOOLTIP SIZES
+ * =================================== */
+
+/* Small */
+[data-tooltip][data-tooltip-size="small"]::before {
+  padding: 4px 8px;
+  font-size: var(--font-size-100);
+  max-width: 160px;
+}
+
+/* Large */
+[data-tooltip][data-tooltip-size="large"]::before {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-300);
+  max-width: 320px;
+}
+
+/* ===================================
+ * TOOLTIP VARIANTS
+ * =================================== */
+
+/* No arrow */
+[data-tooltip][data-tooltip-arrow="false"]::after {
+  display: none;
+}
+
+[data-tooltip][data-tooltip-arrow="false"]::before {
+  bottom: calc(100% + 8px);
+}
+
+/* Always visible (no hover required) */
+[data-tooltip][data-tooltip-visible="true"]::before,
+[data-tooltip][data-tooltip-visible="true"]::after {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Multiline (left-aligned text) */
+[data-tooltip][data-tooltip-multiline="true"]::before {
+  text-align: left;
+  white-space: normal;
+}
+
+/* ===================================
+ * ANGULAR MATERIAL TOOLTIP OVERRIDES
+ * Apply Obsidian Noir styling to mat-tooltip
+ * =================================== */
+
+.mat-mdc-tooltip,
+.mat-tooltip {
+  /* Override Material's default tooltip */
+  background-color: var(--tooltip-bg-glass) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--tooltip-border) !important;
+  border-radius: var(--tooltip-border-radius) !important;
+  box-shadow: var(--tooltip-shadow) !important;
+  color: var(--tooltip-text) !important;
+  font-family: var(--font-family-base) !important;
+  font-size: var(--tooltip-font-size) !important;
+  font-weight: var(--font-weight-medium) !important;
+  padding: var(--tooltip-padding) !important;
+  max-width: var(--tooltip-max-width) !important;
+}
+
+/* ===================================
+ * ACCESSIBILITY
+ * =================================== */
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-tooltip]::before,
+  [data-tooltip]::after {
+    transition: opacity var(--motion-duration-instant) linear,
+                transform var(--motion-duration-instant) linear !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: more) {
+  [data-tooltip]::before {
+    border-width: 2px !important;
+    backdrop-filter: none !important;
+    background-color: var(--color-surface-1) !important;
+  }
+}
+
+/* Forced colors mode */
+@media (forced-colors: active) {
+  [data-tooltip]::before {
+    border: 2px solid CanvasText !important;
+    background-color: Canvas !important;
+    color: CanvasText !important;
+  }
+
+  [data-tooltip]::after {
+    display: none; /* Hide arrow in forced colors */
+  }
+}
+
+/* ===================================
+ * UTILITY CLASSES
+ * =================================== */
+
+/* Disable tooltips */
+.no-tooltip::before,
+.no-tooltip::after {
+  display: none !important;
+}
+
+/* Force tooltip to stay visible (for screenshots/demos) */
+.tooltip-visible [data-tooltip]::before,
+.tooltip-visible [data-tooltip]::after {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}

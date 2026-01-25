@@ -1,0 +1,487 @@
+/**
+ * OBSIDIAN NOIR - Form Component Base
+ *
+ * Shared patterns for form components (input, select, textarea, datepicker)
+ * Extracts common styling to reduce duplication and ensure consistency
+ *
+ * USAGE:
+ *
+ * 1. Import in component:
+ *    @import '../../../../styles/components/form-base';
+ *
+ * 2. Apply container states (hover, focus, error, success, disabled):
+ *    .my-form-container {
+ *      @extend %form-container-states;
+ *      height: 60px; // component-specific property
+ *    }
+ *
+ * 3. Apply field stripping (removes native browser styling):
+ *    .my-form-field {
+ *      @include form-field-strip-native();
+ *      // Or with autofill fixes:
+ *      // @include form-field-strip-native($include-autofill: true);
+ *    }
+ *
+ * 4. Apply floating label (Material Design style):
+ *    .my-form-label {
+ *      @include form-floating-label();
+ *      // Or with custom positioning:
+ *      // @include form-floating-label($top: 12px, $transform-centered: none);
+ *    }
+ *
+ * 5. Apply validation icons (success/error/loading):
+ *    .my-form-icon {
+ *      @include form-validation-icon();
+ *      // Or with custom position:
+ *      // @include form-validation-icon($right: 40px);
+ *    }
+ *
+ * 6. Apply error message styling:
+ *    .my-form-error-message {
+ *      @extend %form-error-message;
+ *    }
+ *    .my-form-error-text {
+ *      @extend %form-error-text;
+ *    }
+ *
+ * STATE CLASSES:
+ * Components must apply these classes for states to activate:
+ * - {prefix}-focused: When field has focus
+ * - {prefix}-filled: When field has a value
+ * - {prefix}-error: When field has validation error
+ * - {prefix}-success: When field passes validation
+ * - {prefix}-disabled: When field is disabled
+ *
+ * ANIMATIONS:
+ * - slideDown: Error message entrance (0 → 1 opacity, -5px → 0 translateY)
+ * - spin: Loading spinner rotation (0deg → 360deg)
+ * - Automatically respects prefers-reduced-motion
+ */
+
+// ==============================================================================
+// SECTION 1: PLACEHOLDERS - Identical Patterns Across All Components
+// ==============================================================================
+
+/**
+ * %form-container-states
+ * Handles all container state management (hover, focus, success, error, disabled)
+ * Nearly identical across input, select, datepicker, and textarea (~90 lines each)
+ */
+%form-container-states {
+  position: relative;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--border-radius-medium);
+  transition: all var(--duration-normal) var(--easing-standard);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  /* Hover State - Subtle border and background enhancement */
+  &:hover:not([class*='-disabled']):not([class*='-error']):not([class*='-focused']) {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface-3);
+  }
+
+  /* Focus State - Brand primary color with teal glow effect */
+  &[class*='-focused']:not([class*='-disabled']):not([class*='-error']) {
+    border-color: var(--color-brand-primary) !important;
+    box-shadow: var(--shadow-glow-teal-sm);
+    background-color: var(--color-surface-1);
+    outline: none;
+  }
+
+  /* Success State - Green border with success glow on focus */
+  &[class*='-success']:not([class*='-error']) {
+    border-color: var(--color-success-primary);
+
+    &[class*='-focused'] {
+      box-shadow: var(--shadow-glow-success);
+      outline: none;
+    }
+  }
+
+  /* Error State - No border, just background tint and Shake */
+  &[class*='-error'] {
+    /* border-color: var(--color-border-default) !important; // Keep neutral border */
+    /* background-color: rgba(244, 63, 94, 0.02); // Red tint */
+    background: rgba(244, 63, 94, 0.02);
+    border-color: var(--color-border-default) !important;
+
+    &[class*='-focused'] {
+      /* box-shadow: var(--shadow-glow-error); // Remove red glow */
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15), 0 0 12px rgba(244, 63, 94, 0.2);
+      /* Actually user wanted "without border". 
+         If we keep shadow it looks like a border.
+         Let's keep the focus shadow *subtle* or just remove it if they hate borders.
+         Glow is okay, hard border is bad.
+      */
+      border-color: var(--color-border-default) !important;
+      outline: none;
+    }
+  }
+
+  /* Disabled State - Reduced opacity and interaction disabled */
+  &[class*='-disabled'] {
+    opacity: 0.5;
+    background-color: var(--color-surface-3);
+    cursor: not-allowed;
+  }
+}
+
+/**
+ * %form-required-indicator
+ * Styles the required asterisk (*) shown next to labels
+ * Identical across all components (7 lines)
+ */
+%form-required-indicator {
+  color: var(--color-error);
+  margin-left: var(--spacing-xxs);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.1em;
+}
+
+/**
+ * %form-error-message
+ * Container for error message with slide-down animation
+ * Identical across all components (10 lines)
+ */
+%form-error-message {
+  margin-top: var(--spacing-xxs);
+  padding-left: var(--spacing-xxs);
+  animation: slideDown var(--duration-fast) var(--easing-decelerate);
+
+  /* Reset global [role="alert"] styles from _accessibility.css */
+  background: transparent !important;
+  border: none !important;
+  padding: 0 var(--spacing-xxs) !important;
+  margin-bottom: 0 !important;
+}
+
+/**
+ * %form-error-text
+ * Text styling for error messages
+ * Identical across all components
+ */
+%form-error-text {
+  color: var(--color-error-primary);
+  font-size: var(--font-size-200);
+  display: block;
+}
+
+/**
+ * %form-hint-text
+ * Styling for help text / hints below fields
+ * Identical across all components
+ */
+%form-hint-text {
+  font-size: var(--font-size-200);
+  color: var(--color-foreground-4);
+  margin-top: var(--spacing-xxs);
+  line-height: var(--line-height-normal);
+}
+
+// ==============================================================================
+// SECTION 2: MIXINS - Parameterized Patterns for Customization
+// ==============================================================================
+
+/**
+ * form-wrapper
+ * Base flex column layout for form components (wrapper container)
+ *
+ * @param {String} $gap - Gap between wrapper children (default: var(--spacing-xxs))
+ *
+ * @example
+ *   .form-wrapper {
+ *     @include form-wrapper();
+ *   }
+ *
+ *   .form-wrapper--large-gap {
+ *     @include form-wrapper($gap: var(--spacing-xs));
+ *   }
+ */
+@mixin form-wrapper($gap: var(--spacing-xxs)) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  width: 100%;
+  position: relative;
+}
+
+/**
+ * form-field-strip-native
+ * Removes all browser default styling from input/textarea/select elements
+ * Ensures the container controls all visual appearance
+ *
+ * @param {Boolean} $include-autofill - Include Chrome autofill fixes (default: false)
+ *                                      Set to true only for <input> elements
+ *
+ * @example
+ *   // For input with autofill
+ *   .form-field {
+ *     @include form-field-strip-native($include-autofill: true);
+ *   }
+ *
+ *   // For select/textarea without autofill
+ *   .form-field {
+ *     @include form-field-strip-native();
+ *   }
+ */
+@mixin form-field-strip-native($include-autofill: false) {
+  /* Critical: Remove all native styling */
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  margin: 0;
+
+  /* Typography */
+  color: var(--color-foreground-1);
+  font-family: inherit;
+  font-size: var(--font-size-300);
+  line-height: normal;
+
+  /* Suppress global focus ring and validation styles */
+  &:focus,
+  &:focus-visible,
+  &.ng-valid,
+  &.ng-invalid,
+  &.is-valid,
+  &:valid,
+  &:invalid {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    background-image: none !important;
+    background-color: transparent !important;
+  }
+
+  @if $include-autofill {
+
+    /* Fix for Chrome Autofill (input-specific) */
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+      -webkit-text-fill-color: var(--color-foreground-1) !important;
+      -webkit-box-shadow: 0 0 0 1000px var(--color-surface-2) inset !important;
+      background-color: var(--color-surface-2) !important;
+      background-image: none !important;
+      border: none !important;
+      outline: none !important;
+      caret-color: var(--color-foreground-1) !important;
+      transition: background-color 5000s ease-in-out 0s !important;
+    }
+
+    &:-webkit-autofill::selection,
+    &:-webkit-autofill:hover::selection,
+    &:-webkit-autofill:focus::selection {
+      background-color: var(--color-brand-primary) !important;
+      color: var(--color-foreground-on-brand) !important;
+    }
+  }
+}
+
+/**
+ * form-floating-label
+ * Material Design-style floating label with state-based colors
+ * Positions label absolutely and animates it up when field has focus/value
+ *
+ * @param {String} $left - Left position of label (default: 16px)
+ * @param {String} $top - Top position for resting state (default: 50%)
+ * @param {String} $transform-centered - Transform for centered position (default: translateY(-50%))
+ * @param {String} $transform-floated - Transform when label floats up (default: translateY(-115%) scale(0.85))
+ *
+ * @example
+ *   // Default: centered label that floats up
+ *   .form-label {
+ *     @include form-floating-label();
+ *   }
+ *
+ *   // Datepicker: floats up more
+ *   .datepicker-label {
+ *     @include form-floating-label($transform-floated: translateY(-155%) scale(0.8));
+ *   }
+ *
+ *   // Textarea: top-aligned label
+ *   .textarea-label {
+ *     @include form-floating-label(
+ *       $top: 12px,
+ *       $transform-centered: none,
+ *       $transform-floated: translateY(-28px) scale(0.85)
+ *     );
+ *   }
+ */
+@mixin form-floating-label($left: 16px,
+  $top: 50%,
+  $transform-centered: translateY(-50%),
+  $transform-floated: translateY(-115%) scale(0.85)) {
+  position: absolute;
+  left: $left;
+  top: $top;
+  transform: $transform-centered;
+  font-size: var(--font-size-300);
+  color: var(--color-foreground-3);
+  pointer-events: none;
+  transition: all var(--duration-fast) var(--easing-standard);
+  transform-origin: left center;
+  z-index: var(--z-index-dropdown);
+
+  /* Floated state - when field has value or is focused */
+  // Using parent class selectors with attribute matching
+  [class*='-filled'] &,
+  [class*='-focused'] & {
+    transform: $transform-floated;
+    color: var(--color-foreground-3);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Focus state color - brand primary teal */
+  [class*='-focused'] & {
+    color: var(--color-brand-primary);
+  }
+
+  /* Error state color - error red */
+  [class*='-error'] & {
+    color: var(--color-error-primary);
+  }
+
+  /* Success state color - success green */
+  [class*='-success'] & {
+    color: var(--color-success-primary);
+  }
+}
+
+/**
+ * form-validation-icon
+ * Positioned validation icons (success checkmark, error X, loading spinner)
+ * Handles color and animation based on state classes
+ *
+ * @param {String} $right - Right position (default: 12px)
+ * @param {String} $top - Top position (default: 50%)
+ * @param {String} $transform - Transform to apply (default: translateY(-50%))
+ *
+ * @example
+ *   // Default: centered right icon
+ *   .form-icon {
+ *     @include form-validation-icon();
+ *   }
+ *
+ *   // Select: icon positioned further left to avoid chevron
+ *   .select-icon {
+ *     @include form-validation-icon($right: 40px);
+ *   }
+ *
+ *   // Textarea: top-right corner icon
+ *   .textarea-icon {
+ *     @include form-validation-icon($right: 12px, $top: 12px, $transform: none);
+ *   }
+ */
+@mixin form-validation-icon($right: 12px,
+  $top: 50%,
+  $transform: translateY(-50%)) {
+  position: absolute;
+  right: $right;
+  top: $top;
+  transform: $transform;
+  z-index: var(--z-index-validation-icon);
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--easing-standard);
+
+  /* Success state - green checkmark */
+  &[class*='-success'] {
+    color: var(--color-success-primary);
+  }
+
+  /* Error state - red X icon */
+  &[class*='-error'] {
+    color: var(--color-error-primary);
+  }
+
+  /* Loading state - teal spinner with rotation animation */
+  &[class*='-loading'] {
+    color: var(--color-brand-primary);
+    animation: spin var(--duration-spinner) var(--easing-linear) infinite;
+  }
+}
+
+/**
+ * form-reduced-motion
+ * Disables animations for users who prefer reduced motion
+ * Automatically applied via @media (prefers-reduced-motion: reduce)
+ *
+ * @example
+ *   .form-container {
+ *     transition: all 250ms ease;
+ *     @include form-reduced-motion() {
+ *       transition: none;
+ *     }
+ *   }
+ */
+@mixin form-reduced-motion() {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// ==============================================================================
+// SECTION 3: ANIMATIONS - Keyframes for Form Component Interactions
+// ==============================================================================
+
+/**
+ * slideDown
+ * Animation for error messages appearing below fields
+ * Opacity: 0 → 1, translateY: -5px → 0
+ * Duration: var(--duration-fast) = 150ms
+ * Easing: var(--easing-decelerate) = ease-out
+ */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/**
+ * spin
+ * Animation for loading spinner icons
+ * Rotation: 0deg → 360deg
+ * Duration: var(--duration-spinner) = 1000ms
+ * Easing: var(--easing-linear) = linear
+ * Note: Adjusted for input validation icons with translateY(-50%) offset
+ */
+@keyframes spin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+// ==============================================================================
+// SECTION 4: ACCESSIBILITY UTILITIES
+// ==============================================================================
+
+/**
+ * Base accessibility support
+ * All components should respect prefers-reduced-motion
+ */
+@media (prefers-reduced-motion: reduce) {
+
+  /* Disable all animations for form components when user prefers reduced motion */
+  [class*='-container'],
+  [class*='-label'],
+  [class*='-icon'],
+  [class*='-error-message'] {
+    transition: none !important;
+    animation: none !important;
+  }
+}

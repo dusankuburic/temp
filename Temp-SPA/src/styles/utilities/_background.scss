@@ -1,0 +1,34 @@
+/* Background & Color Utilities */
+
+.bg-canvas { background-color: var(--color-canvas); }
+.bg-surface-1 { background-color: var(--color-surface-1); }
+.bg-surface-2 { background-color: var(--color-surface-2); }
+.bg-surface-3 { background-color: var(--color-surface-3); }
+
+.bg-primary { background-color: var(--color-brand-primary); }
+.bg-secondary { background-color: var(--color-brand-secondary); }
+
+.bg-success { background-color: var(--color-success-primary); }
+.bg-error { background-color: var(--color-error-primary); }
+.bg-warning { background-color: var(--color-warning-primary); }
+.bg-info { background-color: var(--color-info-primary); }
+
+.bg-glass {
+  background: var(--gradient-glass);
+  background-color: var(--color-surface-glass-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bg-gradient-brand { background: var(--gradient-brand); }
+.bg-gradient-glow { background: var(--gradient-glow); }
+.bg-gradient-obsidian { background: var(--gradient-obsidian-deep); }
+
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+
+/* Semantic backgrounds */
+.bg-success-light { background-color: var(--color-background-success); }
+.bg-error-light { background-color: var(--color-background-error); }
+.bg-warning-light { background-color: var(--color-background-warning); }
+.bg-info-light { background-color: var(--color-background-info); }

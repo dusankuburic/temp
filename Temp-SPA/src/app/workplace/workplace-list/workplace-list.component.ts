@@ -16,7 +16,7 @@ import { TableColumn } from 'src/app/shared/components/tmp-table/tmp-table.compo
 @Component({
     selector: 'app-workplace-list',
     templateUrl: './workplace-list.component.html',
-    styleUrl: './workplace-list.component.css',
+    styleUrl: './workplace-list.component.scss',
     standalone: false
 })
 export class WorkplaceListComponent extends DestroyableComponent implements OnInit, AfterViewInit {

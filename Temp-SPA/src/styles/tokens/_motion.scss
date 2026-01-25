@@ -1,0 +1,470 @@
+/**
+ * OBSIDIAN NOIR Design System - Motion & Animation Tokens
+ *
+ * Dramatic, personality-driven motion that matches the bold Obsidian Noir aesthetic.
+ * These tokens define timing, easing curves, and animation presets for consistent
+ * micro-interactions throughout the application.
+ *
+ * Motion Philosophy:
+ * - SNAPPY: Fast, responsive interactions (buttons, hovers)
+ * - DRAMATIC: Entrances and exits with personality
+ * - SMOOTH: Fluid transitions between states
+ * - ACCESSIBLE: Respects prefers-reduced-motion
+ */
+
+:root {
+  /* ===================================
+   * DURATION SCALE
+   * Based on Material Design with Obsidian Noir adjustments
+   * =================================== */
+
+  /* Ultra-fast - Immediate feedback (< 100ms feels instant) */
+  --motion-duration-instant: 50ms;
+
+  /* Fast - Quick transitions, micro-interactions */
+  --motion-duration-fast: 150ms;
+
+  /* Normal - Most UI interactions (sweet spot for UX) */
+  --motion-duration-normal: 250ms;
+
+  /* Moderate - Noticeable transitions */
+  --motion-duration-moderate: 350ms;
+
+  /* Slow - Dramatic entrances/exits */
+  --motion-duration-slow: 500ms;
+
+  /* Cinematic - Hero animations, page transitions */
+  --motion-duration-cinematic: 800ms;
+
+  /* ===================================
+   * EASING CURVES
+   * Custom curves that create Obsidian Noir's dramatic feel
+   * =================================== */
+
+  /* STANDARD CURVES (Material Design 3 inspired) */
+
+  /* Standard - Balanced, natural motion */
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Emphasized - More personality, slightly bouncy */
+  --motion-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Decelerate - Incoming elements (ease-out) */
+  --motion-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Accelerate - Outgoing elements (ease-in) */
+  --motion-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+
+  /* OBSIDIAN NOIR SIGNATURE CURVES */
+
+  /* Dramatic - Bouncy, energetic (for buttons, cards) */
+  --motion-ease-dramatic: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Smooth - Buttery, premium feel */
+  --motion-ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Snap - Crisp, mechanical (for toggles, switches) */
+  --motion-ease-snap: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Elastic - Playful spring (for success states) */
+  --motion-ease-elastic: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  /* CONTEXTUAL EASING */
+
+  /* Enter - Elements appearing */
+  --motion-ease-enter: var(--motion-ease-decelerate);
+
+  /* Exit - Elements disappearing */
+  --motion-ease-exit: var(--motion-ease-accelerate);
+
+  /* Move - Elements changing position */
+  --motion-ease-move: var(--motion-ease-emphasized);
+
+  /* ===================================
+   * ANIMATION PRESETS
+   * Composite values for common patterns
+   * =================================== */
+
+  /* BUTTONS & INTERACTIVE ELEMENTS */
+  --motion-button-hover: var(--motion-duration-fast) var(--motion-ease-smooth);
+  --motion-button-active: var(--motion-duration-instant) var(--motion-ease-snap);
+  --motion-button-focus: var(--motion-duration-normal) var(--motion-ease-emphasized);
+
+  /* FORMS & INPUTS */
+  --motion-input-focus: var(--motion-duration-normal) var(--motion-ease-smooth);
+  --motion-input-error: var(--motion-duration-moderate) var(--motion-ease-elastic);
+  --motion-label-float: var(--motion-duration-fast) var(--motion-ease-decelerate);
+
+  /* CARDS & CONTAINERS */
+  --motion-card-hover: var(--motion-duration-normal) var(--motion-ease-smooth);
+  --motion-card-lift: var(--motion-duration-fast) var(--motion-ease-decelerate);
+
+  /* MODALS & OVERLAYS */
+  --motion-modal-enter: var(--motion-duration-moderate) var(--motion-ease-emphasized);
+  --motion-modal-exit: var(--motion-duration-normal) var(--motion-ease-accelerate);
+  --motion-backdrop-fade: var(--motion-duration-normal) var(--motion-ease-standard);
+
+  /* DROPDOWNS & POPOVERS */
+  --motion-dropdown-open: var(--motion-duration-fast) var(--motion-ease-decelerate);
+  --motion-dropdown-close: var(--motion-duration-fast) var(--motion-ease-accelerate);
+
+  /* NAVIGATION */
+  --motion-nav-transition: var(--motion-duration-moderate) var(--motion-ease-smooth);
+  --motion-sidebar-slide: var(--motion-duration-moderate) var(--motion-ease-emphasized);
+
+  /* TOASTS & NOTIFICATIONS */
+  --motion-toast-enter: var(--motion-duration-moderate) var(--motion-ease-elastic);
+  --motion-toast-exit: var(--motion-duration-normal) var(--motion-ease-accelerate);
+
+  /* LOADERS & SKELETONS */
+  --motion-loader-spin: 800ms linear;
+  --motion-skeleton-pulse: 1500ms ease-in-out;
+  --motion-progress-indeterminate: 2000ms cubic-bezier(0.65, 0.05, 0.36, 1);
+
+  /* ===================================
+   * DELAYS (Stagger animations)
+   * =================================== */
+
+  --motion-delay-none: 0ms;
+  --motion-delay-xs: 50ms;
+  --motion-delay-sm: 100ms;
+  --motion-delay-md: 150ms;
+  --motion-delay-lg: 200ms;
+  --motion-delay-xl: 300ms;
+
+  /* ===================================
+   * TRANSFORM PRESETS
+   * Common transform values for consistency
+   * =================================== */
+
+  /* SCALE */
+  --motion-scale-up-sm: 1.02;
+  --motion-scale-up-md: 1.05;
+  --motion-scale-up-lg: 1.1;
+  --motion-scale-down-sm: 0.98;
+  --motion-scale-down-md: 0.95;
+
+  /* TRANSLATE */
+  --motion-translate-up-sm: -2px;
+  --motion-translate-up-md: -4px;
+  --motion-translate-up-lg: -8px;
+  --motion-translate-down-sm: 2px;
+  --motion-translate-down-md: 4px;
+
+  /* ROTATE */
+  --motion-rotate-subtle: 2deg;
+  --motion-rotate-moderate: 5deg;
+  --motion-rotate-dramatic: 15deg;
+
+  /* ===================================
+   * OPACITY LEVELS
+   * For fade animations
+   * =================================== */
+
+  --motion-opacity-invisible: 0;
+  --motion-opacity-subtle: 0.3;
+  --motion-opacity-moderate: 0.6;
+  --motion-opacity-visible: 1;
+
+  /* ===================================
+   * BLUR LEVELS (for glass morphism)
+   * =================================== */
+
+  --motion-blur-light: blur(8px);
+  --motion-blur-medium: blur(16px);
+  --motion-blur-heavy: blur(24px);
+}
+
+/* ===================================
+ * ANIMATION KEYFRAMES
+ * Reusable animation definitions
+ * =================================== */
+
+/* FADE ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: var(--motion-opacity-invisible);
+  }
+  to {
+    opacity: var(--motion-opacity-visible);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: var(--motion-opacity-visible);
+  }
+  to {
+    opacity: var(--motion-opacity-invisible);
+  }
+}
+
+/* SLIDE ANIMATIONS */
+@keyframes slideInUp {
+  from {
+    opacity: var(--motion-opacity-invisible);
+    transform: translateY(20px);
+  }
+  to {
+    opacity: var(--motion-opacity-visible);
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: var(--motion-opacity-invisible);
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: var(--motion-opacity-visible);
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: var(--motion-opacity-invisible);
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: var(--motion-opacity-visible);
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: var(--motion-opacity-invisible);
+    transform: translateX(20px);
+  }
+  to {
+    opacity: var(--motion-opacity-visible);
+    transform: translateX(0);
+  }
+}
+
+/* SCALE ANIMATIONS */
+@keyframes scaleIn {
+  from {
+    opacity: var(--motion-opacity-invisible);
+    transform: scale(0.9);
+  }
+  to {
+    opacity: var(--motion-opacity-visible);
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: var(--motion-opacity-visible);
+    transform: scale(1);
+  }
+  to {
+    opacity: var(--motion-opacity-invisible);
+    transform: scale(0.9);
+  }
+}
+
+/* BOUNCE ANIMATION (Obsidian Noir signature) */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--motion-translate-up-md));
+  }
+}
+
+/* PULSE ANIMATION */
+@keyframes pulse {
+  0%, 100% {
+    opacity: var(--motion-opacity-visible);
+  }
+  50% {
+    opacity: var(--motion-opacity-moderate);
+  }
+}
+
+/* GLOW PULSE (for dramatic effects) */
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.2);
+  }
+}
+
+/* SPIN (for loaders) */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* SHIMMER (for skeleton loaders) */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* PROGRESS BAR (indeterminate) */
+@keyframes progressIndeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* SHAKE (for errors) */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* WIGGLE (playful) */
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(var(--motion-rotate-subtle));
+  }
+  75% {
+    transform: rotate(calc(var(--motion-rotate-subtle) * -1));
+  }
+}
+
+/* ELASTIC ENTER (for success states) */
+@keyframes elasticEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===================================
+ * UTILITY CLASSES
+ * Apply motion tokens directly in HTML
+ * =================================== */
+
+.animate-fade-in {
+  animation: fadeIn var(--motion-duration-normal) var(--motion-ease-standard);
+}
+
+.animate-slide-up {
+  animation: slideInUp var(--motion-duration-moderate) var(--motion-ease-emphasized);
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--motion-duration-normal) var(--motion-ease-dramatic);
+}
+
+.animate-bounce {
+  animation: bounce 600ms var(--motion-ease-elastic) infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s var(--motion-ease-standard) infinite;
+}
+
+.animate-spin {
+  animation: spin var(--motion-loader-spin) infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer var(--motion-skeleton-pulse) infinite;
+}
+
+.animate-shake {
+  animation: shake 400ms var(--motion-ease-standard);
+}
+
+/* ===================================
+ * TRANSITION UTILITIES
+ * =================================== */
+
+.transition-all {
+  transition: all var(--motion-duration-normal) var(--motion-ease-standard);
+}
+
+.transition-colors {
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard),
+              background-color var(--motion-duration-fast) var(--motion-ease-standard),
+              border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.transition-transform {
+  transition: transform var(--motion-duration-normal) var(--motion-ease-smooth);
+}
+
+.transition-opacity {
+  transition: opacity var(--motion-duration-normal) var(--motion-ease-standard);
+}
+
+/* ===================================
+ * ACCESSIBILITY: REDUCED MOTION
+ * Respect user preferences
+ * =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Override all durations to be nearly instant */
+    --motion-duration-instant: 1ms;
+    --motion-duration-fast: 1ms;
+    --motion-duration-normal: 1ms;
+    --motion-duration-moderate: 1ms;
+    --motion-duration-slow: 1ms;
+    --motion-duration-cinematic: 1ms;
+
+    /* Disable bouncy/elastic curves */
+    --motion-ease-dramatic: linear;
+    --motion-ease-elastic: linear;
+  }
+
+  /* Disable all animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable transforms for reduced motion */
+  .animate-bounce,
+  .animate-pulse,
+  .animate-spin,
+  .animate-shimmer,
+  .animate-shake {
+    animation: none !important;
+  }
+}

@@ -5,6 +5,8 @@ import { UsersComponent } from './user/users/users.component';
 import { moderatorGuard } from './core/guards/moderator.guard';
 import { ModeratorComponent } from './user/moderator/moderator.component';
 import { authGuard } from './core/guards/auth.guard';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 export const appRoutes: Routes = [
     {
@@ -76,5 +78,7 @@ export const appRoutes: Routes = [
             {path: 'moderators', component: ModeratorComponent, data: { animation: 'Moderators' }},
         ]
     },
-    {path: '**', redirectTo: '', pathMatch: 'full'}
+    {path: 'not-found', component: NotFoundComponent},
+    {path: 'server-error', component: ServerErrorComponent},
+    {path: '**', component: NotFoundComponent, pathMatch: 'full'}
 ];

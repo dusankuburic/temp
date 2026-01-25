@@ -1,0 +1,78 @@
+/**
+ * Form Utility Mixins
+ * Input styling, labels, form groups, and validation indicators
+ */
+
+@mixin form-input {
+  display: block;
+  width: 100%;
+  padding: var(--input-padding-y, 10px) var(--input-padding-x, 12px);
+  font-size: var(--input-font-size, 14px);
+  line-height: 1.5;
+  color: var(--color-text, #1f2937);
+  background-color: var(--color-input-bg, #ffffff);
+  border: 1px solid var(--color-input-border, #d1d5db);
+  border-radius: var(--radius-sm, 4px);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-input-border-hover, #9ca3af);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--color-primary, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  &:disabled {
+    background-color: var(--color-input-bg-disabled, #f3f4f6);
+    color: var(--color-text-disabled, #9ca3af);
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: var(--color-input-placeholder, #9ca3af);
+  }
+
+  @content;
+}
+
+@mixin form-label {
+  display: block;
+  margin-bottom: var(--spacing-xs, 8px);
+  font-size: var(--label-font-size, 14px);
+  font-weight: 500;
+  color: var(--color-label, #374151);
+  @content;
+}
+
+@mixin form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-md, 16px);
+
+  label {
+    @include form-label;
+  }
+
+  input,
+  textarea,
+  select {
+    @include form-input;
+  }
+
+  @content;
+}
+
+@mixin required-indicator {
+  &::after {
+    content: ' *';
+    color: var(--color-error, #ef4444);
+    font-weight: bold;
+  }
+  @content;
+}

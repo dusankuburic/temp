@@ -1,0 +1,86 @@
+@if (control) {
+<div class="tmp-textarea-wrapper">
+    <div class="tmp-textarea-container"
+         [class.tmp-textarea-filled]="control.value"
+         [class.tmp-textarea-focused]="isFocused"
+         [class.tmp-textarea-error]="hasError"
+         [class.tmp-textarea-success]="isValid"
+         [class.tmp-textarea-disabled]="control.disabled">
+
+        <textarea
+            #textarea
+            [formControl]="control"
+            [placeholder]="' '"
+            [id]="textareaId"
+            [rows]="rows"
+            [cols]="cols || undefined"
+            [maxLength]="maxLength || undefined"
+            class="tmp-textarea-field"
+            (focus)="onFocus()"
+            (blur)="onBlur()"
+            (input)="onInput()"
+            [attr.aria-label]="label"
+            [attr.aria-invalid]="hasError"
+            [attr.aria-describedby]="(hasError ? errorId : null) || (hint && !hasError ? hintId : null)">
+        </textarea>
+
+        <label [for]="textareaId" class="tmp-textarea-label">
+            {{ label }}
+            @if (isFieldRequired) {
+                <span class="required-indicator" aria-label="required">*</span>
+            }
+        </label>
+
+        @if (control.touched) {
+            @if (isLoading) {
+                <span class="tmp-textarea-icon tmp-textarea-icon-loading" aria-hidden="true">
+                    <fa-icon [icon]="faSpinner" [size]="'xl'"></fa-icon>
+                </span>
+            } @else if (isValid) {
+                <span class="tmp-textarea-icon tmp-textarea-icon-success" aria-hidden="true">
+                    <fa-icon [icon]="faCheck" [size]="'xl'"></fa-icon>
+                </span>
+            } @else if (hasError) {
+                <span class="tmp-textarea-icon tmp-textarea-icon-error" aria-hidden="true">
+                    <fa-icon [icon]="faExclamationCircle" [size]="'xl'"></fa-icon>
+                </span>
+            }
+        }
+    </div>
+
+    @if (control.touched && control.invalid) {
+        <div [id]="errorId" class="tmp-textarea-error-message" role="alert">
+            @if (control.errors?.required) {
+                <span class="tmp-textarea-error-text">
+                    Please enter {{label}}.
+                </span>
+            }
+            @if (control.errors?.minlength) {
+                <span class="tmp-textarea-error-text">
+                    The value you inputted is {{ control.errors?.minlength.actualLength }} characters long.
+                    It must be at least {{ control.errors?.minlength.requiredLength }} characters long.
+                </span>
+            }
+            @if (control.errors?.maxlength) {
+                <span class="tmp-textarea-error-text">
+                    The value you inputted is {{ control.errors?.maxlength.actualLength }} characters long.
+                    It must be less than {{ control.errors?.maxlength.requiredLength }} characters long.
+                </span>
+            }
+        </div>
+    }
+
+    @if (maxLength) {
+        <div class="tmp-textarea-footer">
+            @if (hint && !hasError) {
+                <p [id]="hintId" class="textarea-hint">{{ hint }}</p>
+            }
+            <span [id]="charCountId" class="character-count">
+                {{ characterCountDisplay }}
+            </span>
+        </div>
+    } @else if (hint && !hasError) {
+        <p [id]="hintId" class="textarea-hint">{{ hint }}</p>
+    }
+</div>
+}

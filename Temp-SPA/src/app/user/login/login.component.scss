@@ -1,3 +1,6 @@
+@use '../../../styles/mixins/flexbox' as *;
+@use '../../../styles/mixins/glass' as *;
+
 /**
  * OBSIDIAN NOIR - Login Component
  * A dramatic, full-screen dark login experience
@@ -6,12 +9,9 @@
 .login-container {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   padding: var(--spacing-l);
   position: absolute;
-  /* Ensure it stays out of flow if needed, though layout changes should handle it */
   top: 0;
   left: 0;
   overflow: hidden;
@@ -22,7 +22,6 @@
     radial-gradient(ellipse at 80% 20%, rgba(167, 139, 250, 0.08) 0%, transparent 50%),
     radial-gradient(ellipse at 50% 50%, rgba(251, 191, 36, 0.04) 0%, transparent 50%),
     var(--color-canvas);
-  /* Base dark background */
 }
 
 /* Animated background orbs */
@@ -36,7 +35,7 @@
   opacity: 0.3;
   /* More subtle */
   animation: float 25s ease-in-out infinite;
-  z-index: 0;
+  z-index: var(--z-index-base);
 }
 
 .login-container::before {
@@ -83,29 +82,22 @@
 /* Login card */
 .login-card {
   position: relative;
-  z-index: 10;
+  z-index: var(--z-index-float);
   width: 100%;
   max-width: 440px;
-  /* Slightly wider */
-  padding: 48px;
-  /* More breathing room */
+  padding: var(--spacing-huge);
   background: rgba(20, 20, 23, 0.6);
-  /* Semi-transparent dark */
   border: 1px solid rgba(255, 255, 255, 0.08);
-  /* Subtle border */
   border-top: 1px solid rgba(255, 255, 255, 0.12);
-  /* Highlight top border */
-  border-radius: 24px;
-  box-shadow:
-    0 24px 48px -12px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(0, 0, 0, 0.2);
+  border-radius: 40px;
+  /* Enhanced rounding as requested */
+  box-shadow: var(--shadow-2xl), 0 0 0 1px rgba(0, 0, 0, 0.2);
 
   /* Stronger glass effect */
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  @include glass-premium;
 
   /* Entry animation */
-  animation: card-enter 800ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: card-enter var(--duration-ultra-slow) cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes card-enter {
@@ -133,7 +125,8 @@
   width: 64px;
   height: 64px;
   background: var(--gradient-brand);
-  border-radius: var(--border-radius-large);
+  border-radius: 20px;
+  /* Rounder logo to match the card */
   margin-bottom: var(--spacing-m);
   box-shadow: var(--shadow-glow-teal);
 
@@ -159,15 +152,13 @@
 
 /* Form */
 .login-form {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   gap: var(--spacing-m);
 }
 
 /* Form group */
 .login-form-group {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   gap: var(--spacing-xs);
 }
 
@@ -248,14 +239,14 @@
   border-radius: 0 0 var(--border-radius-pill) var(--border-radius-pill);
 }
 
-/* Responsive */
-@media (max-width: 480px) {
+/* Responsive - Mobile */
+@media (max-width: 639px) {
   .login-container {
     padding: var(--spacing-m);
   }
 
   .login-card {
-    padding: var(--spacing-l);
+    padding: var(--spacing-xl);
   }
 
   .login-title {

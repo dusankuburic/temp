@@ -17,7 +17,7 @@ import { forkJoin } from 'rxjs';
 @Component({
     selector: 'app-group-edit-modal',
     templateUrl: './group-edit-modal.component.html',
-    styleUrls: ['../../shared/styles/modal.css'],
+    styleUrls: ['../../shared/styles/modal.scss'],
     standalone: false
 })
 export class GroupEditModalComponent extends DestroyableComponent implements OnInit {

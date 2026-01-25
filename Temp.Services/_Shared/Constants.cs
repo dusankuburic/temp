@@ -72,4 +72,6 @@ public static class AppConstants
     public const string AdminRole = "Admin";
     public const string UserRole = "User";
     public const string ModeratorRole = "Moderator";
+
+    public static readonly string[] AllowedRoles = new[] { AdminRole, UserRole, ModeratorRole };
 }

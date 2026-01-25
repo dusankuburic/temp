@@ -1,0 +1,34 @@
+/**
+ * SCSS Mixins Library - Organized Index
+ * Central import file for all mixin modules
+ *
+ * This file organizes mixins into focused, single-responsibility files
+ * for better maintainability and reusability.
+ */
+
+/* Layout & Responsive Foundation */
+@use 'responsive' as *;
+@use 'layout' as *;
+
+/* Interactive States & Flexbox */
+@use 'interactive' as *;
+@use 'flexbox' as *;
+
+/* Visual Effects */
+@use 'glass' as *;
+@use 'shadows' as *;
+@use 'animations' as *;
+@use 'text' as *;
+
+/* Component Styling */
+@use 'buttons' as *;
+@use 'forms' as *;
+@use 'cards' as *;
+
+/* Focus & Accessibility */
+@use 'focus' as *;
+@use 'accessibility' as *;
+
+/* UI Enhancements */
+@use 'scrollbar' as *;
+@use 'centering' as *;

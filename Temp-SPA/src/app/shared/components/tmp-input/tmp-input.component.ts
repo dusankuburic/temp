@@ -1,16 +1,16 @@
 import { Component, Input, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AbstractControl, NG_VALUE_ACCESSOR, ValidationErrors, Validators } from '@angular/forms';
 import { ControlValueAccessorDirective } from '../control-value-accessor.directive';
-import { faCheck, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faExclamationCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-type InputType = 'text' | 'number' | 'email' | 'password';
+type InputType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url' | 'search' | 'time';
 
 let nextUniqueId = 0;
 
 @Component({
     selector: 'tmp-input',
     templateUrl: './tmp-input.component.html',
-    styleUrl: './tmp-input.component.css',
+    styleUrl: './tmp-input.component.scss',
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -25,6 +25,7 @@ export class TmpInputComponent<T> extends ControlValueAccessorDirective<T> {
   @Input() placeholder = '';
   @Input() label = '';
   @Input() isFilter: boolean = false;
+  @Input() hint: string = '';
 
   isFocused = false;
   private uniqueId = `tmp-input-${++nextUniqueId}`;
@@ -37,6 +38,28 @@ export class TmpInputComponent<T> extends ControlValueAccessorDirective<T> {
     return `${this.uniqueId}-error`;
   }
 
+  get hintId(): string {
+    return `${this.uniqueId}-hint`;
+  }
+
+  get isFieldRequired(): boolean {
+    if (!this.control?.validator) return false;
+    const validator = this.control.validator({} as AbstractControl);
+    return !!(validator && validator['required'] === true);
+  }
+
+  get isLoading(): boolean {
+    return this.control?.status === 'PENDING';
+  }
+
+  get hasError(): boolean {
+    return !this.isFilter && !!(this.control?.touched && this.control?.invalid);
+  }
+
+  get isValid(): boolean {
+    return !this.isFilter && !!(this.control?.touched && this.control?.valid);
+  }
+
   onFocus(): void {
     this.isFocused = true;
   }
@@ -45,7 +68,8 @@ export class TmpInputComponent<T> extends ControlValueAccessorDirective<T> {
     this.isFocused = false;
   }
 
-  // Icons
+  
   protected readonly faCheck = faCheck;
   protected readonly faExclamationCircle = faExclamationCircle;
+  protected readonly faSpinner = faSpinner;
 }

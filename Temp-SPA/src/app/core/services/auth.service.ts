@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
+import { JwtPayload } from '../models/jwt-payload';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -14,15 +15,6 @@ interface LoginRequest {
 interface LoginResponse {
   token: string;
   user: User;
-}
-
-interface JwtPayload {
-  unique_name: string;
-  nameid: string;
-  role: string;
-  nbf: number;
-  exp: number;
-  iat: number;
 }
 
 @Injectable({

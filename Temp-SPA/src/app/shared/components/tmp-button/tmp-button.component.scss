@@ -1,0 +1,485 @@
+/**
+ * OBSIDIAN NOIR - Button Component
+ * Dramatic buttons with glow effects and gradient backgrounds
+ */
+
+/* ===================================
+ * BASE BUTTON
+ * =================================== */
+
+.tmp-button {
+  /* Reset */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+  user-select: none;
+
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  position: relative;
+
+  /* Typography */
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  white-space: nowrap;
+  text-align: center;
+
+  /* Shape */
+  border-radius: var(--border-radius-medium);
+
+  /* Transitions - smooth and snappy */
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Remove default focus outline */
+  outline: none;
+}
+
+/* ===================================
+ * SIZES
+ * =================================== */
+
+.tmp-button-small {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: var(--font-size-200);
+  line-height: 1.4;
+}
+
+.tmp-button-medium {
+  min-height: 40px;
+  padding: 8px 16px;
+  font-size: var(--font-size-300);
+  line-height: 1.4;
+}
+
+.tmp-button-large {
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: var(--font-size-400);
+  line-height: 1.4;
+}
+
+/* Icon-only buttons (square) */
+.tmp-button-icon-only.tmp-button-small { width: 32px; padding: 6px; }
+.tmp-button-icon-only.tmp-button-medium { width: 40px; padding: 8px; }
+.tmp-button-icon-only.tmp-button-large { width: 48px; padding: 12px; }
+
+/* Full width */
+.tmp-button-full-width {
+  width: 100%;
+}
+
+/* ===================================
+ * PRIMARY - Gradient with Glow
+ * =================================== */
+
+.tmp-button-primary {
+  background: var(--gradient-brand);
+  color: var(--color-foreground-on-brand);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-button);
+}
+
+.tmp-button-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button-hover);
+}
+
+.tmp-button-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.tmp-button-primary:focus-visible {
+  border-color: var(--color-brand-primary);
+  box-shadow: var(--shadow-glow-teal-sm);
+}
+
+/* ===================================
+ * SECONDARY - Subtle with border
+ * =================================== */
+
+.tmp-button-secondary {
+  background-color: var(--color-surface-2);
+  color: var(--color-foreground-1);
+  border: 1px solid var(--color-border-default);
+  box-shadow: var(--shadow-2);
+}
+
+.tmp-button-secondary:hover:not(:disabled) {
+  background-color: var(--color-surface-3);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-4);
+}
+
+.tmp-button-secondary:active:not(:disabled) {
+  background-color: var(--color-interactive-pressed);
+  transform: scale(0.98);
+}
+
+.tmp-button-secondary:focus-visible {
+  border-color: var(--color-brand-primary);
+  box-shadow: var(--shadow-glow-teal-sm);
+}
+
+/* ===================================
+ * OUTLINE - Teal border glow
+ * =================================== */
+
+.tmp-button-outline {
+  background-color: transparent;
+  color: var(--color-brand-primary);
+  border: 1px solid var(--color-brand-primary);
+}
+
+.tmp-button-outline:hover:not(:disabled) {
+  background-color: rgba(45, 212, 191, 0.1);
+  box-shadow: var(--shadow-glow-teal-sm);
+}
+
+.tmp-button-outline:active:not(:disabled) {
+  background-color: rgba(45, 212, 191, 0.15);
+  transform: scale(0.98);
+}
+
+.tmp-button-outline:focus-visible {
+  border-color: var(--color-brand-primary);
+  box-shadow: var(--shadow-glow-teal-sm);
+}
+
+/* ===================================
+ * SUBTLE - Ghost with hover reveal
+ * =================================== */
+
+.tmp-button-subtle {
+  background-color: transparent;
+  color: var(--color-foreground-2);
+}
+
+.tmp-button-subtle:hover:not(:disabled) {
+  background-color: var(--color-interactive-hover);
+  color: var(--color-foreground-1);
+}
+
+.tmp-button-subtle:active:not(:disabled) {
+  background-color: var(--color-interactive-pressed);
+  transform: scale(0.98);
+}
+
+.tmp-button-subtle:focus-visible {
+  box-shadow: var(--shadow-focus-inset);
+}
+
+/* ===================================
+ * TRANSPARENT - Minimal ghost
+ * =================================== */
+
+.tmp-button-transparent {
+  background-color: transparent;
+  color: var(--color-foreground-3);
+}
+
+.tmp-button-transparent:hover:not(:disabled) {
+  background-color: var(--color-white-alpha-8);
+  color: var(--color-foreground-1);
+}
+
+.tmp-button-transparent:active:not(:disabled) {
+  background-color: var(--color-white-alpha-12);
+  transform: scale(0.98);
+}
+
+.tmp-button-transparent:focus-visible {
+  box-shadow: var(--shadow-focus-inset);
+}
+
+/* ===================================
+ * DANGER - Red with error glow
+ * =================================== */
+
+.tmp-button-danger {
+  background: linear-gradient(135deg, var(--color-error-primary) 0%, var(--color-error-600) 100%);
+  color: var(--color-foreground-on-brand);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tmp-button-danger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--shadow-glow-error);
+}
+
+.tmp-button-danger:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.tmp-button-danger:focus-visible {
+  border-color: var(--color-error-primary);
+  box-shadow: var(--shadow-glow-error);
+}
+
+/* ===================================
+ * SUCCESS - Green with success glow
+ * =================================== */
+
+.tmp-button-success {
+  background: linear-gradient(135deg, var(--color-success-400) 0%, var(--color-success-600) 100%);
+  color: var(--color-foreground-on-brand);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-sm);
+}
+
+.tmp-button-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--shadow-glow-success);
+}
+
+.tmp-button-success:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.tmp-button-success:focus-visible {
+  border-color: var(--color-success-primary);
+  box-shadow: var(--shadow-glow-success);
+}
+
+/* ===================================
+ * WARNING - Amber with warm glow
+ * =================================== */
+
+.tmp-button-warning {
+  background: linear-gradient(135deg, var(--color-warning-primary) 0%, var(--amber-600) 100%);
+  color: var(--obsidian-30);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tmp-button-warning:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--shadow-glow-warning);
+}
+
+.tmp-button-warning:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.tmp-button-warning:focus-visible {
+  border-color: var(--color-warning-primary);
+  box-shadow: var(--shadow-glow-warning);
+}
+
+/* ===================================
+ * INFO - Cyan glow
+ * =================================== */
+
+.tmp-button-info {
+  background: linear-gradient(135deg, var(--color-info-primary) 0%, var(--color-info-600) 100%);
+  color: var(--color-foreground-on-brand);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tmp-button-info:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--shadow-glow-info);
+}
+
+.tmp-button-info:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.tmp-button-info:focus-visible {
+  border-color: var(--color-info-primary);
+  box-shadow: var(--shadow-glow-info);
+}
+
+/* ===================================
+ * DISABLED STATE
+ * =================================== */
+
+.tmp-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.tmp-button-primary:disabled {
+  background: var(--color-surface-3);
+  color: var(--color-foreground-4);
+}
+
+.tmp-button-secondary:disabled,
+.tmp-button-outline:disabled {
+  background-color: transparent;
+  border-color: var(--color-border-subtle);
+  color: var(--color-foreground-4);
+}
+
+/* ===================================
+ * LOADING STATE
+ * =================================== */
+
+.tmp-button-loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.tmp-button-loading .tmp-button-content {
+  opacity: 0.5;
+}
+
+/* ===================================
+ * CONTENT & ICONS
+ * =================================== */
+
+.tmp-button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  transition: opacity 150ms ease;
+}
+
+.tmp-button-content-hidden {
+  opacity: 0;
+}
+
+.tmp-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.4em;
+}
+
+.tmp-button-icon-left {
+  margin-right: -2px;
+}
+
+.tmp-button-icon-right {
+  margin-left: -2px;
+}
+
+/* ===================================
+ * LOADING SPINNER
+ * =================================== */
+
+.tmp-button-spinner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================
+ * BUTTON GROUPS
+ * =================================== */
+
+.tmp-button-group {
+  display: inline-flex;
+  gap: var(--spacing-xs);
+}
+
+.tmp-button-group-attached {
+  display: inline-flex;
+  gap: 0;
+}
+
+.tmp-button-group-attached .tmp-button {
+  border-radius: 0;
+  margin-left: -1px;
+}
+
+.tmp-button-group-attached .tmp-button:first-child {
+  border-top-left-radius: var(--border-radius-medium);
+  border-bottom-left-radius: var(--border-radius-medium);
+  margin-left: 0;
+}
+
+.tmp-button-group-attached .tmp-button:last-child {
+  border-top-right-radius: var(--border-radius-medium);
+  border-bottom-right-radius: var(--border-radius-medium);
+}
+
+.tmp-button-group-attached .tmp-button:focus {
+  z-index: 1;
+}
+
+/* ===================================
+ * LINK-STYLE BUTTON
+ * =================================== */
+
+.tmp-button-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-foreground-link);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  min-height: auto;
+}
+
+.tmp-button-link:hover:not(:disabled) {
+  color: var(--color-foreground-link-hover);
+  background: none;
+  text-decoration: underline;
+  transform: none;
+}
+
+.tmp-button-link:active:not(:disabled) {
+  color: var(--color-brand-primary-pressed);
+  transform: none;
+}
+
+/* ===================================
+ * ACCESSIBILITY
+ * =================================== */
+
+@media (prefers-contrast: high) {
+  .tmp-button {
+    border: 2px solid currentColor;
+  }
+
+  .tmp-button-primary,
+  .tmp-button-danger,
+  .tmp-button-success,
+  .tmp-button-warning,
+  .tmp-button-info {
+    border-color: transparent;
+  }
+
+  .tmp-button:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tmp-button,
+  .tmp-button-content,
+  .tmp-button-spinner {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .tmp-button:hover:not(:disabled),
+  .tmp-button:active:not(:disabled) {
+    transform: none !important;
+  }
+}

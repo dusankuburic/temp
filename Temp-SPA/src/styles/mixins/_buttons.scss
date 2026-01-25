@@ -1,0 +1,76 @@
+/**
+ * Button Style Mixins
+ * Base button styling and color variants (primary, secondary, outline)
+ */
+
+@mixin btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs, 8px);
+  padding: var(--btn-padding-y, 10px) var(--btn-padding-x, 16px);
+  font-size: var(--btn-font-size, 14px);
+  font-weight: 600;
+  line-height: 1.5;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md, 6px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @content;
+}
+
+@mixin btn-primary {
+  @include btn-base {
+    background-color: var(--color-primary, #2563eb);
+    color: var(--color-primary-text, white);
+    border-color: var(--color-primary, #2563eb);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-primary-dark, #1d4ed8);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    @content;
+  }
+}
+
+@mixin btn-secondary {
+  @include btn-base {
+    background-color: var(--color-secondary, #64748b);
+    color: var(--color-secondary-text, white);
+    border-color: var(--color-secondary, #64748b);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-secondary-dark, #475569);
+      box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+    }
+
+    @content;
+  }
+}
+
+@mixin btn-outline {
+  @include btn-base {
+    background-color: transparent;
+    color: var(--color-primary, #2563eb);
+    border-color: var(--color-primary, #2563eb);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-primary, #2563eb);
+      color: var(--color-primary-text, white);
+    }
+
+    @content;
+  }
+}

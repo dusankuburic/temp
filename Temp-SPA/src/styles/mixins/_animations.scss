@@ -1,0 +1,75 @@
+/**
+ * Animation Mixins
+ * Common animation effects and transitions
+ */
+
+@mixin fade-in($duration: 0.3s) {
+  animation: fadeIn $duration ease-in-out;
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @content;
+}
+
+@mixin fade-out($duration: 0.3s) {
+  animation: fadeOut $duration ease-in-out;
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  @content;
+}
+
+@mixin slide-in-left($duration: 0.4s, $distance: 20px) {
+  animation: slideInLeft $duration ease-out;
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-$distance);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @content;
+}
+
+@mixin slide-in-right($duration: 0.4s, $distance: 20px) {
+  animation: slideInRight $duration ease-out;
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX($distance);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @content;
+}
+
+@mixin bounce($duration: 0.6s) {
+  animation: bounce $duration infinite;
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @content;
+}
+
+@mixin transition($props: all, $duration: 0.3s, $timing: ease) {
+  transition: $props $duration $timing;
+  @content;
+}
+
+@mixin pulse($duration: 2s) {
+  animation: pulse $duration cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  @content;
+}
