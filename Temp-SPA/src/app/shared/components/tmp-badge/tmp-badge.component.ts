@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export type BadgeVariant = 'filled' | 'outline' | 'subtle' | 'tint';
 export type BadgeColor = 'brand' | 'success' | 'warning' | 'error' | 'info' | 'neutral';
@@ -8,6 +8,7 @@ export type BadgeSize = 'small' | 'medium' | 'large';
   selector: 'tmp-badge',
   templateUrl: './tmp-badge.component.html',
   styleUrls: ['./tmp-badge.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class TmpBadgeComponent {

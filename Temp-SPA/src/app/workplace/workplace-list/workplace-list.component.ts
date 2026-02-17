@@ -92,7 +92,7 @@ export class WorkplaceListComponent extends DestroyableComponent implements OnIn
 
   openEditModal(id: number): void {
     const initialState: ModalOptions = {
-      class: 'modal-dialog-centered',
+      class: 'modal-dialog-centered modal-xl',
       initialState: {
         title: 'Edit Workplace',
         workplaceId: id

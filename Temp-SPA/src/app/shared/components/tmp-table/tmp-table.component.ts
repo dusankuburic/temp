@@ -1,4 +1,4 @@
-import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 export interface TableColumn {
   key: string;
@@ -15,7 +15,8 @@ import { tableAnimations } from '../../../core/animations/table.animations';
   templateUrl: './tmp-table.component.html',
   styleUrls: ['./tmp-table.component.scss'],
   standalone: false,
-  animations: [tableAnimations]
+  animations: [tableAnimations],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TmpTableComponent<T = any> {
   @Input() columns: TableColumn[] = [];

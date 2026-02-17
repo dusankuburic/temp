@@ -1,4 +1,4 @@
-import { Component, Input, Self } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Self } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 
 
@@ -8,6 +8,7 @@ let nextUniqueId = 0;
     selector: 'tmp-datepicker',
     templateUrl: './tmp-datepicker.component.html',
     styleUrl: './tmp-datepicker.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class TmpDatepickerComponent implements ControlValueAccessor {

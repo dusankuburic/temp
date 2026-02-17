@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from './core/services/auth.service';
@@ -8,6 +8,7 @@ import { User } from './core/models/user';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class AppComponent implements OnInit {

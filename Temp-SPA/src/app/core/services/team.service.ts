@@ -28,20 +28,21 @@ resetTeamParams(): void {
   this.teamParams.name = '';
 }
 
-getInnerTeams(groupId: number): Observable<PagedInnerTeams> {
+getInnerTeams(groupId: number, params?: TeamParams): Observable<PagedInnerTeams> {
   const paginatedResult: PaginatedResult<Team[]> = new PaginatedResult<Team[]>();
+  const currentParams = params || this.teamParams;
 
-  let params = new HttpParams();
+  let httpParams = new HttpParams();
 
-  params = params.append('groupId', groupId);
-  params = params.append('pageNumber', this.teamParams.pageNumber);
-  params = params.append('pageSize', this.teamParams.pageSize);
+  httpParams = httpParams.append('groupId', groupId);
+  httpParams = httpParams.append('pageNumber', currentParams.pageNumber);
+  httpParams = httpParams.append('pageSize', currentParams.pageSize);
 
-  if (this.teamParams.name) {
-    params = params.append('name', this.teamParams.name);
+  if (currentParams.name) {
+    httpParams = httpParams.append('name', currentParams.name);
   }
 
-  return this.http.get<InnerTeams>(this.baseUrl + 'groups/paged-inner-teams', {observe: 'response', params})
+  return this.http.get<InnerTeams>(this.baseUrl + 'groups/paged-inner-teams', {observe: 'response', params: httpParams})
     .pipe(
       map(response => {
         const body = response.body!;

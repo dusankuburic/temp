@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, ValidationErrors, Validators } from '@angular/forms';
 import { ControlValueAccessorDirective } from '../control-value-accessor.directive';
 import { faCheck, faExclamationCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -18,6 +18,7 @@ let nextUniqueId = 0;
             multi: true
         }
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class TmpInputComponent<T> extends ControlValueAccessorDirective<T> {

@@ -23,71 +23,73 @@
   </tmp-card>
 
    <!-- Data Table Card -->
-   <tmp-card variant="filled" class="employee-list-table-card">
-     <tmp-table
-       [columns]="columns"
-       [data]="employees"
-       [striped]="true"
-       [hoverable]="true"
-       [loading]="isLoading"
-       [disableAnimations]="disableTableAnimations"
-       emptyMessage="No employees found">
-
-      <!-- Custom row template for complex content -->
-      <ng-template #rowTemplate let-employee>
-        <tr>
-          <td>{{ employee.firstName }}</td>
-          <td>{{ employee.lastName }}</td>
-          <td class="text-center">
-            <tmp-badge
-              variant="filled"
-              [color]="employee.role === 'Admin' ? 'warning' :
-                       employee.role === 'Moderator' ? 'success' :
-                       employee.role === 'User' ? 'info' : 'neutral'">
-              {{ employee.role }}
-            </tmp-badge>
-          </td>
-          <td class="text-center">
-            <div class="tmp-button-group">
-              <!-- Edit button -->
-              <tmp-button variant="primary" size="small" (clicked)="openEditModal(employee.id)" ariaLabel="Edit employee {{employee.firstName}} {{employee.lastName}}">
-                <fa-icon [icon]="editIcon" [size]="'lg'"></fa-icon>
-              </tmp-button>
-
-              <!-- Assign role (only for None role) -->
-              @if (employee.role === 'None') {
-                <tmp-button variant="info" size="small" (clicked)="openAssignRoleModal(employee.id, employee.firstName, employee.lastName)" ariaLabel="Assign role to {{employee.firstName}} {{employee.lastName}}">
-                  <fa-icon [icon]="assignRoleIcon" [size]="'lg'"></fa-icon>
-                </tmp-button>
-              }
-
-              <!-- Status toggle and remove role (for assigned roles) -->
-              @if (employee.role !== 'None') {
-                <tmp-button
-                  [variant]="employee.isAppUserActive ? 'success' : 'warning'"
-                  size="small"
-                  (clicked)="changeStatus(employee.id)"
-                  ariaLabel="{{employee.isAppUserActive ? 'Deactivate' : 'Activate'}} {{employee.firstName}} {{employee.lastName}}">
-                  <fa-icon [icon]="employee.isAppUserActive ? deactivateUserIcon : activateUserIcon" [size]="'lg'"></fa-icon>
-                </tmp-button>
-                <tmp-button variant="danger" size="small" (clicked)="removeRole(employee.id)" ariaLabel="Remove role from {{employee.firstName}} {{employee.lastName}}">
-                  <fa-icon [icon]="removeRoleIcon" [size]="'lg'"></fa-icon>
-                </tmp-button>
-              }
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-    </tmp-table>
-  </tmp-card>
-
-  <!-- Pagination -->
-  <div class="employee-list-pagination">
-    <tmp-pagination
-      [totalCount]="pagination.totalItems"
-      [pageSize]="pagination.itemsPerPage"
-      [pageNumber]="pagination.currentPage"
-      (pageChanged)="pageChanged($event)">
-    </tmp-pagination>
-  </div>
+   <ng-container *ngIf="paginatedResult">
+       <tmp-card variant="filled" class="employee-list-table-card">
+         <tmp-table
+           [columns]="columns"
+           [data]="paginatedResult.result"
+           [striped]="true"
+           [hoverable]="true"
+           [loading]="isLoading"
+           [disableAnimations]="disableTableAnimations"
+           emptyMessage="No employees found">
+    
+           <!-- Custom row template for complex content -->
+           <ng-template #rowTemplate let-employee>
+             <tr>
+               <td>{{ employee.firstName }}</td>
+               <td>{{ employee.lastName }}</td>
+               <td class="text-center">
+                 <tmp-badge
+                   variant="filled"
+                   [color]="employee.role === 'Admin' ? 'warning' :
+                            employee.role === 'Moderator' ? 'success' :
+                            employee.role === 'User' ? 'info' : 'neutral'">
+                   {{ employee.role }}
+                 </tmp-badge>
+               </td>
+               <td class="text-center">
+                 <div class="tmp-button-group">
+                   <!-- Edit button -->
+                   <tmp-button variant="primary" size="small" (clicked)="openEditModal(employee.id)" ariaLabel="Edit employee {{employee.firstName}} {{employee.lastName}}">
+                     <fa-icon [icon]="editIcon" [size]="'lg'"></fa-icon>
+                   </tmp-button>
+    
+                   <!-- Assign role (only for None role) -->
+                   @if (employee.role === 'None') {
+                     <tmp-button variant="info" size="small" (clicked)="openAssignRoleModal(employee.id, employee.firstName, employee.lastName)" ariaLabel="Assign role to {{employee.firstName}} {{employee.lastName}}">
+                       <fa-icon [icon]="assignRoleIcon" [size]="'lg'"></fa-icon>
+                     </tmp-button>
+                   }
+    
+                   <!-- Status toggle and remove role (for assigned roles) -->
+                   @if (employee.role !== 'None') {
+                     <tmp-button
+                       [variant]="employee.isAppUserActive ? 'success' : 'warning'"
+                       size="small"
+                       (clicked)="changeStatus(employee.id)"
+                       ariaLabel="{{employee.isAppUserActive ? 'Deactivate' : 'Activate'}} {{employee.firstName}} {{employee.lastName}}">
+                       <fa-icon [icon]="employee.isAppUserActive ? deactivateUserIcon : activateUserIcon" [size]="'lg'"></fa-icon>
+                     </tmp-button>
+                     <tmp-button variant="danger" size="small" (clicked)="removeRole(employee.id)" ariaLabel="Remove role from {{employee.firstName}} {{employee.lastName}}">
+                       <fa-icon [icon]="removeRoleIcon" [size]="'lg'"></fa-icon>
+                     </tmp-button>
+                   }
+                 </div>
+               </td>
+             </tr>
+           </ng-template>
+         </tmp-table>
+       </tmp-card>
+    
+       <!-- Pagination -->
+       <div class="employee-list-pagination">
+         <tmp-pagination
+           [totalCount]="paginatedResult.pagination.totalItems"
+           [pageSize]="paginatedResult.pagination.itemsPerPage"
+           [pageNumber]="paginatedResult.pagination.currentPage"
+           (pageChanged)="pageChanged($event)">
+         </tmp-pagination>
+       </div>
+   </ng-container>
 </div>

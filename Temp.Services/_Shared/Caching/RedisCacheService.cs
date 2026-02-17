@@ -28,10 +28,18 @@ public class RedisCacheService : ICacheService
         }
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default) {
+    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, string? group = null, CancellationToken cancellationToken = default) {
         try {
             var serializedValue = JsonConvert.SerializeObject(value);
             await _database.StringSetAsync(key, serializedValue, expiration);
+
+            if (!string.IsNullOrEmpty(group)) {
+                 await _database.SetAddAsync($"group:{group}", key);
+                 
+                 if (expiration.HasValue) {
+                     await _database.KeyExpireAsync($"group:{group}", expiration);
+                 }
+            }
         } catch (RedisConnectionException ex) {
             _logger?.LogWarning(ex, "Redis connection failed for SetAsync with key: {Key}", key);
         }
@@ -45,22 +53,20 @@ public class RedisCacheService : ICacheService
         }
     }
 
-    public async Task RemoveByPatternAsync(string pattern, CancellationToken cancellationToken = default) {
+    public async Task RemoveGroupAsync(string group, CancellationToken cancellationToken = default) {
         try {
-            var endpoints = _redis.GetEndPoints();
-            var server = _redis.GetServer(endpoints.First());
+            var groupKey = $"group:{group}";
+            var keys = await _database.SetMembersAsync(groupKey);
 
-
-            var keys = new List<RedisKey>();
-            await foreach (var key in server.KeysAsync(pattern: pattern)) {
-                keys.Add(key);
+            if (keys.Length > 0) {
+                 var redisKeys = keys.Select(k => (RedisKey)k.ToString()).ToArray();
+                 await _database.KeyDeleteAsync(redisKeys);
             }
-
-            if (keys.Count > 0) {
-                await _database.KeyDeleteAsync(keys.ToArray());
-            }
+            
+            await _database.KeyDeleteAsync(groupKey);
+            
         } catch (RedisConnectionException ex) {
-            _logger?.LogWarning(ex, "Redis connection failed for RemoveByPatternAsync with pattern: {Pattern}", pattern);
+            _logger?.LogWarning(ex, "Redis connection failed for RemoveGroupAsync with group: {Group}", group);
         }
     }
 

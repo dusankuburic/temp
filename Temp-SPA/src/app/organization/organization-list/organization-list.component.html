@@ -20,53 +20,55 @@
     </form>
   </tmp-card>
 
-  <tmp-card variant="filled" class="organization-list-table-card">
-    <tmp-table
-      [columns]="columns"
-      [data]="organizations"
-      [striped]="true"
-      [hoverable]="true"
-      [loading]="isLoading"
-      emptyMessage="No organizations found">
+  <ng-container *ngIf="paginatedResult">
+    <tmp-card variant="filled" class="organization-list-table-card">
+      <tmp-table
+        [columns]="columns"
+        [data]="paginatedResult.result"
+        [striped]="true"
+        [hoverable]="true"
+        [loading]="isLoading"
+        emptyMessage="No organizations found">
 
-      <ng-template #rowTemplate let-organization>
-        <tr>
-          <td>{{ organization.name }}</td>
-          <td class="text-center">
-            <div class="tmp-button-group">
-              <tmp-button variant="primary" size="small" (clicked)="openEditModal(organization.id)" ariaLabel="Edit organization {{organization.name}}">
-                <fa-icon [icon]="editOrganizationIcon" [size]="'lg'"></fa-icon>
-              </tmp-button>
-              <tmp-button variant="danger" size="small" (clicked)="changeStatus(organization.id)" ariaLabel="Archive organization {{organization.name}}">
-                <fa-icon [icon]="archiveOrganizationIcon" [size]="'lg'"></fa-icon>
-              </tmp-button>
-            </div>
-          </td>
-          <td class="text-center">
-            <div class="tmp-button-group">
-              <tmp-button
-                [variant]="organization.hasActiveGroup ? 'warning' : 'danger'"
-                size="small"
-                [routerLink]="['/groups/organization/', organization.id]"
-                ariaLabel="View groups for {{organization.name}}">
-                <fa-icon [icon]="innerGroupsIcon" [size]="'lg'"></fa-icon>
-              </tmp-button>
-              <tmp-button variant="info" size="small" [routerLink]="['/groups/create/organization/', organization.id]" ariaLabel="Create group for {{organization.name}}">
-                <fa-icon [icon]="plusIcon" [size]="'lg'"></fa-icon>
-              </tmp-button>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-    </tmp-table>
-  </tmp-card>
+        <ng-template #rowTemplate let-organization>
+          <tr>
+            <td>{{ organization.name }}</td>
+            <td class="text-center">
+              <div class="tmp-button-group">
+                <tmp-button variant="primary" size="small" (clicked)="openEditModal(organization.id)" ariaLabel="Edit organization {{organization.name}}">
+                  <fa-icon [icon]="editOrganizationIcon" [size]="'lg'"></fa-icon>
+                </tmp-button>
+                <tmp-button variant="danger" size="small" (clicked)="changeStatus(organization.id)" ariaLabel="Archive organization {{organization.name}}">
+                  <fa-icon [icon]="archiveOrganizationIcon" [size]="'lg'"></fa-icon>
+                </tmp-button>
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="tmp-button-group">
+                <tmp-button
+                  [variant]="organization.hasActiveGroup ? 'warning' : 'danger'"
+                  size="small"
+                  [routerLink]="['/groups/organization/', organization.id]"
+                  ariaLabel="View groups for {{organization.name}}">
+                  <fa-icon [icon]="innerGroupsIcon" [size]="'lg'"></fa-icon>
+                </tmp-button>
+                <tmp-button variant="info" size="small" [routerLink]="['/groups/create/organization/', organization.id]" ariaLabel="Create group for {{organization.name}}">
+                  <fa-icon [icon]="plusIcon" [size]="'lg'"></fa-icon>
+                </tmp-button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </tmp-table>
+    </tmp-card>
 
-  <div class="organization-list-pagination">
-    <tmp-pagination
-      [totalCount]="pagination.totalItems"
-      [pageSize]="pagination.itemsPerPage"
-      [pageNumber]="pagination.currentPage"
-      (pageChanged)="pageChanged($event)">
-    </tmp-pagination>
-  </div>
+    <div class="organization-list-pagination">
+      <tmp-pagination
+        [totalCount]="paginatedResult.pagination.totalItems"
+        [pageSize]="paginatedResult.pagination.itemsPerPage"
+        [pageNumber]="paginatedResult.pagination.currentPage"
+        (pageChanged)="pageChanged($event)">
+      </tmp-pagination>
+    </div>
+  </ng-container>
 </div>

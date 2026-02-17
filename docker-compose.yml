@@ -1,6 +1,6 @@
 services:
   tempdb:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
     networks:
       - temp-network
 
@@ -10,7 +10,7 @@ services:
       - temp-network
 
   redis:
-    image: redis:latest
+    image: redis:alpine
     networks:
       - temp-network
 
