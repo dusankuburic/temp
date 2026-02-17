@@ -8,10 +8,14 @@
 
 .sidebar-fluent {
   /* Layout */
-  width: var(--sidebar-width);
-  position: sticky;
+  /* Fixed positioning for stability */
+  position: fixed;
   top: var(--navbar-height);
-  height: calc(100vh - var(--navbar-height));
+  bottom: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: auto;
+  /* Let top/bottom determine height */
 
   /* Colors - Premium Tinted Obsidian with Mesh Glows */
   background: var(--obsidian-20);
@@ -44,7 +48,8 @@
   /* Enable scrolling */
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: calc(100vh - var(--navbar-height));
+  height: 100%;
+  max-height: 100%;
 
   /* Custom scrollbar */
   scrollbar-width: thin;

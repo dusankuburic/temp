@@ -33,3 +33,5 @@ RUN mkdir -p /app/certs
 COPY Temp.API/certs/aspnetapp.pfx /app/certs
 
 ENTRYPOINT ["dotnet", "Temp.API.dll"]
+
+USER app

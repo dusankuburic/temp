@@ -9,9 +9,12 @@ import { SharedModule } from '../shared/shared.module';
 import { WorkplaceCreateModalComponent } from './workplace-create-modal/workplace-create-modal.component';
 import { WorkplaceEditModalComponent } from './workplace-edit-modal/workplace-edit-modal.component';
 
+import { TabsModule } from 'ngx-bootstrap/tabs';
+
 @NgModule({
     imports: [
         SharedModule,
+        TabsModule,
         RouterModule.forChild(workplaceRoutes)
     ],
     exports: [],

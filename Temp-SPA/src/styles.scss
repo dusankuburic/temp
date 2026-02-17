@@ -158,13 +158,16 @@ body {
 }
 
 /* Stabilize layout elements during modal transitions */
+/* Stabilize layout elements during modal transitions */
+/* Removed transform: translateZ(0) to fix position: fixed context */
 #wrapper,
 #sidebar-wrapper,
 #page-content-wrapper {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  will-change: transform;
+  /* transform: translateZ(0); REMOVED */
+  /* -webkit-transform: translateZ(0); REMOVED */
+  /* will-change: transform; REMOVED */
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .modal-open {
@@ -234,15 +237,9 @@ body {
 }
 
 /* Stabilize sidebar during modal transitions */
-#sidebar-wrapper {
-  transform: translateZ(0) !important;
-  will-change: transform !important;
-}
-
-#page-content-wrapper {
-  transform: translateZ(0) !important;
-  will-change: transform !important;
-}
+/* Stabilize sidebar during modal transitions */
+/* REMOVED: #sidebar-wrapper { transform: translateZ(0) !important; will-change: transform !important; } */
+/* REMOVED: #page-content-wrapper { transform: translateZ(0) !important; will-change: transform !important; } */
 
 /* ===================================
  * TYPOGRAPHY BASE
@@ -332,18 +329,22 @@ textarea:focus-visible {
 
 #wrapper {
   padding-top: var(--navbar-height);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-#wrapper>.container-fluid {
+#wrapper>.content-layout {
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 #sidebar-wrapper {
-  height: calc(100vh - var(--navbar-height));
-  min-height: 0;
-  margin-left: calc(var(--sidebar-width) * -1);
-  transition: margin 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Inherit layout from component styles */
+  /* Sidebar handling is done via fixed positioning in sidebar.component.scss */
+  z-index: 100;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -356,15 +357,15 @@ textarea:focus-visible {
 }
 
 #page-content-wrapper,
-.container-fluid {
+.content-layout {
   min-width: 0;
   width: 100%;
   background-color: var(--color-canvas);
 }
 
-#wrapper.toggled #sidebar-wrapper {
-  margin-left: 0;
-}
+/* Mobile: Sidebar is hidden by default (via component styles handling left position or transform) */
+/* Actually, sidebar.component.scss handles mobile hiding via media queries if implemented there. */
+/* Let's rely on sidebar.component.scss for visibility toggling. */
 
 @media (min-width: 768px) {
   #sidebar-wrapper {
@@ -376,8 +377,18 @@ textarea:focus-visible {
     width: 100%;
   }
 
-  #wrapper.toggled #sidebar-wrapper {
-    margin-left: calc(var(--sidebar-width) * -1);
+  /* Desktop: Content pushed by sidebar */
+  /* Desktop: Content pushed by sidebar */
+  #wrapper .content-layout {
+    margin-left: var(--sidebar-width);
+    width: auto;
+    /* Allow flex to calculate remaining width */
+    transition: margin-left 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* When toggled (collapsed on desktop?), reclaim space */
+  #wrapper.toggled .content-layout {
+    margin-left: 0;
   }
 }
 
@@ -823,13 +834,7 @@ select.is-invalid {
   background: rgba(244, 63, 94, 0.02);
   animation: input-shake 400ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:focus {
 
-    /* No special border/shadow for error state on focus */
-    &::after {
-      /* No background change */
-    }
-  }
 }
 
 @keyframes input-shake {
