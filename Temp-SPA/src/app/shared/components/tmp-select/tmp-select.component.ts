@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { ControlValueAccessorDirective } from '../control-value-accessor.directive';
 
@@ -22,6 +22,7 @@ let nextUniqueId = 0;
             multi: true,
         }
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class TmpSelectComponent<T> extends ControlValueAccessorDirective<T> {

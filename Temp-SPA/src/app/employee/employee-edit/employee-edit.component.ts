@@ -111,7 +111,7 @@ export class EmployeeEditComponent extends DestroyableComponent implements OnIni
       this.fullTeam = fullTeam;
       this.loadOrgData(this.fullTeam);
 
-      const moderator = await firstValueFrom(this.employeeService.getModerator(EmployeeId).pipe(takeUntil(this.destroy$)));
+      const moderator = await firstValueFrom(this.employeeService.getEmployee(EmployeeId).pipe(takeUntil(this.destroy$)));
       const moderatorMin: ModeratorMin = {id: moderator.id};
 
       try {

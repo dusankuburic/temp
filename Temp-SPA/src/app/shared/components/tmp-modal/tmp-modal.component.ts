@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output, EventEmitter, OnInit, OnDestroy, HostListener } from '@angular/core';
 
 export type ModalSize = 'small' | 'medium' | 'large' | 'fullscreen';
 
@@ -6,6 +6,7 @@ export type ModalSize = 'small' | 'medium' | 'large' | 'fullscreen';
   selector: 'tmp-modal',
   templateUrl: './tmp-modal.component.html',
   styleUrls: ['./tmp-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class TmpModalComponent implements OnInit, OnDestroy {
@@ -25,6 +26,8 @@ export class TmpModalComponent implements OnInit, OnDestroy {
   isAnimating = false;
   isClosing = false;
   private animationTimeout?: number;
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     if (this.isOpen) {
@@ -54,6 +57,7 @@ export class TmpModalComponent implements OnInit, OnDestroy {
       this.addBodyScrollLock();
       this.isOpenChange.emit(this.isOpen);
       this.opened.emit();
+      this.cdr.markForCheck();
 
       if (this.animationTimeout) {
         clearTimeout(this.animationTimeout);
@@ -62,6 +66,7 @@ export class TmpModalComponent implements OnInit, OnDestroy {
       this.animationTimeout = window.setTimeout(() => {
         this.isAnimating = false;
         this.animationTimeout = undefined;
+        this.cdr.markForCheck();
       }, 150);
     }
   }
@@ -70,6 +75,7 @@ export class TmpModalComponent implements OnInit, OnDestroy {
     if (this.isOpen && this.closable) {
       this.isClosing = true;
       this.isAnimating = true;
+      this.cdr.markForCheck();
 
       if (this.animationTimeout) {
         clearTimeout(this.animationTimeout);
@@ -83,6 +89,7 @@ export class TmpModalComponent implements OnInit, OnDestroy {
         this.isClosing = false;
         this.isAnimating = false;
         this.animationTimeout = undefined;
+        this.cdr.markForCheck();
       }, 150);
     }
   }

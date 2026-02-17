@@ -1,9 +1,13 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+# Install ICU libs for globalization support
+RUN apk add --no-cache icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /src
 COPY ["Directory.Build.props", "./"]
 COPY ["Directory.Packages.props", "./"]
@@ -29,3 +33,5 @@ RUN mkdir -p /app/certs
 COPY Temp.API/certs/aspnetapp.pfx /app/certs
 
 ENTRYPOINT ["dotnet", "Temp.API.dll"]
+
+USER app

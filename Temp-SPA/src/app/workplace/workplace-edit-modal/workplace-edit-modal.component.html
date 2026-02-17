@@ -5,49 +5,88 @@
     </button>
 </div>
 <div class="modal-body-obsidian">
-    <form [formGroup]="editWorkplaceForm" (ngSubmit)="update()">
-        <div class="modal-form-section">
-            <tmp-input [formControl]="name" [label]="'Name'" [placeholder]="'Enter Workplace Name'"></tmp-input>
-        </div>
+    <tabset>
+        <tab heading="Profile">
+            <form [formGroup]="editWorkplaceForm" (ngSubmit)="update()">
+                <div class="modal-form-section">
+                    <tmp-input [formControl]="name" [label]="'Name'" [placeholder]="'Enter Workplace Name'"></tmp-input>
+                </div>
 
-        <hr class="modal-section-divider">
+                <div class="modal-actions">
+                    <tmp-button type="submit" variant="success" [disabled]="!editWorkplaceForm.valid">Save Workplace</tmp-button>
+                </div>
+            </form>
+        </tab>
+        <tab heading="Files">
+            <div class="pt-3">
+                <div class="employee-files-grid">
+                    <tmp-card variant="filled" class="upload-card">
+                        <h4 class="section-title">Upload Files</h4>
+                        <div class="modal-form-section modal-form-section-tight">
+                            <div class="row">
+                                <div class="col-6 col-xl-12 mb-3">
+                                    @if (workplace) {
+                                    <tmp-file-upload
+                                        [label]="'Upload Photo'"
+                                        [fileType]="'Image'"
+                                        [maxSizeMB]="5"
+                                        [uploadedFiles]="workplaceFiles"
+                                        [customFolder]="'workplaces/' + workplaceId + '/images'"
+                                        [compact]="true"
+                                        (fileUploaded)="onFileUploaded($event)"
+                                        (fileDeleted)="onFileDeleted($event)">
+                                    </tmp-file-upload>
+                                    }
+                                </div>
+                                <div class="col-6 col-xl-12 mb-3">
+                                    @if (workplace) {
+                                    <tmp-file-upload
+                                        [label]="'Upload Documents'"
+                                        [fileType]="'Document'"
+                                        [maxSizeMB]="10"
+                                        [uploadedFiles]="workplaceFiles"
+                                        [customFolder]="'workplaces/' + workplaceId + '/documents'"
+                                        [compact]="true"
+                                        (fileUploaded)="onFileUploaded($event)"
+                                        (fileDeleted)="onFileDeleted($event)">
+                                    </tmp-file-upload>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </tmp-card>
 
-        <div class="modal-form-grid">
-            <div class="modal-upload-section">
-                @if (profilePictureUrl) {
-                    <div class="modal-upload-preview">
-                        <tmp-avatar
-                            [profilePictureUrl]="profilePictureUrl"
-                            [displayName]="name.value ?? undefined"
-                            [size]="'large'"
-                            [shape]="'circle'">
-                        </tmp-avatar>
-                        <p class="modal-upload-label">Current Profile Picture</p>
-                    </div>
-                }
-                <tmp-file-upload
-                    [label]="'Upload Photo'"
-                    [fileType]="'Image'"
-                    [maxSizeMB]="5"
-                    [uploadedFiles]="workplaceFiles"
-                    (fileUploaded)="onFileUploaded($event)"
-                    (fileDeleted)="onFileDeleted($event)">
-                </tmp-file-upload>
+                    <tmp-card variant="filled" class="files-table-card" style="overflow: visible;">
+                        <h4 class="section-title">File Library</h4>
+                        <tmp-table [hoverable]="true" [data]="paginatedFiles" [columns]="fileColumns">
+                            <ng-template #rowTemplate let-file>
+                                <tr>
+                                    <td class="file-name" [attr.title]="file.name" style="width: 50%;">{{file.displayName || file.name}}</td>
+                                    <td style="width: 20%;">{{file.fileTypeDisplay || file.fileType}}</td>
+                                    <td class="text-center" style="width: 30%;">
+                                        <div class="tmp-button-group justify-content-center">
+                                            <tmp-button variant="subtle" size="small" (clicked)="downloadFile(file)" ariaLabel="Download file {{file.displayName}}">
+                                                <fa-icon [icon]="downloadIcon" [size]="'xl'"></fa-icon>
+                                            </tmp-button>
+                                            <tmp-button variant="danger" size="small" (clicked)="removeFile(file)" ariaLabel="Delete file {{file.displayName}}">
+                                                <fa-icon [icon]="removeIcon" [size]="'xl'"></fa-icon>
+                                            </tmp-button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </tmp-table>
+                        <div class="mt-3 d-flex justify-content-center p-2">
+                            <tmp-pagination
+                                [totalCount]="workplaceFiles.length"
+                                [pageSize]="pageSize"
+                                [pageNumber]="pageNumber"
+                                (pageChanged)="onPageChanged($event)">
+                            </tmp-pagination>
+                        </div>
+                    </tmp-card>
+                </div>
             </div>
-            <div class="modal-upload-section">
-                <tmp-file-upload
-                    [label]="'Upload Documents'"
-                    [fileType]="'Document'"
-                    [maxSizeMB]="10"
-                    [uploadedFiles]="workplaceFiles"
-                    (fileUploaded)="onFileUploaded($event)"
-                    (fileDeleted)="onFileDeleted($event)">
-                </tmp-file-upload>
-            </div>
-        </div>
-
-        <div class="modal-actions">
-            <tmp-button type="submit" variant="success" [disabled]="!editWorkplaceForm.valid">Save Workplace</tmp-button>
-        </div>
-    </form>
+        </tab>
+    </tabset>
 </div>

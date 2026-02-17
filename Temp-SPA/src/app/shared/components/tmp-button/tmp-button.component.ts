@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'subtle' | 'transparent' | 'success' | 'danger' | 'warning' | 'info';
 export type ButtonSize = 'small' | 'medium' | 'large';
@@ -7,6 +7,7 @@ export type ButtonSize = 'small' | 'medium' | 'large';
   selector: 'tmp-button',
   templateUrl: './tmp-button.component.html',
   styleUrls: ['./tmp-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class TmpButtonComponent {

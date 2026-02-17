@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faEdit, faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { Subscription, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap } from 'rxjs';
 import { InnerGroup } from 'src/app/core/models/group';
 import { Pagination } from 'src/app/core/models/pagination';
 import { InnerTeam, PagedInnerTeams, TeamParams } from 'src/app/core/models/team';
@@ -15,12 +15,13 @@ import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 import { TableColumn } from 'src/app/shared/components/tmp-table/tmp-table.component';
 
 @Component({
-    selector: 'app-team-list',
-    templateUrl: './inner-team-list.component.html',
-    styleUrl: './inner-team-list.component.scss',
-    standalone: false
+  selector: 'app-team-list',
+  templateUrl: './inner-team-list.component.html',
+  styleUrl: './inner-team-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
-export class TeamListComponent extends DestroyableComponent implements OnInit, AfterViewInit {
+export class TeamListComponent extends DestroyableComponent implements OnInit {
   editTeamIcon = faEdit;
   archiveTeamIcon = faTrashAlt;
   plusIcon = faPlusCircle;
@@ -33,51 +34,79 @@ export class TeamListComponent extends DestroyableComponent implements OnInit, A
   bsModalRef?: BsModalRef;
   subscriptions!: Subscription;
   filtersForm!: FormGroup;
-  innerTeams!: InnerTeam[];
-  pagination!: Pagination;
-  group!: InnerGroup;
-  teamParams!: TeamParams;
+  
+  pagedInnerTeams$: Observable<PagedInnerTeams>;
+  refresh$ = new BehaviorSubject<void>(undefined);
+  
+  currentParams: TeamParams;
+  isLoading = false;
+  groupId!: number;
 
   constructor(
     private route: ActivatedRoute,
     private teamService: TeamService,
     private alertify: AlertifyService,
     private fb: FormBuilder,
-    private bsModalService: BsModalService) {
+    private bsModalService: BsModalService,
+    private cdr: ChangeDetectorRef) {
       super();
-      this.teamParams = teamService.getTeamParams();
+      this.currentParams = teamService.getTeamParams();
 
       this.filtersForm = this.fb.group({
-        name: ['']
-      })
+        name: [this.currentParams.name || '']
+      });
+
+      const filters$ = combineLatest([
+        this.filtersForm.get('name')!.valueChanges.pipe(startWith(this.filtersForm.get('name')!.value), debounceTime(600), distinctUntilChanged())
+      ]);
+
+      // We get groupId from route data initially, but it's constant for this view instance.
+      // The resolver 'innerteams' provides the initial data.
+      const initialData$ = this.route.data.pipe(
+        map(data => data['innerteams'] as PagedInnerTeams),
+        tap(data => {
+          this.groupId = data.id;
+        })
+      );
+
+      this.pagedInnerTeams$ = initialData$.pipe(
+        switchMap(initial => {
+          return combineLatest([
+            filters$,
+            this.refresh$
+          ]).pipe(
+            tap(() => {
+              this.isLoading = true;
+              this.cdr.markForCheck();
+            }),
+            debounceTime(100),
+            switchMap(([[name], _]) => {
+              const params = new TeamParams();
+              params.pageNumber = this.currentParams.pageNumber;
+              
+              if (name !== this.currentParams.name) {
+                params.pageNumber = 1;
+              }
+
+              params.pageSize = this.currentParams.pageSize;
+              params.name = name;
+
+              this.currentParams = params;
+              this.teamService.setTeamParams(params);
+
+              return this.teamService.getInnerTeams(this.groupId, params).pipe(
+                tap(() => {
+                  this.isLoading = false;
+                  this.cdr.markForCheck();
+                })
+              );
+            })
+          );
+        })
+      );
     }
 
-  ngAfterViewInit(): void {
-    const nameControl = this.filtersForm.get('name');
-    nameControl?.valueChanges.pipe(
-      debounceTime(600),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
-    ).subscribe((searchFor) => {
-      const params = this.teamService.getTeamParams();
-      params.pageNumber = 1;
-      params.name = searchFor;
-      this.teamService.setTeamParams(params);
-      this.teamParams = params;
-      this.loadTeams();
-    })
-  }
-
   ngOnInit(): void {
-    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
-      this.group = {
-        id: data['innerteams'].id,
-        name: data['innerteams'].name,
-        hasActiveTeam: data['innerteams'].hasActiveTeam
-      };
-      this.innerTeams = data['innerteams'].teams.result;
-      this.pagination = data['innerteams'].teams.pagination;
-    });
   }
 
   openCreateModal(groupId: number): void {
@@ -92,11 +121,11 @@ export class TeamListComponent extends DestroyableComponent implements OnInit, A
     this.bsModalRef = this.bsModalService.show(TeamCreateModalComponent, initialState);
     if (this.bsModalRef?.onHidden) {
       this.subscriptions.add(this.bsModalRef.onHidden.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
-          this.loadTeams();
-
+        if (this.bsModalRef?.content?.isSaved) {
+          this.refresh$.next();
+        }
         this.unsubscribe();
-      }))
+      }));
     }
   }
 
@@ -113,47 +142,29 @@ export class TeamListComponent extends DestroyableComponent implements OnInit, A
     this.bsModalRef = this.bsModalService.show(TeamEditModalComponent, initialState);
     if (this.bsModalRef?.onHidden) {
       this.subscriptions.add(this.bsModalRef.onHidden.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
-          this.loadTeams();
-
+        if (this.bsModalRef?.content?.isSaved) {
+          this.refresh$.next();
+        }
         this.unsubscribe();
-      }))
+      }));
     }
   }
 
-  loadTeams(): void {
-    this.teamService.getInnerTeams(this.group.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: PagedInnerTeams) => {
-          this.innerTeams = res.teams.result;
-          this.pagination = res.teams.pagination;
-        },
-        error: () => {
-          this.alertify.error('Unable to load teams');
-        }
-      })
-  }
-
   pageChanged(event: any): void {
-    const params = this.teamService.getTeamParams();
-    if (params.pageNumber !== event) {
-      this.pagination.currentPage = event;
-      params.pageNumber = event;
-      this.teamService.setTeamParams(params);
-      this.teamParams = params;
-      this.loadTeams();
+    if (this.currentParams.pageNumber !== event) {
+      this.currentParams.pageNumber = event;
+      this.refresh$.next();
     }
   }
 
   changeStatus(id: number): void {
     this.teamService.changeStatus(id).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.loadTeams();
+        this.refresh$.next();
         this.alertify.success('Status changed');
       },
       error: () => {
-        this.alertify.error('Unable to archive');
+        this.alertify.error('Unable to change status');
       }
     });
   }
@@ -161,6 +172,4 @@ export class TeamListComponent extends DestroyableComponent implements OnInit, A
   unsubscribe() {
     this.subscriptions.unsubscribe();
   }
-
-
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../core/services/auth.service';
@@ -9,6 +9,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class SidebarComponent implements OnInit, OnDestroy {
@@ -20,7 +21,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private mediaQuery?: MediaQueryList;
   private destroy$ = new Subject<void>();
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const userJson = localStorage.getItem('user');
@@ -38,7 +39,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd), takeUntil(this.destroy$))
-      .subscribe(event => this.setActiveSectionFromUrl(event.urlAfterRedirects));
+      .subscribe(event => {
+        this.setActiveSectionFromUrl(event.urlAfterRedirects);
+        this.cdr.markForCheck();
+      });
   }
 
   ngOnDestroy(): void {
@@ -72,6 +76,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!this.isMobile) {
       this.activeSection = null;
     }
+    this.cdr.markForCheck();
   };
 
   private buildMenu(role: string): MenuSection[] {

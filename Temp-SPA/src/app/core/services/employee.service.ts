@@ -33,22 +33,24 @@ resetEmployeeParams(): void {
   this.employeeParams.role = '';
 }
 
-getEmployees(): Observable<PaginatedResult<Employee[]>> {
+getEmployees(employeeParams?: EmployeeParams): Observable<PaginatedResult<Employee[]>> {
   const paginatedResult: PaginatedResult<Employee[]> = new PaginatedResult<Employee[]>();
 
   let params = new HttpParams();
 
-  params = params.append('pageNumber', this.employeeParams.pageNumber);
-  params = params.append('pageSize', this.employeeParams.pageSize);
+  const sourceParams = employeeParams || this.employeeParams;
 
-  if (this.employeeParams.role) {
-    params = params.append('role', this.employeeParams.role);
+  params = params.append('pageNumber', sourceParams.pageNumber);
+  params = params.append('pageSize', sourceParams.pageSize);
+
+  if (sourceParams.role) {
+    params = params.append('role', sourceParams.role);
   }
-  if (this.employeeParams.firstName) {
-    params = params.append('firstName', this.employeeParams.firstName);
+  if (sourceParams.firstName) {
+    params = params.append('firstName', sourceParams.firstName);
   }
-  if (this.employeeParams.lastName) {
-    params = params.append('lastName', this.employeeParams.lastName);
+  if (sourceParams.lastName) {
+    params = params.append('lastName', sourceParams.lastName);
   }
 
   return this.http.get<Employee[]>(this.baseUrl + 'employees', {observe : 'response', params})
@@ -63,9 +65,7 @@ getEmployees(): Observable<PaginatedResult<Employee[]>> {
     );
 }
 
-getModerator(employeeId: number): Observable<any> {
-  return this.http.get<any>(this.baseUrl + 'moderators/' + employeeId);
-}
+
 
 getEmployee(id: number): Observable<Employee> {
   return this.http.get<Employee>(this.baseUrl + 'employees/' + id);

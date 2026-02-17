@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class HomeComponent {
