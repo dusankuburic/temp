@@ -13,6 +13,7 @@ using Temp.Domain.Models.Identity;
 using Temp.Services.Auth;
 using Temp.Services.Auth.Exceptions;
 using Temp.Services.Auth.Models.Commands;
+using Temp.Services.Exceptions;
 using Temp.Services.Integrations.Loggings;
 using Temp.Services.Providers;
 using Temp.Services.Providers.Models;
@@ -138,11 +139,11 @@ public class AuthServiceTests
         Func<Task> act = () => _service.Login(request);
 
 
-        await act.Should().ThrowAsync<UserValidationException>();
+        await act.Should().ThrowAsync<AuthenticationException>();
     }
 
     [Fact]
-    public async Task Login_WithInvalidPassword_ThrowsUserValidationException() {
+    public async Task Login_WithInvalidPassword_ThrowsAuthenticationException() {
 
         var request = new LoginAppUserRequest {
             Username = "test@example.com",
@@ -164,11 +165,11 @@ public class AuthServiceTests
         Func<Task> act = () => _service.Login(request);
 
 
-        await act.Should().ThrowAsync<UserValidationException>();
+        await act.Should().ThrowAsync<AuthenticationException>();
     }
 
     [Fact]
-    public async Task Login_WithLockedOutUser_ThrowsUserValidationException() {
+    public async Task Login_WithLockedOutUser_ThrowsAuthenticationException() {
 
         var request = new LoginAppUserRequest {
             Username = "locked@example.com",
@@ -191,7 +192,7 @@ public class AuthServiceTests
         Func<Task> act = () => _service.Login(request);
 
 
-        await act.Should().ThrowAsync<UserValidationException>();
+        await act.Should().ThrowAsync<AuthenticationException>();
     }
 
 
@@ -681,12 +682,12 @@ public class AuthServiceTests
 
         try {
             await _service.Login(request);
-        } catch (UserValidationException) {
+        } catch (AuthenticationException) {
 
         }
 
 
-        _mockLoggingBroker.Verify(l => l.LogError(It.IsAny<Exception>()), Times.Once);
+        _mockLoggingBroker.Verify(l => l.LogError(It.IsAny<Exception>()), Times.Never);
     }
 
     [Fact]
