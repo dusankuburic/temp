@@ -113,7 +113,7 @@ export class EngagementWithoutEmployeeListComponent extends DestroyableComponent
 
   openCreateModal(employeeId: number): void {
     const initialState: ModalOptions = {
-      class: 'modal-dialog-centered modal-lg',
+      class: 'modal-dialog-centered modal-xl',
       initialState: {
         title: 'Create Engagement',
         employeeId: employeeId
