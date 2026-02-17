@@ -16,8 +16,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Temp.API", "Temp.API\Temp.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Temp.Services", "Temp.Services\Temp.Services.csproj", "{FA9988F1-CF8E-41F2-A4DF-48CAD93BFC4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temp.Tests.Integration", "Temp.Tests.Integration\Temp.Tests.Integration.csproj", "{B2DC56A3-0009-44C7-2F40-1A07AAD1E57D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temp.Tests.Unit", "Temp.Tests.Unit\Temp.Tests.Unit.csproj", "{81B20EE6-1920-5E1F-7E40-B0B42CB9F893}"
 EndProject
 Global
@@ -42,10 +40,6 @@ Global
 		{FA9988F1-CF8E-41F2-A4DF-48CAD93BFC4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA9988F1-CF8E-41F2-A4DF-48CAD93BFC4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA9988F1-CF8E-41F2-A4DF-48CAD93BFC4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2DC56A3-0009-44C7-2F40-1A07AAD1E57D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2DC56A3-0009-44C7-2F40-1A07AAD1E57D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2DC56A3-0009-44C7-2F40-1A07AAD1E57D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2DC56A3-0009-44C7-2F40-1A07AAD1E57D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81B20EE6-1920-5E1F-7E40-B0B42CB9F893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81B20EE6-1920-5E1F-7E40-B0B42CB9F893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81B20EE6-1920-5E1F-7E40-B0B42CB9F893}.Release|Any CPU.ActiveCfg = Release|Any CPU
