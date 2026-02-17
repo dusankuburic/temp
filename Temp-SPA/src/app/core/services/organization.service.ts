@@ -31,21 +31,21 @@ export class OrganizationService {
     this.organizationParams.withGroups = 'all';
   }
 
-  getPagedOrganizations(): Observable<PaginatedResult<Organization[]>> {
+  getPagedOrganizations(params?: OrganizationParams): Observable<PaginatedResult<Organization[]>> {
     const paginatedResult: PaginatedResult<Organization[]> = new PaginatedResult<Organization[]>();
+    const currentParams = params || this.organizationParams;
 
-    let params = new HttpParams();
+    let httpParams = new HttpParams();
 
-    params = params.append('pageNumber', this.organizationParams.pageNumber);
-    params = params.append('pageSize', this.organizationParams.pageSize);
+    httpParams = httpParams.append('pageNumber', currentParams.pageNumber);
+    httpParams = httpParams.append('pageSize', currentParams.pageSize);
+    httpParams = httpParams.append('withGroups', currentParams.withGroups);
 
-    params = params.append('withGroups', this.organizationParams.withGroups);
-
-    if (this.organizationParams.name) {
-      params = params.append('name', this.organizationParams.name);
+    if (currentParams.name) {
+      httpParams = httpParams.append('name', currentParams.name);
     }
 
-    return this.http.get<Organization[]>(this.baseUrl + 'organizations/paged-organizations', {observe: 'response', params})
+    return this.http.get<Organization[]>(this.baseUrl + 'organizations/paged-organizations', {observe: 'response', params: httpParams})
       .pipe(
         map(response => {
           paginatedResult.result = response.body ?? [];

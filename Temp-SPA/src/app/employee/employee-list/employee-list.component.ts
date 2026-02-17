@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faEdit, faLock, faLockOpen, faPlusCircle, faSitemap, faUserTimes } from '@fortawesome/free-solid-svg-icons';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { combineLatest, debounceTime, distinctUntilChanged, startWith, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap } from 'rxjs';
 import { Employee, EmployeeParams } from 'src/app/core/models/employee';
 import { PaginatedResult, Pagination } from 'src/app/core/models/pagination';
 import { UnassignRoleDto } from 'src/app/core/models/unassignRoleDto';
@@ -22,6 +22,7 @@ import { UserRoles } from 'src/app/core/constants/app.constants';
     selector: 'app-employee-list',
     templateUrl: './employee-list.component.html',
     styleUrl: './employee-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class EmployeeListComponent extends DestroyableComponent implements OnInit, AfterViewInit {
@@ -41,8 +42,10 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
 
   bsModalRef?: BsModalRef;
   filtersForm!: FormGroup;
-  employees!: Employee[];
-  disableTableAnimations = false;
+  
+  // Reactive Streams
+  paginatedResult!: PaginatedResult<Employee[]>;
+  
   unassignRoleDto!: UnassignRoleDto;
   rolesSelect: SelectionOption[] = [
     {value: '', display: '', disabled: true},
@@ -51,66 +54,83 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
     {value: UserRoles.ADMIN, display: 'Admin'},
     {value: UserRoles.MODERATOR, display: 'Moderator'},
     {value: 'None', display: 'None'}];
-  employeeParams!: EmployeeParams;
+  
+  // Helper to keep track of current params for pagination
+  private currentParams: EmployeeParams;
 
-  pagination!: Pagination;
   isLoading = false;
+  disableTableAnimations = false;
 
   constructor(
     private route: ActivatedRoute,
     private employeeService: EmployeeService,
     private alertify: AlertifyService,
     private fb: FormBuilder,
-    private modalFactory: ModalFactoryService) {
+    private modalFactory: ModalFactoryService,
+    private cdr: ChangeDetectorRef) {
       super();
-      this.employeeParams = employeeService.getEmployeeParams();
+      this.currentParams = employeeService.getEmployeeParams();
 
       this.filtersForm = this.fb.group({
-        role: [''],
-        firstName: [null],
-        lastName: [null]
+        role: [this.currentParams.role || ''],
+        firstName: [this.currentParams.firstName || null],
+        lastName: [this.currentParams.lastName || null]
       });
     }
-    
-  ngAfterViewInit(): void {
-    combineLatest([
-      this.filtersForm.get('role')!.valueChanges.pipe(
-        startWith(this.filtersForm.get('role')!.value),
-        debounceTime(100),
-        distinctUntilChanged()
-      ),
-      this.filtersForm.get('firstName')!.valueChanges.pipe(
-        startWith(this.filtersForm.get('firstName')!.value),
-        debounceTime(600),
-        distinctUntilChanged()
-      ),
-      this.filtersForm.get('lastName')!.valueChanges.pipe(
-        startWith(this.filtersForm.get('lastName')!.value),
-        debounceTime(600),
-        distinctUntilChanged()
-      )
-    ]).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(([role, firstName, lastName]) => {
-      const params = this.employeeService.getEmployeeParams();
-      params.pageNumber = 1;
-      params.role = role;
-      params.firstName = firstName;
-      params.lastName = lastName;
-      this.employeeService.setEmployeeParams(params);
-      this.employeeParams = params;
-      this.loadEmployees();
+
+  ngOnInit(): void {
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      this.paginatedResult = data['employees'];
     });
   }
 
-  ngOnInit(): void {
-    this.route.data.pipe(
+  ngAfterViewInit(): void {
+    const roleControl = this.filtersForm.get('role');
+    const firstNameControl = this.filtersForm.get('firstName');
+    const lastNameControl = this.filtersForm.get('lastName');
+
+    // Merge all form controls changes into one stream
+    // This simplifies the logic: if any filter changes, we reload from page 1
+    this.filtersForm.valueChanges.pipe(
+      debounceTime(600),
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       takeUntil(this.destroy$)
-    ).subscribe(data => {
-      this.employees = data['employees'].result;
-      this.pagination = data['employees'].pagination;
+    ).subscribe((vals) => {
+         const params = this.employeeService.getEmployeeParams();
+         params.pageNumber = 1;
+         params.role = vals.role;
+         params.firstName = vals.firstName;
+         params.lastName = vals.lastName;
+         
+         this.currentParams = params;
+         this.employeeService.setEmployeeParams(params);
+         this.loadEmployees();
     });
   }
+
+  loadEmployees(): void {
+    this.isLoading = true;
+    this.disableTableAnimations = true; // optional
+    this.cdr.markForCheck();
+    
+    this.employeeService.getEmployees(this.currentParams)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+           this.paginatedResult = res;
+           this.isLoading = false;
+           this.disableTableAnimations = false;
+           this.cdr.markForCheck();
+        },
+        error: () => {
+           this.alertify.error('Unable to load employees');
+           this.isLoading = false;
+           this.cdr.markForCheck();
+        }
+      });
+  }
+
+
 
   openCreateModal(): void {
     this.bsModalRef = this.modalFactory.open({
@@ -149,36 +169,11 @@ export class EmployeeListComponent extends DestroyableComponent implements OnIni
     }, this.destroy$);
   }
 
-  loadEmployees(): void {
-    this.isLoading = true;
-    this.disableTableAnimations = true;
-    this.employeeService.getEmployees()
-      .pipe(
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (res: PaginatedResult<Employee[]>) => {
-          this.employees = res.result;
-          this.pagination = res.pagination;
-          this.isLoading = false;
-          setTimeout(() => this.disableTableAnimations = false, 0);
-        },
-        error: () => {
-          this.alertify.error('Unable to load employees');
-          this.isLoading = false;
-          setTimeout(() => this.disableTableAnimations = false, 0);
-        }
-      });
-  }
-
   pageChanged(event: any): void {
-    const params = this.employeeService.getEmployeeParams();
-    if (params.pageNumber !== event) {
-      this.pagination.currentPage = event;
-      params.pageNumber = event;
-      this.employeeService.setEmployeeParams(params);
-      this.employeeParams = params;
-      this.loadEmployees();
+    // event comes from pagination component, usually number
+    if (this.currentParams.pageNumber !== event) {
+      this.currentParams.pageNumber = event;
+      this.loadEmployees(); 
     }
   }
 

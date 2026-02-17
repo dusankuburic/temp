@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, forwardRef, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { ControlValueAccessorDirective } from '../control-value-accessor.directive';
 import { faCheck, faExclamationCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -16,6 +16,7 @@ let nextUniqueId = 0;
             multi: true
         }
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class TmpTextareaComponent<T> extends ControlValueAccessorDirective<T> implements AfterViewInit {

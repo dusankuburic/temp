@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faEdit, faPlusCircle, faProjectDiagram, faTrashAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { Subscription, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest, debounceTime, distinctUntilChanged, startWith, switchMap, takeUntil, tap } from 'rxjs';
 import { Organization, OrganizationParams } from 'src/app/core/models/organization';
 import { PaginatedResult, Pagination } from 'src/app/core/models/pagination';
 import { AlertifyService } from 'src/app/core/services/alertify.service';
@@ -15,16 +15,17 @@ import { OrganizationEditModalComponent } from '../organization-edit-modal/organ
 import { DestroyableComponent } from 'src/app/core/base/destroyable.component';
 
 @Component({
-    selector: 'app-organization-list',
-    templateUrl: './organization-list.component.html',
-    styleUrl: './organization-list.component.scss',
-    standalone: false
+  selector: 'app-organization-list',
+  templateUrl: './organization-list.component.html',
+  styleUrl: './organization-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class OrganizationListComponent extends DestroyableComponent implements OnInit, AfterViewInit {
-  editOrganizationIcon = faEdit
-  archiveOrganizationIcon = faTrashAlt
-  innerGroupsIcon = faUsers
-  createGroupIcon = faProjectDiagram
+  editOrganizationIcon = faEdit;
+  archiveOrganizationIcon = faTrashAlt;
+  innerGroupsIcon = faUsers;
+  createGroupIcon = faProjectDiagram;
   plusIcon = faPlusCircle;
 
   columns: TableColumn[] = [
@@ -36,12 +37,14 @@ export class OrganizationListComponent extends DestroyableComponent implements O
   bsModalRef?: BsModalRef;
   subscriptions!: Subscription;
   filtersForm!: FormGroup;
-  organizations: Organization[] = [];
-  pagination: Pagination = { currentPage: 1, itemsPerPage: 10, totalItems: 0, totalPages: 0 };
-  organizationParams!: OrganizationParams;
+  
+  paginatedResult!: PaginatedResult<Organization[]>;
+  
+  currentParams: OrganizationParams;
   isLoading = false;
+
   groupsSelect: SelectionOption[] = [
-    {value: '', display: '', disabled: true },
+    {value: '', display: 'Select...', disabled: false },
     {value: 'all', display: 'All'},
     {value: 'yes', display: 'With groups'},
     {value: 'no', display: 'Without groups'}
@@ -52,16 +55,23 @@ export class OrganizationListComponent extends DestroyableComponent implements O
     private organizationsService: OrganizationService,
     private alertify: AlertifyService,
     private fb: FormBuilder,
-    private bsModalService: BsModalService) {
+    private bsModalService: BsModalService,
+    private cdr: ChangeDetectorRef) {
       super();
-      this.organizationParams = organizationsService.getOrganizationParams();
+      this.currentParams = organizationsService.getOrganizationParams();
 
       this.filtersForm = this.fb.group({
-        withGroups: [''],
-        name: ['']
-      })
+        withGroups: [this.currentParams.withGroups || ''],
+        name: [this.currentParams.name || '']
+      });
     }
-    
+
+  ngOnInit(): void {
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      this.paginatedResult = data['organizations'];
+    });
+  }
+
   ngAfterViewInit(): void {
     const withGroupsControl = this.filtersForm.get('withGroups');
     withGroupsControl?.valueChanges.pipe(
@@ -71,11 +81,11 @@ export class OrganizationListComponent extends DestroyableComponent implements O
     ).subscribe((searchFor) => {
       const params = this.organizationsService.getOrganizationParams();
       params.pageNumber = 1;
-      this.organizationParams.withGroups = searchFor;
+      this.currentParams.withGroups = searchFor;
       this.organizationsService.setOrganizationParams(params);
-      this.organizationParams = params;
+      this.currentParams = params;
       this.loadOrganizations();
-    })
+    });
 
     const nameControl = this.filtersForm.get('name');
     nameControl?.valueChanges.pipe(
@@ -85,15 +95,30 @@ export class OrganizationListComponent extends DestroyableComponent implements O
     ).subscribe((searchFor) => {
       const params = this.organizationsService.getOrganizationParams();
       params.pageNumber = 1;
-      params.name = searchFor;
+      this.currentParams.name = searchFor;
       this.organizationsService.setOrganizationParams(params);
-      this.organizationParams = params;
+      this.currentParams = params;
       this.loadOrganizations();
     });
   }
 
-  ngOnInit(): void {
-    this.loadOrganizations();
+  loadOrganizations(): void {
+    this.isLoading = true;
+    this.cdr.markForCheck();
+    this.organizationsService.getPagedOrganizations(this.currentParams)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: PaginatedResult<Organization[]>) => {
+          this.paginatedResult = res;
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.alertify.error('Unable to load organizations');
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   openCreateModal(): void {
@@ -107,11 +132,11 @@ export class OrganizationListComponent extends DestroyableComponent implements O
     this.bsModalRef = this.bsModalService.show(OrganizationCreateModalComponent, initialState);
     if (this.bsModalRef?.onHidden) {
       this.subscriptions.add(this.bsModalRef.onHidden.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
+        if (this.bsModalRef?.content?.isSaved) {
           this.loadOrganizations();
-
+        }
         this.unsubscribe();
-      }))
+      }));
     }
   }
 
@@ -127,11 +152,11 @@ export class OrganizationListComponent extends DestroyableComponent implements O
     this.bsModalRef = this.bsModalService.show(OrganizationEditModalComponent, initialState);
     if (this.bsModalRef?.onHidden) {
       this.subscriptions.add(this.bsModalRef.onHidden.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        if (this.bsModalRef?.content?.isSaved)
+        if (this.bsModalRef?.content?.isSaved) {
           this.loadOrganizations();
-
-          this.unsubscribe();
-      }))
+        }
+        this.unsubscribe();
+      }));
     }
   }
 
@@ -139,30 +164,9 @@ export class OrganizationListComponent extends DestroyableComponent implements O
     this.subscriptions.unsubscribe();
   }
 
-  loadOrganizations(): void {
-    this.isLoading = true;
-    this.organizationsService.getPagedOrganizations()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: PaginatedResult<Organization[]>) => {
-          this.organizations = res.result;
-          this.pagination = res.pagination;
-          this.isLoading = false;
-        },
-        error: () => {
-          this.alertify.error('Unable to load organizations');
-          this.isLoading = false;
-        }
-      })
-  }
-
   pageChanged(event: any): void {
-    const params = this.organizationsService.getOrganizationParams();
-    if (params.pageNumber !== event) {
-      this.pagination.currentPage = event;
-      params.pageNumber = event;
-      this.organizationsService.setOrganizationParams(params);
-      this.organizationParams = params;
+    if (this.currentParams.pageNumber !== event) {
+      this.currentParams.pageNumber = event;
       this.loadOrganizations();
     }
   }
@@ -174,9 +178,8 @@ export class OrganizationListComponent extends DestroyableComponent implements O
         this.alertify.success('Status changed');
       },
       error: () => {
-        this.alertify.error('Unable to archive');
+        this.alertify.error('Unable to change status');
       }
     });
   }
-
 }

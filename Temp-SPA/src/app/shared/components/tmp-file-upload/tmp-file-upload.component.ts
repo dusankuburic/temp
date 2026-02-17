@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { faCloudUpload, faFile, faImage, faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { BlobDto, BlobResponse, FileType } from 'src/app/core/models/blob';
@@ -9,6 +9,7 @@ import { AlertifyService } from 'src/app/core/services/alertify.service';
   selector: 'tmp-file-upload',
   templateUrl: './tmp-file-upload.component.html',
   styleUrls: ['./tmp-file-upload.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class TmpFileUploadComponent {
@@ -36,7 +37,8 @@ export class TmpFileUploadComponent {
 
   constructor(
     private fileService: FileService,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   get acceptTypes(): string {
@@ -96,6 +98,7 @@ export class TmpFileUploadComponent {
     if (!this.selectedFile) return;
 
     this.isUploading = true;
+    this.cdr.markForCheck();
 
     const upload$ = this.fileType === 'Image'
       ? this.fileService.uploadImage(this.selectedFile, undefined, this.customFolder)
@@ -113,12 +116,14 @@ export class TmpFileUploadComponent {
           this.alertify.error(errorMessage);
         }
         this.selectedFile = null;
+        this.cdr.markForCheck();
       },
       error: (err: HttpErrorResponse | Error) => {
         this.isUploading = false;
         const errorMessage = this.getUploadErrorMessage(err);
         this.alertify.error(errorMessage);
         this.selectedFile = null;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -170,9 +175,11 @@ export class TmpFileUploadComponent {
         } else {
           this.alertify.error(response.errorMessage || 'Delete failed');
         }
+        this.cdr.markForCheck();
       },
       error: () => {
         this.alertify.error('Failed to delete file');
+        this.cdr.markForCheck();
       }
     });
   }

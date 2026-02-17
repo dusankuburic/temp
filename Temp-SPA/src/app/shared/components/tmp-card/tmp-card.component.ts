@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export type CardVariant = 'filled' | 'outline' | 'subtle';
 export type CardSize = 'small' | 'medium' | 'large';
@@ -7,6 +7,7 @@ export type CardSize = 'small' | 'medium' | 'large';
   selector: 'tmp-card',
   templateUrl: './tmp-card.component.html',
   styleUrls: ['./tmp-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class TmpCardComponent {

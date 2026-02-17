@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
@@ -13,6 +13,7 @@ import { JwtPayload } from '../core/models/jwt-payload';
     selector: 'app-nav',
     templateUrl: './nav.component.html',
     styleUrls: ['./nav.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
  export class NavComponent extends DestroyableComponent implements OnInit, OnDestroy {
@@ -28,14 +29,18 @@ import { JwtPayload } from '../core/models/jwt-payload';
      private alertify: AlertifyService,
      private router: Router,
      private renderer: Renderer2,
-     @Inject(DOCUMENT) private document: Document) {
+     @Inject(DOCUMENT) private document: Document,
+     private cdr: ChangeDetectorRef) {
      super();
    }
 
    ngOnInit(): void {
      
      this.removeDocumentClickListener = this.renderer.listen(this.document, 'click', () => {
-       this.isUserMenuOpen = false;
+       if (this.isUserMenuOpen) {
+         this.isUserMenuOpen = false;
+         this.cdr.markForCheck();
+       }
      });
 
      
@@ -54,12 +59,17 @@ import { JwtPayload } from '../core/models/jwt-payload';
            this.isMenuOpen = false;
            this.applySidebarState();
          }
+         this.cdr.markForCheck();
        });
    }
 
    private onWindowScroll(): void {
      const scrollPosition = typeof window !== 'undefined' ? window.pageYOffset || document.documentElement.scrollTop : 0;
-     this.isScrolled = scrollPosition > 10;
+     const newIsScrolled = scrollPosition > 10;
+     if (this.isScrolled !== newIsScrolled) {
+       this.isScrolled = newIsScrolled;
+       this.cdr.markForCheck();
+     }
    }
 
   ngOnDestroy(): void {
