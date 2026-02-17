@@ -65,9 +65,7 @@ getEmployees(employeeParams?: EmployeeParams): Observable<PaginatedResult<Employ
     );
 }
 
-getModerator(employeeId: number): Observable<any> {
-  return this.http.get<any>(this.baseUrl + 'moderators/' + employeeId);
-}
+
 
 getEmployee(id: number): Observable<Employee> {
   return this.http.get<Employee>(this.baseUrl + 'employees/' + id);
